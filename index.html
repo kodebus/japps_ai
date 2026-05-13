@@ -516,6 +516,23 @@
   }
   .btn-plan-filled:hover { opacity: 0.88; transform: translateY(-1px); }
 
+  /* ─── MAINTENANCE ─── */
+  #maintenance { background: var(--bg); }
+
+  .maintenance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .maintenance-note {
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 1.5rem;
+  }
+
   /* ─── PORTFOLIO ─── */
   #portfolio { background: var(--bg2); }
 
@@ -907,6 +924,7 @@
     <li><a href="#services">Services</a></li>
     <li><a href="#how">How It Works</a></li>
     <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#maintenance">Maintenance</a></li>
     <li><a href="#portfolio">Portfolio</a></li>
     <li><a href="#testimonials">Reviews</a></li>
     <li><a href="#contact" class="nav-cta">Get Started</a></li>
@@ -1070,6 +1088,91 @@
         <a href="#contact" class="btn-plan btn-plan-outline">Let's Talk</a>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<!-- MAINTENANCE -->
+<section id="maintenance">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center">
+      <div class="section-tag">Maintenance Plans</div>
+      <h2 class="section-title">Keep Your Site Running<br><span class="grad-text">Smooth & Updated</span></h2>
+      <p class="section-sub" style="margin:0 auto 3.5rem">After launch, we've got you covered with flexible monthly plans so your site never falls behind.</p>
+    </div>
+    <div class="maintenance-grid">
+
+      <div class="pricing-card reveal">
+        <div class="plan-name">Basic</div>
+        <div class="plan-price">$49<span>/mo</span></div>
+        <div class="plan-desc">Perfect for small sites that rarely need changes.</div>
+        <ul class="plan-features">
+          <li>1 content update per month</li>
+          <li>Bug fixes</li>
+          <li>Email support</li>
+        </ul>
+        <a href="#contact" class="btn-plan btn-plan-outline">Get Started</a>
+      </div>
+
+      <div class="pricing-card featured reveal">
+        <div class="popular-badge">⭐ MOST POPULAR</div>
+        <div class="plan-name">Standard</div>
+        <div class="plan-price">$99<span>/mo</span></div>
+        <div class="plan-desc">For growing businesses that need regular updates and fast support.</div>
+        <ul class="plan-features">
+          <li>3 content updates per month</li>
+          <li>Bug fixes</li>
+          <li>Priority email support</li>
+          <li>24hr response time</li>
+        </ul>
+        <a href="#contact" class="btn-plan btn-plan-filled">Get Started</a>
+      </div>
+
+      <div class="pricing-card reveal">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$199<span>/mo</span></div>
+        <div class="plan-desc">Full ongoing development and same-day support for active businesses.</div>
+        <ul class="plan-features">
+          <li>Unlimited updates</li>
+          <li>Bug fixes</li>
+          <li>Priority phone & email</li>
+          <li>Same-day response</li>
+          <li>New features included</li>
+        </ul>
+        <a href="#contact" class="btn-plan btn-plan-outline">Get Started</a>
+      </div>
+
+    </div>
+    <p class="maintenance-note reveal">All plans billed monthly · Cancel anytime with 30 days written notice</p>
+
+    <!-- ON DEMAND -->
+    <div style="margin-top:3rem;" class="reveal">
+      <div style="text-align:center;margin-bottom:2rem;">
+        <div class="section-tag">On-Demand Support</div>
+        <h3 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.5px;">No commitment? No problem.</h3>
+        <p style="color:var(--muted);font-size:0.9rem;margin-top:0.5rem;">Pay only when you need help. No contracts, no subscriptions.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;">
+        <div class="pricing-card" style="text-align:center;">
+          <div class="plan-name">Hourly</div>
+          <div class="plan-price">$75<span>/hr</span></div>
+          <div class="plan-desc">Pay as you go. Minimum 1 hour. Perfect for quick fixes and small updates.</div>
+          <a href="#contact" class="btn-plan btn-plan-outline">Book an Hour</a>
+        </div>
+        <div class="pricing-card" style="text-align:center;">
+          <div class="plan-name">5-Hour Bundle</div>
+          <div class="plan-price">$350<span style="font-size:0.85rem;"> (save $25)</span></div>
+          <div class="plan-desc">Buy 5 hours upfront at a discount. Hours never expire — use them anytime.</div>
+          <a href="#contact" class="btn-plan btn-plan-outline">Get Bundle</a>
+        </div>
+        <div class="pricing-card featured" style="text-align:center;">
+          <div class="popular-badge">💰 BEST VALUE</div>
+          <div class="plan-name">10-Hour Bundle</div>
+          <div class="plan-price">$650<span style="font-size:0.85rem;"> (save $100)</span></div>
+          <div class="plan-desc">Our best hourly rate. Buy 10 hours upfront and use them whenever you need.</div>
+          <a href="#contact" class="btn-plan btn-plan-filled">Get Bundle</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
