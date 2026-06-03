@@ -163,7 +163,8 @@ function generateReport() {
 
   chrome.storage.local.get('userRole', function(data) {
     const role = data.userRole || 'Salesforce OmniStudio Developer';
-    let report = `MONTHLY WORK REPORT — ${month.toUpperCase()}\n${role}\n${'='.repeat(45)}\n\n`;
+    //let report = `MONTHLY WORK REPORT — ${month.toUpperCase()}\n${role}\n${'='.repeat(45)}\n\n`;
+    let report = `DAILY WORK REPORT — ${month.toUpperCase()}\n${role}\n${'='.repeat(45)}\n\n`;
     Object.keys(grouped).sort().forEach(week => {
       report += `Week of ${getWeekLabel(week)}\n${'-'.repeat(35)}\n`;
       grouped[week].forEach((l, i) => {
