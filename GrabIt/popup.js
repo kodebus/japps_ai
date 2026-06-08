@@ -1,5 +1,6 @@
 let logs = [];
 let editingId = null;
+let reportMode = 'daily';
 
 function getMonthKey(dateStr) {
   const d = new Date(dateStr + 'T12:00:00');
@@ -11,6 +12,11 @@ function getWeekLabel(dateStr) {
   return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
+function getDayLabel(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+}
+
 function showTab(tab) {
   ['log', 'view', 'report', 'settings'].forEach(t => {
     document.getElementById('tab-' + t).style.display = t === tab ? 'block' : 'none';
@@ -19,8 +25,8 @@ function showTab(tab) {
     el.classList.toggle('active', ['log', 'view', 'report', 'settings'][i] === tab);
   });
   if (tab === 'view') renderLogs();
-  if (tab === 'report') updateReportMonths();
-  if (tab === 'settings') loadSettings();
+  if (tab === 'report') updateReportFilters();
+  if (tab === 'settings') { loadSettings(); updateCleanupMonths(); }
 }
 
 function loadLogs(callback) {
@@ -110,7 +116,7 @@ function renderLogs() {
 function deleteLog(id) {
   if (!confirm('Delete this task?')) return;
   logs = logs.filter(l => l.id !== id);
-  saveLogs(() => renderLogs());
+  saveLogs(() => { renderLogs(); updateMonthFilters(); });
 }
 
 function startEdit(id) {
@@ -146,33 +152,89 @@ function updateMonthFilters() {
   f.innerHTML = '<option value="">All months</option>' + months.map(m => `<option value="${m}">${m}</option>`).join('');
 }
 
-function updateReportMonths() {
+function updateReportFilters() {
   const months = [...new Set(logs.map(l => l.month))].sort();
-  const s = document.getElementById('report-month');
-  s.innerHTML = months.length ? months.map(m => `<option value="${m}">${m}</option>`).join('') : '<option value="">No data yet</option>';
+  const weeks = [...new Set(logs.map(l => l.weekof))].sort();
+
+  document.getElementById('report-month').innerHTML = months.length
+    ? months.map(m => `<option value="${m}">${m}</option>`).join('')
+    : '<option value="">No data yet</option>';
+
+  document.getElementById('report-week').innerHTML = weeks.length
+    ? weeks.map(w => `<option value="${w}">Week of ${getWeekLabel(w)}</option>`).join('')
+    : '<option value="">No data yet</option>';
+
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('report-date').value = today;
+}
+
+function updateCleanupMonths() {
+  const months = [...new Set(logs.map(l => l.month))].sort();
+  const s = document.getElementById('cleanup-month');
+  s.innerHTML = months.length
+    ? months.map(m => `<option value="${m}">${m}</option>`).join('')
+    : '<option value="">No data yet</option>';
+}
+
+function setReportMode(mode) {
+  reportMode = mode;
+  ['daily', 'weekly', 'monthly'].forEach(m => {
+    document.getElementById('toggle-' + m).classList.toggle('active', m === mode);
+    document.getElementById('filter-' + m).style.display = m === mode ? 'block' : 'none';
+  });
 }
 
 function generateReport() {
-  const month = document.getElementById('report-month').value;
-  const filtered = logs.filter(l => l.month === month);
-  const grouped = {};
-  filtered.forEach(l => {
-    if (!grouped[l.weekof]) grouped[l.weekof] = [];
-    grouped[l.weekof].push(l);
-  });
+  const msg = document.getElementById('report-msg');
+  let filtered = [];
+  let headerDate = '';
 
   chrome.storage.local.get('userRole', function(data) {
     const role = data.userRole || 'Salesforce OmniStudio Developer';
-    //let report = `MONTHLY WORK REPORT — ${month.toUpperCase()}\n${role}\n${'='.repeat(45)}\n\n`;
-    let report = `DAILY WORK REPORT — ${month.toUpperCase()}\n${role}\n${'='.repeat(45)}\n\n`;
-    Object.keys(grouped).sort().forEach(week => {
-      report += `Week of ${getWeekLabel(week)}\n${'-'.repeat(35)}\n`;
-      grouped[week].forEach((l, i) => {
+
+    if (reportMode === 'daily') {
+      const date = document.getElementById('report-date').value;
+      filtered = logs.filter(l => l.weekof === date);
+      headerDate = getDayLabel(date);
+    } else if (reportMode === 'weekly') {
+      const week = document.getElementById('report-week').value;
+      filtered = logs.filter(l => l.weekof === week);
+      headerDate = `Week of ${getWeekLabel(week)}`;
+    } else {
+      const month = document.getElementById('report-month').value;
+      filtered = logs.filter(l => l.month === month);
+      headerDate = month;
+    }
+
+    if (!filtered.length) {
+      msg.innerHTML = '<div class="msg msg-error">No tasks found for the selected period.</div>';
+      setTimeout(() => msg.innerHTML = '', 3000);
+      return;
+    }
+
+    let report = `DAILY WORK REPORT — ${headerDate.toUpperCase()}\n${role}\n${'='.repeat(45)}\n\n`;
+
+    if (reportMode === 'monthly') {
+      const grouped = {};
+      filtered.forEach(l => {
+        if (!grouped[l.weekof]) grouped[l.weekof] = [];
+        grouped[l.weekof].push(l);
+      });
+      Object.keys(grouped).sort().forEach(week => {
+        report += `Week of ${getWeekLabel(week)}\n${'-'.repeat(35)}\n`;
+        grouped[week].forEach((l, i) => {
+          report += `${i + 1}. [#${l.story}] ${l.component}\n   ${l.desc}\n`;
+        });
+        report += '\n';
+      });
+    } else {
+      filtered.forEach((l, i) => {
         report += `${i + 1}. [#${l.story}] ${l.component}\n   ${l.desc}\n`;
       });
-      report += '\n';
-    });
+    }
+
     document.getElementById('report-output').value = report;
+    msg.innerHTML = '';
   });
 }
 
@@ -204,6 +266,50 @@ function loadSettings() {
   });
 }
 
+function deleteMonthLogs() {
+  const month = document.getElementById('cleanup-month').value;
+  if (!month) return;
+  if (!confirm(`Delete all logs for ${month}? Make sure you have copied your report first!`)) return;
+  logs = logs.filter(l => l.month !== month);
+  saveLogs(function() {
+    document.getElementById('cleanup-msg').innerHTML = '<div class="msg msg-success">Logs deleted for ' + month + '!</div>';
+    setTimeout(() => document.getElementById('cleanup-msg').innerHTML = '', 3000);
+    updateCleanupMonths();
+    updateMonthFilters();
+  });
+}
+
+function exportAllData() {
+  if (!logs.length) {
+    document.getElementById('cleanup-msg').innerHTML = '<div class="msg msg-error">No data to export.</div>';
+    return;
+  }
+  let csv = 'Date,Week Of,Story,Description,Component,Month\n';
+  logs.forEach(l => {
+    const desc = l.desc.replace(/"/g, '""');
+    const comp = l.component.replace(/"/g, '""');
+    csv += `${new Date().toLocaleDateString()},"${getWeekLabel(l.weekof)}","${l.story}","${desc}","${comp}","${l.month}"\n`;
+  });
+
+  const text = document.getElementById('report-output');
+  text.value = csv;
+  navigator.clipboard.writeText(csv).then(() => {
+    document.getElementById('cleanup-msg').innerHTML = '<div class="msg msg-success">All data copied! Paste into Google Sheets.</div>';
+    setTimeout(() => document.getElementById('cleanup-msg').innerHTML = '', 4000);
+  });
+}
+
+function clearAllLogs() {
+  if (!confirm('Are you sure you want to delete ALL logs? This cannot be undone!')) return;
+  logs = [];
+  saveLogs(function() {
+    document.getElementById('cleanup-msg').innerHTML = '<div class="msg msg-success">All logs cleared!</div>';
+    setTimeout(() => document.getElementById('cleanup-msg').innerHTML = '', 3000);
+    updateCleanupMonths();
+    updateMonthFilters();
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   const today = new Date();
   const monday = new Date(today);
@@ -215,11 +321,18 @@ document.addEventListener('DOMContentLoaded', function() {
     renderLogs();
   });
 
+  // Tab buttons
   document.getElementById('tab-btn-log').addEventListener('click', () => showTab('log'));
   document.getElementById('tab-btn-view').addEventListener('click', () => showTab('view'));
   document.getElementById('tab-btn-report').addEventListener('click', () => showTab('report'));
   document.getElementById('tab-btn-settings').addEventListener('click', () => showTab('settings'));
 
+  // Report toggle
+  document.getElementById('toggle-daily').addEventListener('click', () => setReportMode('daily'));
+  document.getElementById('toggle-weekly').addEventListener('click', () => setReportMode('weekly'));
+  document.getElementById('toggle-monthly').addEventListener('click', () => setReportMode('monthly'));
+
+  // Action buttons
   document.getElementById('save-btn').addEventListener('click', saveLog);
   document.getElementById('generate-btn').addEventListener('click', generateReport);
   document.getElementById('copy-btn').addEventListener('click', copyReport);
@@ -227,7 +340,11 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('edit-save-btn').addEventListener('click', saveEdit);
   document.getElementById('edit-cancel-btn').addEventListener('click', cancelEdit);
   document.getElementById('save-settings-btn').addEventListener('click', saveSettings);
+  document.getElementById('delete-month-btn').addEventListener('click', deleteMonthLogs);
+  document.getElementById('export-all-btn').addEventListener('click', exportAllData);
+  document.getElementById('clear-all-btn').addEventListener('click', clearAllLogs);
 
+  // Detect component
 chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, { action: 'getPageInfo' }, function(response) {
       if (chrome.runtime.lastError) {
@@ -242,12 +359,11 @@ chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       if (response && response.storyNumber) {
         document.getElementById('story').value = response.storyNumber;
       }
-      // If text is highlighted, use it as description
-      // Otherwise auto-fill from component name
+      // Priority: selected text > description > component name
       if (response && response.selectedText) {
         document.getElementById('desc').value = response.selectedText;
-        document.getElementById('component-name').textContent = 
-          response.componentName || document.title || 'Google Docs / Web page';
+      } else if (response && response.description) {
+        document.getElementById('desc').value = response.description;
       } else if (response && response.componentName) {
         autoFillDesc(response.componentName);
       }
