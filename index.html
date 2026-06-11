@@ -34,7 +34,6 @@
 
   h1, h2, h3, h4, .nav-logo { font-family: 'Nunito', sans-serif; }
 
-  /* ─── NOISE OVERLAY ─── */
   body::before {
     content: '';
     position: fixed;
@@ -45,7 +44,6 @@
     opacity: 0.4;
   }
 
-  /* ─── NAV ─── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -97,7 +95,6 @@
 
   .nav-cta:hover { opacity: 0.85; }
 
-  /* ─── HERO ─── */
   #hero {
     min-height: 100vh;
     display: flex;
@@ -258,7 +255,6 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ─── SECTIONS SHARED ─── */
   section { position: relative; z-index: 1; }
 
   .section-inner {
@@ -293,7 +289,6 @@
     margin-bottom: 3.5rem;
   }
 
-  /* ─── SERVICES ─── */
   #services { background: var(--bg2); }
 
   .services-grid {
@@ -346,10 +341,7 @@
 
   .service-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
 
-  /* ─── HOW IT WORKS ─── */
-  #how {
-    background: var(--bg);
-  }
+  #how { background: var(--bg); }
 
   .steps {
     display: grid;
@@ -402,7 +394,6 @@
   .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
   .step p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
 
-  /* ─── PRICING ─── */
   #pricing { background: var(--bg2); }
 
   .pricing-grid {
@@ -516,7 +507,6 @@
   }
   .btn-plan-filled:hover { opacity: 0.88; transform: translateY(-1px); }
 
-  /* ─── MAINTENANCE ─── */
   #maintenance { background: var(--bg); }
 
   .maintenance-grid {
@@ -533,7 +523,6 @@
     margin-top: 1.5rem;
   }
 
-  /* ─── PORTFOLIO ─── */
   #portfolio { background: var(--bg2); }
 
   .portfolio-grid {
@@ -699,6 +688,7 @@
   .portfolio-links {
     display: flex;
     gap: 0.8rem;
+    flex-wrap: wrap;
   }
 
   .portfolio-link {
@@ -722,7 +712,6 @@
 
   .portfolio-link-gh:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* ─── TESTIMONIALS ─── */
   #testimonials { background: var(--bg); }
 
   .testi-grid {
@@ -779,7 +768,6 @@
   .testi-name { font-weight: 700; font-size: 0.9rem; }
   .testi-role { font-size: 0.78rem; color: var(--muted); }
 
-  /* ─── CONTACT ─── */
   #contact {
     background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
   }
@@ -866,7 +854,6 @@
 
   .form-submit:hover { opacity: 0.88; transform: translateY(-2px); }
 
-  /* ─── FOOTER ─── */
   footer {
     background: var(--bg);
     border-top: 1px solid var(--border);
@@ -896,7 +883,6 @@
   .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
   .footer-links a:hover { color: var(--accent); }
 
-  /* ─── RESPONSIVE ─── */
   @media (max-width: 768px) {
     .nav-links { display: none; }
     .contact-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -906,7 +892,6 @@
     .hero-stats { gap: 1.5rem; }
   }
 
-  /* ─── SCROLL REVEAL ─── */
   .reveal {
     opacity: 0;
     transform: translateY(30px);
@@ -1187,6 +1172,7 @@
     </div>
     <div class="portfolio-grid">
 
+      <!-- Smart Time Tracker -->
       <div class="portfolio-card reveal">
         <div class="portfolio-preview">
           <div class="portfolio-preview-inner">
@@ -1242,6 +1228,64 @@
         </div>
       </div>
 
+      <!-- Grab It -->
+      <div class="portfolio-card reveal">
+        <div class="portfolio-preview">
+          <div class="portfolio-preview-inner">
+            <div class="preview-topbar">
+              <div class="preview-dot" style="background:#e05555"></div>
+              <div class="preview-dot" style="background:#e0a855"></div>
+              <div class="preview-dot" style="background:#55e07a"></div>
+              <div style="flex:1;margin-left:6px;background:rgba(255,255,255,0.06);border-radius:3px;padding:2px 8px;font-size:8px;color:rgba(255,255,255,0.35);font-family:'Nunito',sans-serif;">dev.sandbox.lightning.force.com</div>
+            </div>
+            <div class="preview-body" style="grid-template-columns:1fr 1fr;gap:6px;">
+              <div class="preview-stat" style="grid-column:1/-1;display:flex;align-items:center;gap:8px;background:rgba(46,117,182,0.12);border-color:rgba(46,117,182,0.3);">
+                <div style="width:8px;height:8px;border-radius:50%;background:#00D4FF;flex-shrink:0;animation:blink2 1.5s infinite;"></div>
+                <div style="font-size:8px;color:#00D4FF;font-family:'Nunito',sans-serif;font-weight:700;">📋 Grab It — Auto-detected</div>
+              </div>
+              <div class="preview-stat">
+                <div class="preview-stat-label">Component</div>
+                <div class="preview-stat-val" style="font-size:9px;">FetchAppStatus</div>
+              </div>
+              <div class="preview-stat">
+                <div class="preview-stat-label">Story</div>
+                <div class="preview-stat-val" style="font-size:9px;">MYVCF-2430</div>
+              </div>
+              <div class="preview-bar-wrap" style="grid-column:1/-1;">
+                <div class="preview-bar-row">
+                  <div class="preview-bar-label">Mon</div>
+                  <div class="preview-bar-track"><div class="preview-bar-fill" style="width:90%"></div></div>
+                </div>
+                <div class="preview-bar-row">
+                  <div class="preview-bar-label">Tue</div>
+                  <div class="preview-bar-track"><div class="preview-bar-fill" style="width:65%"></div></div>
+                </div>
+                <div class="preview-bar-row">
+                  <div class="preview-bar-label">Wed</div>
+                  <div class="preview-bar-track"><div class="preview-bar-fill" style="width:80%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-body">
+          <div class="portfolio-tags">
+            <span class="portfolio-tag">Chrome Extension</span>
+            <span class="portfolio-tag">Salesforce</span>
+            <span class="portfolio-tag">OmniStudio</span>
+            <span class="portfolio-tag">Productivity</span>
+          </div>
+          <h3>Grab It</h3>
+          <p>A Chrome extension built for Salesforce OmniStudio developers. Automatically detects your active component, captures story numbers and descriptions, and generates daily, weekly, or monthly work reports in one click — all stored locally in your browser.</p>
+          <div class="portfolio-links">
+            <a href="https://japps.ai/grabit" target="_blank" class="portfolio-link portfolio-link-gh">🌐 Visit Website</a>
+            <a href="https://chromewebstore.google.com" target="_blank" class="portfolio-link portfolio-link-gh">🧩 Chrome Store</a>
+            <a href="https://github.com/kodebus" target="_blank" class="portfolio-link portfolio-link-gh">⌥ GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- OmniScript Debug Panel -->
       <div class="portfolio-card reveal">
         <div class="portfolio-preview">
           <div class="portfolio-preview-inner">
@@ -1286,19 +1330,9 @@
           <h3>OmniScript Debug Panel</h3>
           <p>A Lightning Web Component that gives developers a real-time debug view of every field in an active OmniScript step — showing API names, expression paths, and live values from omniJsonData. No more manual text blocks or cleanup before go-live.</p>
           <div class="portfolio-links">
-            <a href="https://github.com/kodebus/omniDebugPanel" target="_blank" class="portfolio-link portfolio-link-gh">
-              ⌥ View on GitHub
-            </a>
+            <a href="https://github.com/kodebus/omniDebugPanel" target="_blank" class="portfolio-link portfolio-link-gh">⌥ View on GitHub</a>
           </div>
         </div>
-      </div>
-
-      <!-- Placeholder card -->
-      <div class="portfolio-card reveal" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:340px;text-align:center;padding:2rem;gap:0.8rem;">
-        <div style="width:56px;height:56px;border-radius:50%;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;">+</div>
-        <h3 style="font-size:1rem;">Your Next Project</h3>
-        <p style="font-size:0.85rem;">Have an idea? Let's build it together and add it here.</p>
-        <a href="#contact" class="portfolio-link portfolio-link-gh">Start a Project</a>
       </div>
 
     </div>
@@ -1357,7 +1391,7 @@
         <h2 class="section-title">Let's build something great together.</h2>
         <p>Tell us about your project — big or small, we want to hear it. We'll get back to you within 24 hours with a plan.</p>
         <ul class="contact-perks">
-          <li><span>✉️</span> <a href="/cdn-cgi/l/email-protection#a5cccbc3cae5cfc4d5d5d68bc4cc" style="color:var(--accent);text-decoration:none;"><span class="__cf_email__" data-cfemail="bfd6d1d9d0ffd5decfcfcc91ded6">[email&#160;protected]</span></a></li>
+          <li><span>✉️</span> <a href="mailto:info@japps.ai" style="color:var(--accent);text-decoration:none;">info@japps.ai</a></li>
           <li><span>⚡</span> Response within 24 hours</li>
           <li><span>💬</span> Free consultation call</li>
           <li><span>🛡️</span> No commitment required</li>
@@ -1393,7 +1427,7 @@
           <textarea placeholder="Describe your idea, goals, and any details you have. Don't worry about being too technical — we'll figure it out together."></textarea>
         </div>
         <button class="form-submit" type="button" onclick="handleSubmit(this)">Send Message →</button>
-        <p style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem;text-align:center">Or email us directly at <a href="/cdn-cgi/l/email-protection#066f686069466c6776767528676f" style="color:var(--accent);text-decoration:none;"><span class="__cf_email__" data-cfemail="ef86818980af858e9f9f9cc18e86">[email&#160;protected]</span></a></p>
+        <p style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem;text-align:center">Or email us directly at <a href="mailto:info@japps.ai" style="color:var(--accent);text-decoration:none;">info@japps.ai</a></p>
       </div>
     </div>
   </div>
@@ -1410,8 +1444,7 @@
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // Scroll reveal
+<script>
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((e, i) => {
       if (e.isIntersecting) {
@@ -1424,7 +1457,6 @@
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Form submit
   async function handleSubmit(btn) {
     const form = document.getElementById('contactForm');
     const name = form.querySelector('input[type="text"]').value.trim();
