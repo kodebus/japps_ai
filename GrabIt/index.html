@@ -35,7 +35,6 @@
       overflow-x: hidden;
     }
 
-    /* ── HERO ── */
     .hero {
       background: var(--navy);
       min-height: 100vh;
@@ -263,7 +262,6 @@
       color: var(--white);
     }
 
-    /* Extension mockup */
     .hero-mockup {
       margin-top: 72px;
       position: relative;
@@ -376,7 +374,6 @@
     .node-text { font-size: 11px; color: rgba(255,255,255,0.7); }
     .node-text strong { display: block; color: var(--white); font-size: 12px; margin-bottom: 2px; }
 
-    /* Grab It popup mockup */
     .mockup-popup {
       padding: 0;
       background: #f9f9f9;
@@ -391,9 +388,7 @@
       gap: 8px;
     }
 
-    .popup-header-icon {
-      font-size: 16px;
-    }
+    .popup-header-icon { font-size: 16px; }
 
     .popup-header-title {
       font-family: var(--mono);
@@ -424,9 +419,7 @@
       color: var(--white);
     }
 
-    .popup-body {
-      padding: 14px;
-    }
+    .popup-body { padding: 14px; }
 
     .popup-detected {
       background: #E6F1FB;
@@ -490,10 +483,7 @@
       margin-top: 4px;
     }
 
-    /* ── FEATURES ── */
-    .section {
-      padding: 100px 64px;
-    }
+    .section { padding: 100px 64px; }
 
     .section-label {
       font-family: var(--mono);
@@ -522,10 +512,7 @@
       font-weight: 300;
     }
 
-    /* Features grid */
-    .features {
-      background: var(--off-white);
-    }
+    .features { background: var(--off-white); }
 
     .features-grid {
       display: grid;
@@ -547,26 +534,18 @@
     .feature-card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 3px;
       background: linear-gradient(90deg, var(--blue), var(--accent));
       opacity: 0;
       transition: opacity 0.2s;
     }
 
-    .feature-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 60px rgba(46,117,182,0.12);
-      border-color: rgba(46,117,182,0.4);
-    }
-
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(46,117,182,0.12); border-color: rgba(46,117,182,0.4); }
     .feature-card:hover::before { opacity: 1; }
 
     .feature-icon {
-      width: 48px;
-      height: 48px;
+      width: 48px; height: 48px;
       background: linear-gradient(135deg, var(--blue), var(--accent));
       border-radius: 10px;
       display: flex;
@@ -585,14 +564,8 @@
       letter-spacing: -0.5px;
     }
 
-    .feature-desc {
-      font-size: 14px;
-      color: var(--text-mid);
-      line-height: 1.7;
-      font-weight: 300;
-    }
+    .feature-desc { font-size: 14px; color: var(--text-mid); line-height: 1.7; font-weight: 300; }
 
-    /* ── HOW IT WORKS ── */
     .how {
       background: var(--navy);
       position: relative;
@@ -631,10 +604,7 @@
       transition: background 0.2s, border-color 0.2s;
     }
 
-    .step:hover {
-      background: rgba(255,255,255,0.07);
-      border-color: rgba(0,212,255,0.3);
-    }
+    .step:hover { background: rgba(255,255,255,0.07); border-color: rgba(0,212,255,0.3); }
 
     .step-num {
       font-family: var(--mono);
@@ -645,22 +615,9 @@
       margin-bottom: 16px;
     }
 
-    .step-title {
-      font-family: var(--mono);
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 10px;
-    }
+    .step-title { font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+    .step-desc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.7; font-weight: 300; }
 
-    .step-desc {
-      font-size: 13px;
-      color: rgba(255,255,255,0.45);
-      line-height: 1.7;
-      font-weight: 300;
-    }
-
-    /* ── COMPONENTS ── */
     .components { background: white; }
 
     .components-grid {
@@ -681,14 +638,10 @@
       transition: border-color 0.2s, transform 0.2s;
     }
 
-    .component-card:hover {
-      border-color: var(--blue);
-      transform: translateX(4px);
-    }
+    .component-card:hover { border-color: var(--blue); transform: translateX(4px); }
 
     .component-icon {
-      width: 44px;
-      height: 44px;
+      width: 44px; height: 44px;
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -702,22 +655,9 @@
     .component-icon.fc { background: linear-gradient(135deg, #2196F3, #1565C0); }
     .component-icon.ip { background: linear-gradient(135deg, #FF5722, #BF360C); }
 
-    .component-info h3 {
-      font-family: var(--mono);
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 6px;
-    }
+    .component-info h3 { font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+    .component-info p { font-size: 13px; color: var(--text-mid); line-height: 1.6; font-weight: 300; }
 
-    .component-info p {
-      font-size: 13px;
-      color: var(--text-mid);
-      line-height: 1.6;
-      font-weight: 300;
-    }
-
-    /* ── SECURITY ── */
     .security {
       background: linear-gradient(135deg, #0B1629 0%, #112244 100%);
       position: relative;
@@ -741,28 +681,10 @@
       border: 1px solid rgba(255,255,255,0.08);
     }
 
-    .security-icon {
-      font-size: 36px;
-      margin-bottom: 16px;
-      display: block;
-    }
+    .security-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+    .security-title { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+    .security-desc { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.6; font-weight: 300; }
 
-    .security-title {
-      font-family: var(--mono);
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 8px;
-    }
-
-    .security-desc {
-      font-size: 13px;
-      color: rgba(255,255,255,0.4);
-      line-height: 1.6;
-      font-weight: 300;
-    }
-
-    /* ── CTA ── */
     .cta {
       background: var(--off-white);
       text-align: center;
@@ -798,7 +720,6 @@
       line-height: 1.7;
     }
 
-    /* ── FOOTER ── */
     footer {
       background: #060D1A;
       padding: 40px 64px;
@@ -806,20 +727,12 @@
       align-items: center;
       justify-content: space-between;
       border-top: 1px solid rgba(255,255,255,0.06);
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
-    .footer-logo {
-      font-family: var(--mono);
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--white);
-    }
-
-    .footer-copy {
-      font-size: 13px;
-      color: rgba(255,255,255,0.3);
-      font-family: var(--mono);
-    }
+    .footer-logo { font-family: var(--mono); font-size: 16px; font-weight: 700; color: var(--white); }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.3); font-family: var(--mono); }
 
     .footer-link {
       font-size: 13px;
@@ -831,7 +744,6 @@
 
     .footer-link:hover { color: var(--accent); }
 
-    /* ── ANIMATIONS ── */
     @keyframes fadeDown {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -847,19 +759,14 @@
       50% { opacity: 0.4; }
     }
 
-    /* Scroll reveal */
     .reveal {
       opacity: 0;
       transform: translateY(30px);
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
 
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       nav { padding: 20px 24px; }
       .nav-links { display: none; }
@@ -878,7 +785,6 @@
 </head>
 <body>
 
-<!-- ── HERO ── -->
 <section class="hero">
   <div class="hero-grid"></div>
   <div class="hero-glow"></div>
@@ -910,12 +816,8 @@
     </p>
 
     <div class="hero-actions">
-      <a href="#install" class="btn-primary">
-        ⚡ Add to Chrome — Free
-      </a>
-      <a href="#how" class="btn-secondary">
-        See how it works →
-      </a>
+      <a href="#install" class="btn-primary">⚡ Add to Chrome — Free</a>
+      <a href="#how" class="btn-secondary">See how it works →</a>
     </div>
 
     <div class="hero-mockup">
@@ -980,12 +882,10 @@
   </div>
 </section>
 
-<!-- ── FEATURES ── -->
 <section class="section features" id="features">
   <div class="section-label reveal">What Grab It does</div>
   <div class="section-title reveal">Everything you need.<br/>Nothing you don't.</div>
   <p class="section-desc reveal">Built specifically for Salesforce OmniStudio developers who are tired of writing reports from memory.</p>
-
   <div class="features-grid">
     <div class="feature-card reveal">
       <div class="feature-icon">🔍</div>
@@ -1020,12 +920,10 @@
   </div>
 </section>
 
-<!-- ── HOW IT WORKS ── -->
 <section class="section how" id="how">
   <div class="section-label reveal">Simple by design</div>
   <div class="section-title reveal">Four steps.<br/>That's it.</div>
   <p class="section-desc reveal">Grab It is designed to get out of your way and let you focus on building.</p>
-
   <div class="steps">
     <div class="step reveal">
       <div class="step-num">01</div>
@@ -1050,12 +948,10 @@
   </div>
 </section>
 
-<!-- ── COMPONENTS ── -->
 <section class="section components" id="components">
   <div class="section-label reveal">Component detection</div>
   <div class="section-title reveal">Knows what you're<br/>working on.</div>
   <p class="section-desc reveal">Grab It intelligently detects four core OmniStudio component types and captures all the relevant information automatically.</p>
-
   <div class="components-grid">
     <div class="component-card reveal">
       <div class="component-icon omni">⚡</div>
@@ -1088,11 +984,9 @@
   </div>
 </section>
 
-<!-- ── SECURITY ── -->
 <section class="section security">
   <div class="section-label reveal">Built with privacy in mind</div>
   <div class="section-title reveal">Your data stays<br/>with you.</div>
-
   <div class="security-grid">
     <div class="security-item reveal">
       <span class="security-icon">🔒</span>
@@ -1112,7 +1006,6 @@
   </div>
 </section>
 
-<!-- ── CTA ── -->
 <section class="cta" id="install">
   <div class="cta-box">
     <div class="section-label">Get started today</div>
@@ -1124,15 +1017,14 @@
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
 <footer>
   <div class="footer-logo">📋 Grab It</div>
   <div class="footer-copy">© 2025 Grab It. Built for Salesforce OmniStudio developers.</div>
+  <a href="privacy.html" class="footer-link">🔒 Privacy Policy</a>
   <a href="https://japps.ai" class="footer-link" target="_blank">japps.ai →</a>
 </footer>
 
 <script>
-  // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
