@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Grab It</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { width: 380px; padding: 16px; background: #f9f9f9; }
+    h1 { font-size: 15px; font-weight: 600; color: #1a1a1a; margin-bottom: 16px; border-bottom: 1.5px solid #2E75B6; padding-bottom: 8px; }
+    label { font-size: 12px; color: #555; display: block; margin-bottom: 4px; }
+    input, textarea, select { width: 100%; padding: 7px 10px; font-size: 13px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 10px; background: white; }
+    textarea { height: 60px; resize: vertical; }
+    .btn { width: 100%; padding: 8px; border-radius: 6px; font-size: 13px; cursor: pointer; border: none; font-weight: 600; margin-bottom: 6px; }
+    .btn-primary { background: #2E75B6; color: white; }
+    .btn-primary:hover { background: #1a5a96; }
+    .btn-success { background: #3B6D11; color: white; }
+    .btn-success:hover { background: #27500A; }
+    .btn-secondary { background: #eee; color: #333; }
+    .btn-secondary:hover { background: #ddd; }
+    .btn-danger { background: #FCEBEB; color: #A32D2D; border: 1px solid #f5c6c6; }
+    .btn-danger:hover { background: #f5c6c6; }
+    .btn-sm { width: auto; padding: 4px 10px; font-size: 11px; font-weight: 500; margin-bottom: 0; }
+    .msg { font-size: 12px; padding: 6px 10px; border-radius: 6px; margin-bottom: 10px; }
+    .msg-success { background: #EAF3DE; color: #3B6D11; }
+    .msg-error { background: #FCEBEB; color: #A32D2D; }
+    .component-box { background: #E6F1FB; border-radius: 6px; padding: 8px 10px; margin-bottom: 10px; font-size: 12px; color: #0C447C; }
+    .component-box strong { display: block; font-size: 11px; color: #555; margin-bottom: 2px; }
+    .tabs { display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap; }
+    .tab { flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 6px; font-size: 12px; cursor: pointer; background: white; color: #555; text-align: center; }
+    .tab.active { background: #2E75B6; color: white; border-color: #2E75B6; }
+    .log-item { background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 8px; margin-bottom: 6px; font-size: 12px; }
+    .log-item .story { font-weight: 600; color: #2E75B6; }
+    .log-item .component { color: #555; font-size: 11px; margin: 2px 0; }
+    .log-item .desc { color: #333; }
+    .log-item .week { color: #888; font-size: 11px; margin-top: 2px; }
+    .log-item .actions { display: flex; gap: 4px; margin-top: 6px; justify-content: flex-end; }
+    .empty { text-align: center; color: #888; font-size: 13px; padding: 20px 0; }
+    .report-area { width: 100%; height: 150px; font-size: 11px; font-family: monospace; border: 1px solid #ccc; border-radius: 6px; padding: 8px; margin-bottom: 8px; resize: vertical; }
+    .delete-btn { background: #FCEBEB; color: #A32D2D; border: 1px solid #f5c6c6; border-radius: 4px; padding: 3px 8px; font-size: 11px; cursor: pointer; }
+    .edit-btn { background: #E6F1FB; color: #0C447C; border: 1px solid #b3d1f0; border-radius: 4px; padding: 3px 8px; font-size: 11px; cursor: pointer; }
+    .edit-modal { background: white; border: 1px solid #ccc; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+    .settings-box { background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px; margin-bottom: 10px; }
+    .settings-box p { font-size: 12px; color: #555; margin-bottom: 8px; line-height: 1.5; }
+    .report-toggle { display: flex; gap: 4px; margin-bottom: 10px; }
+    .report-toggle button { flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 6px; font-size: 12px; cursor: pointer; background: white; color: #555; }
+    .report-toggle button.active { background: #2E75B6; color: white; border-color: #2E75B6; }
+    .cleanup-box { background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px; margin-bottom: 10px; }
+    .cleanup-box p { font-size: 12px; color: #555; margin-bottom: 8px; line-height: 1.5; }
+    .divider { border: none; border-top: 1px solid #eee; margin: 12px 0; }
+  </style>
+</head>
+<body>
+  <h1>📋 Grab It</h1>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-btn-log">Log</button>
+    <button class="tab" id="tab-btn-view">View</button>
+    <button class="tab" id="tab-btn-report">Report</button>
+    <button class="tab" id="tab-btn-settings">Settings</button>
+  </div>
+
+  <!-- LOG TAB -->
+  <div id="tab-log">
+    <div class="component-box">
+      <strong>Detected component:</strong>
+      <span id="component-name">Detecting...</span>
+    </div>
+    <label>Title / Story Number</label>
+    <input type="text" id="story" placeholder="e.g. 2713, Research, or Doc Title" />
+    <label>Week of</label>
+    <input type="date" id="weekof" />
+    <label>What did you work on?</label>
+    <textarea id="desc" placeholder="Auto-filled from component — edit if needed..."></textarea>
+    <div id="log-msg"></div>
+    <button class="btn btn-primary" id="save-btn">Save task</button>
+  </div>
+
+  <!-- VIEW TAB -->
+  <div id="tab-view" style="display:none">
+    <select id="month-filter">
+      <option value="">All months</option>
+    </select>
+    <div id="edit-box" style="display:none" class="edit-modal">
+      <strong style="font-size:12px">Edit task</strong>
+      <label>Title / Story Number</label>
+      <input type="text" id="edit-story" />
+      <label>Description</label>
+      <textarea id="edit-desc" style="height:60px"></textarea>
+      <div style="display:flex; gap:6px; margin-top:6px">
+        <button class="btn btn-primary btn-sm" id="edit-save-btn">Save</button>
+        <button class="btn btn-secondary btn-sm" id="edit-cancel-btn">Cancel</button>
+      </div>
+    </div>
+    <div id="logs-list"></div>
+  </div>
+
+  <!-- REPORT TAB -->
+  <div id="tab-report" style="display:none">
+    <div class="report-toggle">
+      <button id="toggle-daily" class="active">Daily</button>
+      <button id="toggle-weekly">Weekly</button>
+      <button id="toggle-monthly">Monthly</button>
+    </div>
+
+    <div id="filter-daily">
+      <label>Select date</label>
+      <input type="date" id="report-date" />
+    </div>
+
+    <div id="filter-weekly" style="display:none">
+      <label>Select week</label>
+      <select id="report-week"></select>
+    </div>
+
+    <div id="filter-monthly" style="display:none">
+      <label>Select month</label>
+      <select id="report-month"></select>
+    </div>
+
+    <button class="btn btn-success" id="generate-btn">Generate report</button>
+    <button class="btn btn-secondary" id="copy-btn">Copy to clipboard</button>
+    <div id="report-msg" style="margin-top:8px"></div>
+    <textarea class="report-area" id="report-output" readonly placeholder="Your report will appear here..."></textarea>
+  </div>
+
+  <!-- SETTINGS TAB -->
+  <div id="tab-settings" style="display:none">
+    <div class="settings-box">
+      <p>Configure your Grab It settings.</p>
+      <label>Your name / role (optional)</label>
+      <input type="text" id="user-role" placeholder="e.g. Salesforce OmniStudio Developer" />
+      <button class="btn btn-primary" id="save-settings-btn">Save settings</button>
+      <div id="settings-msg"></div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="cleanup-box">
+      <p><strong>🗂️ Data cleanup</strong><br>Delete logs from a specific month once you have copied your report. This keeps your data lean and organized.</p>
+      <label>Delete logs for month</label>
+      <select id="cleanup-month"></select>
+      <button class="btn btn-danger" id="delete-month-btn">Delete month logs</button>
+      <hr class="divider">
+      <p><strong>⚠️ Export all data before clearing</strong><br>Download a backup of all your logs before deleting everything.</p>
+      <button class="btn btn-secondary" id="export-all-btn">Export all data</button>
+      <button class="btn btn-danger" id="clear-all-btn">Clear all logs</button>
+      <div id="cleanup-msg"></div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
