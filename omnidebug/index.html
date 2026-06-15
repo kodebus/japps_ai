@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OmniScript Debug Panel — Live JSON Debugger for Salesforce OmniStudio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sage:       #2D6A4F;
+      --sage-mid:   #40916C;
+      --sage-light: #52B788;
+      --sage-pale:  #D8F3DC;
+      --sage-dim:   rgba(45,106,79,0.12);
+      --navy:       #0D1F16;
+      --navy-mid:   #152A1E;
+      --bg:         #F4F7F5;
+      --card:       #FFFFFF;
+      --border:     #D3E4DA;
+      --text:       #152A1E;
+      --muted:      #4A6358;
+      --mono:       'Source Code Pro', monospace;
+      --sans:       'Source Sans 3', sans-serif;
+      --grad:       linear-gradient(135deg, #2D6A4F, #52B788);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    h1, h2, h3, h4,
+    .section-title,
+    .nav-logo-text,
+    .eyebrow,
+    .hero-eyebrow,
+    .footer-logo {
+      font-family: var(--mono);
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--navy);
+      padding: 0 5%;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--sage-mid);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-mark {
+      width: 28px; height: 28px;
+      background: var(--sage-mid);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .nav-logo-text {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      transition: color 0.2s;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover { color: #fff; }
+
+    .nav-cta {
+      background: var(--sage-mid) !important;
+      color: #fff !important;
+      padding: 6px 16px;
+      border-radius: 4px;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--sage-light) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy);
+      padding: 80px 5% 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(64,145,108,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(64,145,108,0.07) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: end;
+    }
+
+    .hero-copy { padding-bottom: 64px; position: relative; z-index: 2; }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(82,183,136,0.12);
+      border: 1px solid rgba(82,183,136,0.35);
+      border-radius: 4px;
+      padding: 4px 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--sage-light);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero-eyebrow-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--sage-light);
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    .hero h1 {
+      font-family: var(--mono);
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--sage-light);
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.75;
+      max-width: 460px;
+      margin-bottom: 36px;
+      font-weight: 300;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sage-mid);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      font-family: var(--sans);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover { background: var(--sage-light); transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: rgba(255,255,255,0.65);
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      font-family: var(--sans);
+      border: 1px solid rgba(255,255,255,0.18);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--sage-light); color: var(--sage-light); }
+
+    /* ── HERO MOCKUP ── */
+    .hero-mockup {
+      position: relative;
+      z-index: 2;
+      align-self: end;
+    }
+
+    .debug-panel {
+      background: #fff;
+      border-radius: 8px 8px 0 0;
+      overflow: hidden;
+      box-shadow: 0 -8px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08);
+      font-family: var(--mono);
+    }
+
+    .debug-header {
+      background: var(--navy);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--sage-mid);
+    }
+
+    .debug-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .debug-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.3px;
+    }
+
+    .debug-step {
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .debug-copy-btn {
+      background: var(--sage-mid);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .debug-table-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 6px 16px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .debug-col-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .debug-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 10px 16px;
+      border-bottom: 1px solid #EEF3EF;
+      align-items: start;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .debug-row:hover { background: #F4FAF6; }
+
+    .debug-api { font-size: 11px; color: var(--navy); font-weight: 600; }
+    .debug-expr { font-size: 11px; color: var(--sage-mid); }
+
+    .debug-val-collapsed {
+      font-size: 10px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .debug-val-collapsed span {
+      color: var(--sage-mid);
+      text-decoration: underline;
+      font-size: 10px;
+    }
+
+    .debug-val-expanded {
+      font-size: 10px;
+      color: var(--sage);
+      background: #F0FAF4;
+      border: 1px solid #B7DFC8;
+      border-radius: 4px;
+      padding: 8px;
+      white-space: pre;
+      line-height: 1.6;
+      overflow: hidden;
+    }
+
+    /* ── SECTIONS ── */
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 5%;
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--sage-mid);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: var(--mono);
+      font-size: clamp(24px, 3.5vw, 38px);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 56px;
+    }
+
+    /* ── FEATURES ── */
+    #features { background: #fff; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg);
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--grad);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .feature-card:hover { border-color: var(--sage-mid); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(45,106,79,0.1); }
+    .feature-card:hover::after { opacity: 1; }
+
+    .feature-icon {
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      background: var(--sage-dim);
+      border: 1px solid rgba(45,106,79,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+    /* ── SCREENSHOT SECTION ── */
+    #demo { background: var(--navy); }
+
+    #demo .eyebrow { color: var(--sage-light); }
+    #demo .section-title { color: #fff; }
+    #demo .section-sub { color: rgba(255,255,255,0.4); }
+
+    .screenshot-wrap {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    }
+
+    .screenshot-bar {
+      background: var(--navy-mid);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .screenshot-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .screenshot-img { width: 100%; display: block; background: #fff; }
+
+    /* ── INSTALL ── */
+    #install { background: #fff; }
+
+    .install-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .install-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 28px;
+      background: var(--bg);
+    }
+
+    .install-card h3 {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .install-step {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+    }
+
+    .install-step-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--sage-mid);
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .install-step p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .install-step p strong { color: var(--text); font-weight: 600; }
+
+    .code-block {
+      background: var(--navy);
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--sage-light);
+      margin-top: 8px;
+      overflow-x: auto;
+      line-height: 1.8;
+    }
+
+    .coming-soon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--sage-dim);
+      border: 1px solid rgba(45,106,79,0.2);
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--sage);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    /* ── CTA ── */
+    #cta { background: var(--bg); text-align: center; }
+
+    .cta-box {
+      background: var(--navy);
+      border-radius: 16px;
+      padding: 72px 48px;
+      max-width: 720px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(64,145,108,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(64,145,108,0.07) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .cta-box .eyebrow { color: var(--sage-light); position: relative; z-index: 1; }
+    .cta-box .section-title { color: #fff; position: relative; z-index: 1; margin-bottom: 16px; }
+
+    .cta-desc {
+      font-size: 15px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 32px;
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #060F09;
+      padding: 32px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); font-family: var(--mono); }
+
+    .footer-links { display: flex; gap: 20px; }
+
+    .footer-link {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      font-family: var(--mono);
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover { color: var(--sage-light); }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero-mockup { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .install-grid { grid-template-columns: 1fr; }
+      nav .nav-links { display: none; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">OS</div>
+    <span class="nav-logo-text">OmniScript Debug Panel</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#install">Install</a></li>
+    <li><a href="https://github.com/kodebus/omniDebugPanel" target="_blank" class="nav-cta">View on GitHub →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-dot"></div>
+        Salesforce OmniStudio · v1.0
+      </div>
+      <h1>See exactly what's<br/>inside your <em>omniJsonData.</em></h1>
+      <p class="hero-desc">A Lightning Web Component that attaches a live debug panel to any active OmniScript step — showing every field's API name, expression path, and current value in real time. No manual text blocks. No cleanup before go-live.</p>
+      <div class="hero-actions">
+        <a href="https://github.com/kodebus/omniDebugPanel" target="_blank" class="btn-primary">⌥ View on GitHub</a>
+        <a href="#install" class="btn-secondary">Installation Guide →</a>
+      </div>
+    </div>
+
+    <!-- Inline mockup -->
+    <div class="hero-mockup">
+      <div class="debug-panel">
+        <div class="debug-header">
+          <div class="debug-header-left">
+            <div class="debug-title">● OmniScript debug panel</div>
+            <div class="debug-step">Step: CaseDetails (Index 3)</div>
+          </div>
+          <button class="debug-copy-btn">📋 Copy JSON ▲</button>
+        </div>
+        <div class="debug-table-header">
+          <div class="debug-col-label">API name</div>
+          <div class="debug-col-label">Expression</div>
+          <div class="debug-col-label">Current value</div>
+        </div>
+        <div class="debug-row">
+          <div class="debug-api">NewCaseDetails</div>
+          <div class="debug-expr">%CaseDetails.NewCaseDetails%</div>
+          <div class="debug-val-collapsed">{ … } <span>1 key — click to expand</span></div>
+        </div>
+        <div class="debug-row" style="background:#F4FAF6;">
+          <div class="debug-api">NewCaseDetails</div>
+          <div class="debug-expr">%CaseDetails.NewCaseDetails%</div>
+          <div class="debug-val-expanded">{
+  "Subject": "Main issue at
+   the customer's home",
+  "Account": "Selena Rodrigues",
+  "Priority": "High",
+  "Status": "On Hold",
+  "Type": "Problem"
+}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow">What it does</div>
+      <h2 class="section-title">Real-time visibility<br/>into every step.</h2>
+      <p class="section-sub">Drop it into your OmniScript and instantly see the live state of every field — without touching your component logic.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔍</div>
+        <h3>Live omniJsonData</h3>
+        <p>Displays the current value of every field in omniJsonData as your OmniScript runs — updated in real time as users navigate between steps.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📌</div>
+        <h3>API Names & Expressions</h3>
+        <p>Shows the exact API name and expression path for each field (e.g. <code style="font-family:var(--mono);font-size:11px;color:var(--sage-mid);">%StepName.FieldName%</code>) so you can reference them precisely in your logic.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📋</div>
+        <h3>Copy JSON</h3>
+        <p>One-click Copy JSON button exports the full omniJsonData snapshot to your clipboard — paste it into your notes or share with your team instantly.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔽</div>
+        <h3>Expand & Collapse</h3>
+        <p>Complex nested objects are collapsed by default. Click any row to expand and inspect the full JSON tree without cluttering your view.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🚫</div>
+        <h3>Zero Cleanup</h3>
+        <p>No debug text blocks to remove before go-live. The panel is a standalone LWC — remove it from the step when you're done, nothing else changes.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">⚡</div>
+        <h3>OmniStudio Native</h3>
+        <p>Built as a Lightning Web Component using the OmniScript LWC framework. Drops straight into any OmniScript step with no extra configuration.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section id="demo">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow">See it in action</div>
+      <h2 class="section-title">Collapsed and expanded.<br/>Side by side.</h2>
+      <p class="section-sub">The panel sits inside your OmniScript step. Click any row to reveal the full JSON value without leaving the screen.</p>
+    </div>
+    <div class="screenshot-wrap reveal">
+      <div class="screenshot-bar">
+        <div class="screenshot-dot" style="background:#FF5F57"></div>
+        <div class="screenshot-dot" style="background:#FEBC2E"></div>
+        <div class="screenshot-dot" style="background:#28C840"></div>
+      </div>
+      <img
+        src="omnidebupanelscreenshot.png"
+        alt="OmniScript Debug Panel showing collapsed and expanded omniJsonData views inside a Salesforce OmniScript step"
+        class="screenshot-img"
+      />
+    </div>
+  </div>
+</section>
+
+<!-- INSTALL -->
+<section id="install">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow">Installation</div>
+      <h2 class="section-title">Two ways to install.</h2>
+      <p class="section-sub">Get the debug panel into your org in minutes — either via Salesforce CLI or a direct package install.</p>
+    </div>
+    <div class="install-grid">
+      <div class="install-card reveal">
+        <h3>⌥ Deploy from GitHub</h3>
+        <div class="install-step">
+          <div class="install-step-num">1</div>
+          <p>Clone the repository to your local machine.</p>
+        </div>
+        <div class="code-block">git clone https://github.com/kodebus/omniDebugPanel</div>
+        <div class="install-step" style="margin-top:14px;">
+          <div class="install-step-num">2</div>
+          <p>Authorize your Salesforce org with the CLI.</p>
+        </div>
+        <div class="code-block">sf org login web --alias MyOrg</div>
+        <div class="install-step" style="margin-top:14px;">
+          <div class="install-step-num">3</div>
+          <p>Deploy the component to your org.</p>
+        </div>
+        <div class="code-block">sf project deploy start --target-org MyOrg</div>
+        <div class="install-step" style="margin-top:14px;">
+          <div class="install-step-num">4</div>
+          <p><strong>Add the LWC</strong> to your OmniScript step as a custom component and start debugging.</p>
+        </div>
+      </div>
+
+      <div class="install-card reveal">
+        <h3>📦 Unlocked Package</h3>
+        <div class="coming-soon-badge">⏳ COMING SOON</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;">A one-click Salesforce Unlocked Package install is in progress. Once available, you'll be able to install the debug panel directly into any org with a single URL — no CLI required.</p>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;">In the meantime, use the GitHub deployment method. It takes less than 5 minutes.</p>
+        <div style="margin-top:20px;padding:16px;background:var(--sage-dim);border-radius:6px;border:1px solid rgba(45,106,79,0.2);">
+          <p style="font-size:12px;color:var(--sage);font-family:var(--mono);font-weight:600;margin-bottom:4px;">Want to be notified?</p>
+          <p style="font-size:12px;color:var(--muted);">Star the GitHub repo and you'll get notified when the package drops.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="section-inner">
+    <div class="cta-box reveal">
+      <div class="eyebrow">Open Source</div>
+      <h2 class="section-title">Free for every<br/>OmniStudio developer.</h2>
+      <p class="cta-desc">No license, no cost, no account required. Clone it, deploy it, use it. Contributions and feedback welcome on GitHub.</p>
+      <div class="cta-actions">
+        <a href="https://github.com/kodebus/omniDebugPanel" target="_blank" class="btn-primary">⌥ View on GitHub</a>
+        <a href="https://japps.ai" target="_blank" class="btn-secondary">Built by Japps.ai →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">OS · OmniScript Debug Panel v1.0</div>
+  <div class="footer-copy">© 2025 Japps.ai. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="privacy.html" class="footer-link">🔒 Privacy Policy</a>
+    <a href="https://github.com/kodebus/omniDebugPanel" target="_blank" class="footer-link">GitHub →</a>
+    <a href="https://japps.ai" target="_blank" class="footer-link">japps.ai →</a>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.transitionDelay = (i * 0.08) + 's';
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

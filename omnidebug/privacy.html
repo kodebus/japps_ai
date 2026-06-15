@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Privacy Policy — OmniScript Debug Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sage:       #2D6A4F;
+      --sage-mid:   #40916C;
+      --sage-light: #52B788;
+      --sage-dim:   rgba(45,106,79,0.12);
+      --navy:       #0D1F16;
+      --bg:         #F4F7F5;
+      --card:       #FFFFFF;
+      --border:     #D3E4DA;
+      --text:       #152A1E;
+      --muted:      #4A6358;
+      --mono:       'Source Code Pro', monospace;
+      --sans:       'Source Sans 3', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    h1, h2, h3, h4 { font-family: var(--mono); }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--navy);
+      padding: 0 5%;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--sage-mid);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-mark {
+      width: 28px; height: 28px;
+      background: var(--sage-mid);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .nav-logo-text {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .nav-back {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-back:hover { color: var(--sage-light); }
+
+    /* HERO */
+    .hero {
+      background: var(--navy);
+      padding: 56px 5% 44px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(64,145,108,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(64,145,108,0.07) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; z-index: 1; }
+
+    .hero-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--sage-light);
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      font-family: var(--mono);
+      font-size: clamp(24px, 3.5vw, 40px);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .hero-meta {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* CONTENT */
+    .content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 64px 5% 96px;
+    }
+
+    .section { margin-bottom: 48px; }
+
+    .section h2 {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.3px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section p {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-weight: 300;
+    }
+
+    .section ul {
+      list-style: none;
+      margin: 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .section ul li {
+      font-size: 15px;
+      color: var(--muted);
+      padding-left: 20px;
+      position: relative;
+      font-weight: 300;
+    }
+
+    .section ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--sage-mid);
+      font-weight: 700;
+    }
+
+    .highlight-box {
+      background: white;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--sage-mid);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+
+    .highlight-box p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    code {
+      font-family: var(--mono);
+      font-size: 12px;
+      background: var(--sage-dim);
+      color: var(--sage);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .contact-box {
+      background: var(--navy);
+      border-radius: 12px;
+      padding: 32px;
+      margin-top: 48px;
+    }
+
+    .contact-box h2 {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 10px;
+    }
+
+    .contact-box p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 8px;
+      font-weight: 300;
+    }
+
+    .contact-box a {
+      color: var(--sage-light);
+      text-decoration: none;
+    }
+
+    .contact-box a:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    footer {
+      background: #060F09;
+      padding: 32px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); font-family: var(--mono); }
+
+    .footer-links { display: flex; gap: 20px; }
+
+    .footer-link {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      font-family: var(--mono);
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover { color: var(--sage-light); }
+
+    @media (max-width: 600px) {
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-mark">OS</div>
+    <span class="nav-logo-text">OmniScript Debug Panel</span>
+  </a>
+  <a href="index.html" class="nav-back">← Back</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Legal</div>
+    <h1>Privacy Policy</h1>
+    <div class="hero-meta">Effective date: June 2025 · OmniScript Debug Panel · v1.0</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="section">
+    <h2>Overview</h2>
+    <div class="highlight-box">
+      <p>The OmniScript Debug Panel does not collect, transmit, or share any data. It reads live OmniScript session data directly in your browser and displays it locally. Nothing leaves your environment.</p>
+    </div>
+    <p>This Privacy Policy describes how the OmniScript Debug Panel (the "Component"), developed by Japps.ai, handles information when installed and used within a Salesforce org. Our approach is simple: we do not collect your data.</p>
+  </div>
+
+  <div class="section">
+    <h2>Information We Do Not Collect</h2>
+    <p>The OmniScript Debug Panel does not collect, store remotely, or transmit any of the following:</p>
+    <ul>
+      <li>Salesforce org data, record IDs, or field values</li>
+      <li>OmniScript JSON data or session state</li>
+      <li>User credentials, profiles, or account information</li>
+      <li>Usage analytics, telemetry, or behavioral data</li>
+      <li>Device information or IP addresses</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>How the Component Works</h2>
+    <p>The OmniScript Debug Panel is a Lightning Web Component (LWC) that reads the <code>omniJsonData</code> object from the active OmniScript step at runtime. This data is displayed directly within your Salesforce session and is never transmitted outside of it.</p>
+    <ul>
+      <li>All data displayed in the panel exists only within your active browser session</li>
+      <li>No data is written to any external server, database, or API</li>
+      <li>The Copy JSON button copies data to your local clipboard only</li>
+      <li>Removing the component from a step leaves no data behind</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Third-Party Services</h2>
+    <p>The OmniScript Debug Panel does not integrate with, send data to, or rely on any third-party analytics, advertising, tracking, or data collection services. There are no external API calls made by this component.</p>
+  </div>
+
+  <div class="section">
+    <h2>Data Security</h2>
+    <p>Since the component operates entirely within your Salesforce org and browser session, data security is governed by your org's existing Salesforce security model — including profiles, permission sets, and field-level security. Japps.ai does not have access to your org or its data.</p>
+  </div>
+
+  <div class="section">
+    <h2>Open Source</h2>
+    <p>The OmniScript Debug Panel is open source and available for review on GitHub at <a href="https://github.com/kodebus/omniDebugPanel" target="_blank" style="color:var(--sage-mid);">github.com/kodebus/omniDebugPanel</a>. You are welcome to inspect the full source code to verify these privacy claims directly.</p>
+  </div>
+
+  <div class="section">
+    <h2>Changes to This Policy</h2>
+    <p>If this Privacy Policy is updated, the new version will be posted at this URL with a revised effective date. We do not anticipate changes that would introduce any form of data collection.</p>
+  </div>
+
+  <div class="contact-box">
+    <h2>Contact</h2>
+    <p>If you have any questions about this Privacy Policy or the OmniScript Debug Panel, please contact:</p>
+    <p><strong style="color:rgba(255,255,255,0.7);">Japps.ai</strong></p>
+    <p>Email: <a href="mailto:gsselle@japps.ai">gsselle@japps.ai</a></p>
+    <p>Website: <a href="https://japps.ai" target="_blank">japps.ai</a></p>
+    <p>GitHub: <a href="https://github.com/kodebus/omniDebugPanel" target="_blank">github.com/kodebus/omniDebugPanel</a></p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">OS · OmniScript Debug Panel v1.0</div>
+  <div class="footer-copy">© 2025 Japps.ai. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="https://github.com/kodebus/omniDebugPanel" target="_blank" class="footer-link">GitHub →</a>
+    <a href="https://japps.ai" target="_blank" class="footer-link">japps.ai →</a>
+  </div>
+</footer>
+
+</body>
+</html>
