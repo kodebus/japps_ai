@@ -1,16 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Grab It",
-  "version": "1.0",
+  "version": "1.1",
   "description": "GI - Grab the name of any Salesforce component you are working on and log your daily tasks for monthly reporting",
   "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": [
-    "https://api.anthropic.com/*",
     "https://*.salesforce.com/*",
     "https://*.lightning.force.com/*",
-    "https://*.force.com/*",
-    "https://docs.google.com/*",
-    "https://*.google.com/*"
+    "https://*.force.com/*"
   ],
   "icons": {
     "16": "icon_16.png",
@@ -33,9 +30,7 @@
       "matches": [
         "https://*.salesforce.com/*",
         "https://*.lightning.force.com/*",
-        "https://*.force.com/*",
-        "https://docs.google.com/*",
-        "https://*.google.com/*"
+        "https://*.force.com/*"
       ],
       "js": ["content.js"]
     }
