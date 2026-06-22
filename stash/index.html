@@ -1,0 +1,2058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stash — Your Cheat Sheets</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #1C1F26;
+    --bg-elev: #232730;
+    --bg-elev-2: #2A2F3A;
+    --card: #F7F5F0;
+    --card-border: #E5E1D8;
+    --ink: #1C1F26;
+    --ink-soft: #5B5F6B;
+    --paper-muted: #8C909C;
+    --amber: #E8A33D;
+    --amber-soft: rgba(232,163,61,0.15);
+    --sage: #6B8F71;
+    --sage-soft: rgba(107,143,113,0.15);
+    --danger: #C2645A;
+    --danger-soft: rgba(194,100,90,0.15);
+    --border: #353A46;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: #E8E6E0;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .app {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--bg-elev);
+    border-right: 1px solid var(--border);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overflow-y: auto;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 4px 4px;
+  }
+
+  .brand-mark {
+    width: 28px; height: 28px;
+    background: var(--amber);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 14px;
+    color: #1C1F26;
+    flex-shrink: 0;
+  }
+
+  .brand-name {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.3px;
+    color: #fff;
+  }
+
+  .new-btn {
+    background: var(--amber);
+    color: #1C1F26;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background 0.15s;
+  }
+
+  .new-btn:hover { background: #f0b257; }
+
+  .nav-section { display: flex; flex-direction: column; gap: 2px; }
+
+  .nav-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--paper-muted);
+    padding: 0 8px;
+    margin-bottom: 6px;
+    margin-top: 4px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #C5C3BD;
+    transition: background 0.12s;
+  }
+
+  .nav-item:hover { background: var(--bg-elev-2); }
+  .nav-item.active { background: var(--amber-soft); color: var(--amber); font-weight: 600; }
+
+  .nav-item-left { display: flex; align-items: center; gap: 8px; }
+
+  .nav-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  .nav-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--paper-muted);
+  }
+
+  .nav-item.active .nav-count { color: var(--amber); opacity: 0.8; }
+
+  .tag-pill {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 9px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: opacity 0.12s;
+    border: 1px solid transparent;
+  }
+
+  .tag-pill:hover { opacity: 0.8; }
+
+  .tags-wrap { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 4px; }
+
+  /* MAIN */
+  .main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .topbar {
+    padding: 18px 28px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  .search-wrap {
+    flex: 1;
+    position: relative;
+    max-width: 420px;
+  }
+
+  .search-input {
+    width: 100%;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 14px 9px 34px;
+    color: #fff;
+    font-size: 13px;
+    font-family: var(--sans);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .search-input:focus { border-color: var(--amber); }
+  .search-input::placeholder { color: var(--paper-muted); }
+
+  .search-icon {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--paper-muted);
+    font-size: 14px;
+  }
+
+  .view-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--paper-muted);
+  }
+
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 28px 40px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .sheet-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sheet-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  }
+
+  .sheet-card-head {
+    padding: 14px 16px 10px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .sheet-title {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ink);
+    letter-spacing: -0.2px;
+  }
+
+  .sheet-cat {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+
+  .sheet-preview {
+    margin: 0 16px 12px;
+    background: #232730;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #B8E0C2;
+    line-height: 1.7;
+    white-space: pre;
+    overflow: hidden;
+    max-height: 90px;
+    position: relative;
+  }
+
+  .sheet-preview.is-note {
+    color: #D8D5CC;
+    white-space: pre-wrap;
+    font-family: var(--sans);
+  }
+
+  .sheet-footer {
+    margin-top: auto;
+    padding: 10px 16px 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .footer-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 100px;
+    background: var(--sage-soft);
+    color: #3F5A44;
+    font-weight: 600;
+  }
+
+  /* DETAIL / EDITOR PANEL */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 32px;
+  }
+
+  .editor-panel {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 720px;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .editor-head {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .editor-title-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 17px;
+    color: #fff;
+    width: 100%;
+  }
+
+  .editor-title-input::placeholder { color: var(--paper-muted); }
+
+  .icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--paper-muted);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.12s, color 0.12s;
+  }
+
+  .icon-btn:hover { background: var(--bg-elev-2); color: #fff; }
+
+  .editor-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .meta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .meta-field { flex: 1; min-width: 140px; }
+
+  .meta-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--paper-muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .meta-select, .meta-input {
+    width: 100%;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 8px 10px;
+    color: #fff;
+    font-size: 13px;
+    font-family: var(--sans);
+    outline: none;
+  }
+
+  .meta-select:focus, .meta-input:focus { border-color: var(--amber); }
+
+  .editor-textarea {
+    width: 100%;
+    min-height: 220px;
+    background: #15171D;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    color: #B8E0C2;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    outline: none;
+    resize: vertical;
+  }
+
+  .editor-textarea:focus { border-color: var(--amber); }
+
+  .editor-textarea.note-mode {
+    color: #E8E6E0;
+    font-family: var(--sans);
+  }
+
+  .type-toggle {
+    display: flex;
+    gap: 6px;
+  }
+
+  .type-btn {
+    flex: 1;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 8px;
+    color: var(--paper-muted);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.12s;
+  }
+
+  .type-btn.active {
+    background: var(--amber-soft);
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+
+  .editor-footer {
+    padding: 14px 22px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .save-btn {
+    background: var(--amber);
+    color: #1C1F26;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .save-btn:hover { background: #f0b257; }
+
+  .delete-btn {
+    background: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+
+  .delete-btn:hover { background: var(--danger-soft); }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    text-align: center;
+    color: var(--paper-muted);
+  }
+
+  .empty-state-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+  }
+
+  .empty-state h3 {
+    font-family: var(--sans);
+    font-size: 15px;
+    color: #C5C3BD;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .empty-state p { font-size: 13px; max-width: 280px; }
+
+  .add-tag-input {
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px 10px;
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 11px;
+    outline: none;
+    width: 90px;
+  }
+
+  .add-tag-input:focus { border-color: var(--amber); }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #3A3F4B; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #4A5060; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  #printArea { display: none; }
+
+  /* PRINT LAYOUT WORKSPACE */
+  .layout-view {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .layout-tray {
+    width: 230px;
+    border-right: 1px solid var(--border);
+    padding: 16px;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+
+  .layout-tray-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--paper-muted);
+    margin-bottom: 10px;
+  }
+
+  .tray-item {
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 9px 10px;
+    margin-bottom: 8px;
+    cursor: grab;
+    font-size: 12px;
+    color: #E8E6E0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: border-color 0.12s;
+  }
+
+  .tray-item:hover { border-color: var(--amber); }
+  .tray-item.used { opacity: 0.35; cursor: default; }
+  .tray-item.used:hover { border-color: var(--border); }
+
+  .tray-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  .layout-canvas-wrap {
+    flex: 1;
+    overflow: auto;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .layout-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    max-width: 850px;
+  }
+
+  .layout-toolbar .save-btn { margin-left: auto; }
+
+  .ghost-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: #C5C3BD;
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.12s, color 0.12s;
+  }
+
+  .ghost-btn:hover { border-color: var(--amber); color: var(--amber); }
+
+  .print-page {
+    background: #fff;
+    width: 850px;
+    height: 1100px;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    border-radius: 2px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .page-dropzone-hint {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #C5C3BD;
+    font-family: var(--mono);
+    font-size: 13px;
+    pointer-events: none;
+  }
+
+  .placed-sheet {
+    position: absolute;
+    background: var(--card);
+    border: 1.5px solid var(--card-border);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: move;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .placed-sheet.selected { border-color: var(--amber); box-shadow: 0 0 0 2px var(--amber-soft); }
+
+  .select-box {
+    position: absolute;
+    border: 1.5px dashed var(--amber);
+    background: rgba(232,163,61,0.1);
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .color-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+    transition: transform 0.1s;
+  }
+
+  .color-swatch:hover { transform: scale(1.12); }
+  .color-swatch.active { border-color: var(--amber); box-shadow: 0 0 0 2px var(--amber-soft); }
+
+  .card-drag-handle {
+    cursor: grab;
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: 1;
+    padding-top: 2px;
+    user-select: none;
+  }
+
+  .card-drag-handle:active { cursor: grabbing; }
+
+  .sheet-card.manual-mode.drag-over {
+    outline: 2px dashed var(--amber);
+    outline-offset: 2px;
+  }
+
+  .sheet-card.dragging-card { opacity: 0.4; }
+
+  .placed-sheet-head {
+    padding: 8px 10px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    border-bottom: 1px solid #EFEBE2;
+  }
+
+  .placed-sheet-title {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .placed-sheet-remove {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-size: 13px;
+    padding: 0 2px;
+    flex-shrink: 0;
+  }
+
+  .placed-sheet-remove:hover { color: var(--danger); }
+
+  .placed-sheet-body {
+    padding: 8px 10px;
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1.6;
+    color: #3F5A44;
+    white-space: pre-wrap;
+    overflow: hidden;
+    height: calc(100% - 32px);
+  }
+
+  .placed-sheet-body.note-mode { font-family: var(--sans); color: #3A3D44; }
+
+  .resize-handle {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 14px;
+    height: 14px;
+    cursor: nwse-resize;
+    background: linear-gradient(135deg, transparent 50%, var(--amber) 50%);
+    opacity: 0.7;
+  }
+
+  .page-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--paper-muted);
+    align-self: flex-start;
+    margin-left: calc((100% - 850px) / 2);
+  }
+
+  @media print {
+    @page { size: letter; margin: 0; }
+    body * { visibility: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact; }
+    #printArea, #printArea * { visibility: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact; }
+    #printArea {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      color: #1C1F26;
+    }
+    #printArea.single-sheet-mode { padding: 24px; }
+    .print-title {
+      font-family: 'Inter', sans-serif;
+      font-size: calc(22px * var(--print-scale, 1));
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .print-cat {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: calc(13px * var(--print-scale, 1));
+      color: #5B5F6B;
+      margin-bottom: 16px;
+    }
+    .print-content {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: calc(15px * var(--print-scale, 1));
+      line-height: 1.7;
+      white-space: pre-wrap;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 16px;
+      background: #fafafa;
+    }
+    .print-content.note-mode { font-family: 'Inter', sans-serif; background: #fff; border: none; padding: 0; }
+    .print-tags {
+      margin-top: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: calc(12px * var(--print-scale, 1));
+      color: #6B8F71;
+    }
+
+    .layout-print-page {
+      position: relative;
+      width: 850px;
+      height: 1100px;
+      margin: 0;
+      page-break-inside: avoid;
+    }
+
+    .layout-print-sheet {
+      position: absolute;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      background: #fff;
+    }
+
+    .layout-print-head {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: calc(13px * var(--print-scale, 1));
+      padding: 7px 10px 5px;
+      border-bottom: 1px solid #eee;
+      color: #1C1F26;
+    }
+
+    .layout-print-body {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: calc(12px * var(--print-scale, 1));
+      line-height: 1.5;
+      white-space: pre-wrap;
+      padding: 7px 10px;
+      color: #2D4A33;
+      overflow: hidden;
+      height: calc(100% - 28px);
+    }
+
+    .layout-print-body.note-mode { font-family: 'Inter', sans-serif; color: #1C1F26; }
+  }
+</style>
+</head>
+<body>
+
+<div id="printArea"></div>
+<div class="app" id="app"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ====== SUPABASE CONFIG — fill these in after creating your project ======
+const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// ===========================================================================
+
+let CATEGORIES = [];
+
+const CATEGORY_COLORS = ['#4A9EE8', '#E8A33D', '#6B8F71', '#C2645A', '#A78BFA', '#E07AAE', '#5FB8B0', '#D4A574'];
+
+async function addCategory(name) {
+  const id = name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  if (!id) return null;
+  const existing = CATEGORIES.find(c => c.id === id);
+  if (existing) return existing.id;
+  const color = CATEGORY_COLORS[CATEGORIES.length % CATEGORY_COLORS.length];
+  const sortOrder = CATEGORIES.length;
+  state.dbStatus = 'syncing';
+  updateDbBadge();
+  try {
+    const { data, error } = await sb.from('categories').insert({ id, name: name.trim(), color, sort_order: sortOrder, user_id: currentUser.id }).select().single();
+    if (error) throw error;
+    CATEGORIES.push({ id: data.id, name: data.name, color: data.color });
+    state.dbStatus = 'connected';
+    return data.id;
+  } catch (err) {
+    console.error('addCategory failed', err);
+    state.dbStatus = 'error';
+    showToast('Could not create category', true);
+    return null;
+  } finally {
+    updateDbBadge();
+  }
+}
+
+let sheets = [];
+let currentUser = null; // { id, email, name, avatarUrl } once signed in
+
+let state = {
+  activeCategory: 'all',
+  activeTag: null,
+  search: '',
+  editing: null,
+  isNew: false,
+  view: 'library',
+  printLayout: { pages: [[]], fontScale: 1 },
+  draggingSheetId: null,
+  resizing: null,
+  selectedPlacedIds: [],
+  sortMode: 'manual',
+  isLoading: true,
+  loadError: null,
+  dbStatus: 'connecting', // 'connecting' | 'connected' | 'syncing' | 'error'
+  authChecked: false,
+  authBusy: false,
+};
+
+// ====== AUTH ======
+
+async function initAuth() {
+  const { data } = await sb.auth.getSession();
+  applySession(data.session);
+  state.authChecked = true;
+  render();
+
+  sb.auth.onAuthStateChange((_event, session) => {
+    applySession(session);
+    if (session) {
+      loadAll();
+    } else {
+      CATEGORIES = [];
+      sheets = [];
+      state.printLayout = { pages: [[]], fontScale: 1 };
+      state.isLoading = false;
+      render();
+    }
+  });
+
+  if (data.session) {
+    await loadAll();
+  } else {
+    render();
+  }
+}
+
+function applySession(session) {
+  if (session && session.user) {
+    currentUser = {
+      id: session.user.id,
+      email: session.user.email,
+      name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email,
+      avatarUrl: session.user.user_metadata?.avatar_url || null,
+    };
+  } else {
+    currentUser = null;
+  }
+}
+
+async function signInWithGoogle() {
+  state.authBusy = true;
+  render();
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.href },
+  });
+  if (error) {
+    console.error('signInWithGoogle failed', error);
+    state.authBusy = false;
+    showToast('Could not start Google sign-in', true);
+    render();
+  }
+  // On success the browser redirects away, so nothing else to do here.
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+}
+
+function renderLoginScreen() {
+  return `
+  <div style="grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:18px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="brand-mark" style="width:36px;height:36px;font-size:17px;">S</div>
+      <span class="brand-name" style="font-size:20px;">Stash</span>
+    </div>
+    <div style="color:var(--paper-muted);font-family:var(--sans);font-size:13px;max-width:320px;text-align:center;">
+      Your cheat sheets, synced and private to your account.
+    </div>
+    <button id="googleSignInBtn" ${state.authBusy ? 'disabled' : ''} style="display:flex;align-items:center;gap:10px;background:#fff;color:#1C1F26;border:none;border-radius:8px;padding:11px 20px;font-family:var(--sans);font-weight:600;font-size:14px;cursor:pointer;">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84c-.21 1.12-.84 2.07-1.8 2.71v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.61z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.55-1.84.86-3.06.86-2.35 0-4.34-1.58-5.05-3.71H.96v2.33C2.44 15.98 5.48 18 9 18z"/><path fill="#FBBC05" d="M3.95 10.71c-.18-.55-.28-1.13-.28-1.71s.1-1.16.28-1.71V4.96H.96A8.99 8.99 0 000 9c0 1.45.35 2.83.96 4.04l2.99-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.57-2.57C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.99 2.33C4.66 5.16 6.65 3.58 9 3.58z"/></svg>
+      ${state.authBusy ? 'Redirecting…' : 'Sign in with Google'}
+    </button>
+  </div>`;
+}
+
+// ====== DATA LAYER: load from / save to Supabase ======
+
+function rowToSheet(row) {
+  return {
+    id: row.id,
+    title: row.title,
+    category: row.category,
+    type: row.type,
+    content: row.content,
+    tags: row.tags || [],
+    color: row.color,
+    order: row.sort_order,
+    updatedAt: row.updated_at ? new Date(row.updated_at).getTime() : Date.now(),
+  };
+}
+
+async function loadAll() {
+  state.isLoading = true;
+  state.loadError = null;
+  state.dbStatus = 'connecting';
+  render();
+  try {
+    const [catRes, sheetRes, layoutRes] = await Promise.all([
+      sb.from('categories').select('*').order('sort_order'),
+      sb.from('sheets').select('*').order('sort_order'),
+      sb.from('print_layout').select('*').eq('user_id', currentUser.id).maybeSingle(),
+    ]);
+    if (catRes.error) throw catRes.error;
+    if (sheetRes.error) throw sheetRes.error;
+    if (layoutRes.error) throw layoutRes.error;
+
+    CATEGORIES = catRes.data.map(c => ({ id: c.id, name: c.name, color: c.color }));
+    sheets = sheetRes.data.map(rowToSheet);
+    state.printLayout.pages = (layoutRes.data && layoutRes.data.pages) ? layoutRes.data.pages : [[]];
+    state.printLayout.fontScale = (layoutRes.data && layoutRes.data.font_scale) || 1;
+    state.dbStatus = 'connected';
+
+    if (CATEGORIES.length === 0 && sheets.length === 0) {
+      await seedDemoData();
+    }
+  } catch (err) {
+    console.error('Failed to load from Supabase', err);
+    state.loadError = err.message || 'Could not connect to Supabase';
+    state.dbStatus = 'error';
+  } finally {
+    state.isLoading = false;
+    render();
+  }
+}
+
+// First-time setup for a brand new account: a starter set of categories
+// and example sheets, so the app isn't a blank page on first login.
+async function seedDemoData() {
+  const demoCategories = [
+    { id: 'getting-started', name: 'Getting started', color: '#4A9EE8', sort_order: 0 },
+    { id: 'general', name: 'General', color: '#8C909C', sort_order: 1 },
+  ];
+  const demoSheets = [
+    {
+      title: 'Welcome to Stash', category: 'getting-started', type: 'note',
+      content: 'This is your first cheat sheet!\n\nClick any card to edit it, use "+ New cheat sheet" to add more, and try "Print layout" to arrange several sheets onto a page for printing.',
+      tags: ['welcome'], color: '#DCF0E1', sort_order: 0,
+    },
+    {
+      title: 'Markdown quick reference', category: 'general', type: 'code',
+      content: '# Heading\n**bold**  _italic_\n- bullet item\n[link](https://example.com)\n`inline code`',
+      tags: ['markdown', 'reference'], color: '#D6E8F5', sort_order: 1,
+    },
+  ];
+  try {
+    const { error: catErr } = await sb.from('categories').insert(demoCategories.map(c => ({ ...c, user_id: currentUser.id })));
+    if (catErr) throw catErr;
+    const { data: sheetRows, error: sheetErr } = await sb.from('sheets')
+      .insert(demoSheets.map(s => ({ ...s, user_id: currentUser.id, updated_at: new Date().toISOString() })))
+      .select();
+    if (sheetErr) throw sheetErr;
+    CATEGORIES = demoCategories.map(c => ({ id: c.id, name: c.name, color: c.color }));
+    sheets = sheetRows.map(rowToSheet);
+  } catch (err) {
+    console.error('seedDemoData failed', err);
+    // Non-fatal — the user just starts with an empty library.
+  }
+}
+
+function updateDbBadge() {
+  const el = document.getElementById('dbStatusBadge');
+  if (!el) return;
+  const info = dbStatusInfo();
+  el.title = info.label;
+  el.querySelector('.db-status-dot').style.background = info.color;
+  el.querySelector('.db-status-label').textContent = info.label;
+}
+
+function dbStatusInfo() {
+  switch (state.dbStatus) {
+    case 'connected': return { color: 'var(--sage)', label: 'Synced' };
+    case 'syncing': return { color: 'var(--amber)', label: 'Saving…' };
+    case 'error': return { color: 'var(--danger)', label: 'Sync error' };
+    default: return { color: 'var(--paper-muted)', label: 'Connecting…' };
+  }
+}
+
+async function savePrintLayout() {
+  state.dbStatus = 'syncing';
+  updateDbBadge();
+  try {
+    const { error } = await sb.from('print_layout').upsert({
+      user_id: currentUser.id,
+      pages: state.printLayout.pages,
+      font_scale: state.printLayout.fontScale || 1,
+    });
+    if (error) throw error;
+    state.dbStatus = 'connected';
+  } catch (err) {
+    console.error('savePrintLayout failed', err);
+    state.dbStatus = 'error';
+    showToast('Could not save layout', true);
+  } finally {
+    updateDbBadge();
+  }
+}
+
+function showToast(msg, isError) {
+  let el = document.getElementById('toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'toast';
+    el.style.position = 'fixed';
+    el.style.bottom = '20px';
+    el.style.right = '20px';
+    el.style.padding = '10px 16px';
+    el.style.borderRadius = '8px';
+    el.style.fontFamily = "'Inter', sans-serif";
+    el.style.fontSize = '13px';
+    el.style.fontWeight = '600';
+    el.style.zIndex = '200';
+    el.style.transition = 'opacity 0.3s';
+    el.style.boxShadow = '0 8px 24px rgba(0,0,0,0.3)';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.background = isError ? '#C2645A' : '#6B8F71';
+  el.style.color = '#fff';
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.opacity = '0'; }, 2600);
+}
+
+function uniqueTags() {
+  const all = sheets.flatMap(s => s.tags);
+  return [...new Set(all)].sort();
+}
+
+function categoryCount(catId) {
+  return sheets.filter(s => s.category === catId).length;
+}
+
+function getCategory(id) {
+  return CATEGORIES.find(c => c.id === id) || CATEGORIES[CATEGORIES.length-1];
+}
+
+function filteredSheets() {
+  const filtered = sheets.filter(s => {
+    if (state.activeCategory !== 'all' && s.category !== state.activeCategory) return false;
+    if (state.activeTag && !s.tags.includes(state.activeTag)) return false;
+    if (state.search) {
+      const q = state.search.toLowerCase();
+      const inTitle = s.title.toLowerCase().includes(q);
+      const inContent = s.content.toLowerCase().includes(q);
+      const inTags = s.tags.some(t => t.toLowerCase().includes(q));
+      if (!inTitle && !inContent && !inTags) return false;
+    }
+    return true;
+  });
+
+  const sorted = [...filtered];
+  if (state.sortMode === 'alpha') {
+    sorted.sort((a, b) => a.title.localeCompare(b.title));
+  } else if (state.sortMode === 'recent') {
+    sorted.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  } else if (state.sortMode === 'category') {
+    sorted.sort((a, b) => {
+      const catA = getCategory(a.category).name, catB = getCategory(b.category).name;
+      if (catA !== catB) return catA.localeCompare(catB);
+      return a.title.localeCompare(b.title);
+    });
+  } else {
+    // manual
+    sorted.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  }
+  return sorted;
+}
+
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function render() {
+  const app = document.getElementById('app');
+
+  if (!state.authChecked) {
+    app.innerHTML = `<div style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;height:100vh;color:var(--paper-muted);font-family:var(--mono);font-size:13px;">Checking sign-in…</div>`;
+    return;
+  }
+
+  if (!currentUser) {
+    app.innerHTML = renderLoginScreen();
+    const googleBtn = document.getElementById('googleSignInBtn');
+    if (googleBtn) googleBtn.onclick = () => signInWithGoogle();
+    return;
+  }
+
+  if (state.isLoading) {
+    app.innerHTML = `<div style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;height:100vh;color:var(--paper-muted);font-family:var(--mono);font-size:13px;">Loading your stash…</div>`;
+    return;
+  }
+
+  if (state.loadError) {
+    app.innerHTML = `<div style="grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:14px;text-align:center;padding:20px;">
+      <div style="color:var(--danger);font-family:var(--sans);font-weight:600;font-size:15px;">Couldn't connect to Supabase</div>
+      <div style="color:var(--paper-muted);font-family:var(--mono);font-size:12px;max-width:420px;">${escapeHtml(state.loadError)}</div>
+      <div style="color:var(--paper-muted);font-family:var(--sans);font-size:12px;max-width:420px;">Check that SUPABASE_URL and SUPABASE_ANON_KEY are filled in correctly, and that the tables exist.</div>
+      <button class="ghost-btn" id="retryLoadBtn">Retry</button>
+    </div>`;
+    const retryBtn = document.getElementById('retryLoadBtn');
+    if (retryBtn) retryBtn.onclick = () => loadAll();
+    return;
+  }
+
+  const sidebarHtml = renderSidebar();
+  const mainHtml = state.view === 'printLayout' ? renderPrintLayoutView() : renderMain();
+  const overlayHtml = state.editing ? renderEditor() : '';
+  app.innerHTML = sidebarHtml + mainHtml + overlayHtml;
+  attachEvents();
+}
+
+function renderSidebar() {
+  const navItems = CATEGORIES.map(c => `
+    <div class="nav-item ${state.activeCategory === c.id ? 'active' : ''}" data-cat="${c.id}">
+      <div class="nav-item-left">
+        <div class="nav-dot" style="background:${c.color}"></div>
+        <span>${c.name}</span>
+      </div>
+      <span class="nav-count">${categoryCount(c.id)}</span>
+    </div>
+  `).join('');
+
+  const tags = uniqueTags();
+  const tagsHtml = tags.map(t => `
+    <span class="tag-pill" data-tag="${t}" style="background:${state.activeTag===t ? 'var(--amber)' : 'var(--bg-elev-2)'};color:${state.activeTag===t ? '#1C1F26' : '#C5C3BD'};border-color:${state.activeTag===t ? 'var(--amber)' : 'var(--border)'}">#${t}</span>
+  `).join('');
+
+  const dbInfo = dbStatusInfo();
+  const userInitial = (currentUser.name || currentUser.email || '?').charAt(0).toUpperCase();
+  const avatarHtml = currentUser.avatarUrl
+    ? `<img src="${currentUser.avatarUrl}" alt="" style="width:22px;height:22px;border-radius:50%;flex-shrink:0;" />`
+    : `<div style="width:22px;height:22px;border-radius:50%;background:var(--amber-soft);color:var(--amber);display:flex;align-items:center;justify-content:center;font-family:var(--sans);font-weight:700;font-size:11px;flex-shrink:0;">${userInitial}</div>`;
+
+  return `
+  <div class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <span class="brand-name">Stash</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 4px;border:1px solid var(--border);border-radius:8px;background:var(--bg-elev-2);">
+      ${avatarHtml}
+      <span style="font-family:var(--sans);font-size:12px;color:#E8E6E0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${escapeHtml(currentUser.name || currentUser.email)}</span>
+      <button class="icon-btn" id="signOutBtn" title="Sign out" style="font-size:13px;padding:2px 6px;">⏻</button>
+    </div>
+    <div id="dbStatusBadge" title="${dbInfo.label}" style="display:flex;align-items:center;gap:7px;padding:0 4px;">
+      <div class="db-status-dot" style="width:7px;height:7px;border-radius:50%;background:${dbInfo.color};flex-shrink:0;${state.dbStatus==='syncing' ? 'animation:pulse 1s infinite;' : ''}"></div>
+      <span class="db-status-label" style="font-family:var(--mono);font-size:10.5px;color:var(--paper-muted);letter-spacing:0.3px;">${dbInfo.label}</span>
+    </div>
+    <button class="new-btn" id="newBtn">+ New cheat sheet</button>
+    <button class="new-btn" id="printLayoutBtn" style="background:var(--bg-elev-2);color:#E8E6E0;border:1px solid var(--border);">⎙ Print layout</button>
+    <div class="nav-section">
+      <div class="nav-label">Categories</div>
+
+      <div class="nav-item ${state.activeCategory==='all' ? 'active' : ''}" data-cat="all">
+        <div class="nav-item-left">
+          <div class="nav-dot" style="background:#fff"></div>
+          <span>All sheets</span>
+        </div>
+        <span class="nav-count">${sheets.length}</span>
+      </div>
+      ${navItems}
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Tags</div>
+      <div class="tags-wrap">${tagsHtml || '<span style="color:var(--paper-muted);font-size:12px;padding:0 4px;">No tags yet</span>'}</div>
+    </div>
+  </div>`;
+}
+
+function renderMain() {
+  const list = filteredSheets();
+  const titleText = state.activeTag
+    ? `#${state.activeTag}`
+    : state.activeCategory === 'all'
+      ? 'All sheets'
+      : getCategory(state.activeCategory).name;
+
+  const isManual = state.sortMode === 'manual';
+  const cardsHtml = list.length ? `<div class="grid">${list.map(s => renderCard(s, isManual)).join('')}</div>` : renderEmpty();
+
+  const sortOptions = [
+    { value: 'manual', label: 'Manual order' },
+    { value: 'alpha', label: 'Alphabetical (A–Z)' },
+    { value: 'recent', label: 'Recently edited' },
+    { value: 'category', label: 'By category' },
+  ];
+  const sortOptionsHtml = sortOptions.map(o => `<option value="${o.value}" ${state.sortMode===o.value?'selected':''}>${o.label}</option>`).join('');
+
+  return `
+  <div class="main">
+    <div class="topbar">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input class="search-input" id="searchInput" placeholder="Search sheets, code, tags..." value="${escapeHtml(state.search)}" />
+      </div>
+      <select class="meta-select" id="sortSelect" style="width:auto;max-width:190px;flex-shrink:0;">${sortOptionsHtml}</select>
+      <div class="view-title">${titleText} · ${list.length}</div>
+    </div>
+    <div class="content">${cardsHtml}</div>
+  </div>`;
+}
+
+function renderEmpty() {
+  if (state.search) {
+    return `<div class="empty-state">
+      <div class="empty-state-icon">⌕</div>
+      <h3>No sheets match "${escapeHtml(state.search)}"</h3>
+      <p>Try a different search term, or clear the search to see everything.</p>
+    </div>`;
+  }
+  return `<div class="empty-state">
+    <div class="empty-state-icon">+</div>
+    <h3>Nothing here yet</h3>
+    <p>Create your first cheat sheet in this category to see it appear here.</p>
+  </div>`;
+}
+
+const DEFAULT_SHEET_COLOR = '#F7F5F0';
+const SWATCH_PALETTE = ['#F7F5F0', '#D6E8F5', '#E9DDF7', '#FAE0DC', '#DCF0E1', '#FCEAD2', '#FDE6EF', '#DFF6F5'];
+
+function renderColorSwatches(currentColor) {
+  return SWATCH_PALETTE.map(c => {
+    const isActive = (currentColor || DEFAULT_SHEET_COLOR).toLowerCase() === c.toLowerCase();
+    return `<div class="color-swatch ${isActive ? 'active' : ''}" data-swatch="${c}" style="background:${c};"></div>`;
+  }).join('');
+}
+
+function renderCard(sheet, isManual) {
+  const cat = getCategory(sheet.category);
+  const previewClass = sheet.type === 'note' ? 'sheet-preview is-note' : 'sheet-preview';
+  const tagsHtml = sheet.tags.map(t => `<span class="footer-tag">#${t}</span>`).join('');
+  const bg = sheet.color || DEFAULT_SHEET_COLOR;
+  const dragHandle = isManual ? `<span class="card-drag-handle" draggable="true" data-cardid="${sheet.id}" title="Drag to reorder">⠿</span>` : '';
+  return `
+  <div class="sheet-card ${isManual ? 'manual-mode' : ''}" data-id="${sheet.id}" data-cardwrapper="${sheet.id}">
+    <div class="sheet-card-head" style="background:${bg};">
+      <div style="display:flex;align-items:flex-start;gap:6px;">
+        ${dragHandle}
+        <div>
+          <div class="sheet-title">${escapeHtml(sheet.title)}</div>
+          <div class="sheet-cat" style="color:${cat.color}">${cat.name}</div>
+        </div>
+      </div>
+      <button class="icon-btn" data-printid="${sheet.id}" title="Print" style="color:var(--ink-soft);">⎙</button>
+    </div>
+    <div class="${previewClass}">${escapeHtml(sheet.content.slice(0, 160))}</div>
+    <div class="sheet-footer">${tagsHtml}</div>
+  </div>`;
+}
+
+function getPlacedIds() {
+  const ids = new Set();
+  state.printLayout.pages.forEach(page => page.forEach(item => ids.add(item.sheetId)));
+  return ids;
+}
+
+function renderPrintLayoutView() {
+  const placedIds = getPlacedIds();
+  const trayHtml = sheets.map(s => {
+    const cat = getCategory(s.category);
+    const used = placedIds.has(s.id);
+    return `<div class="tray-item ${used ? 'used' : ''}" draggable="${!used}" data-traysheet="${s.id}">
+      <div class="tray-dot" style="background:${cat.color}"></div>
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(s.title)}</span>
+    </div>`;
+  }).join('');
+
+  const pagesHtml = state.printLayout.pages.map((page, pageIdx) => `
+    <div class="page-label">Page ${pageIdx + 1}${state.printLayout.pages.length > 1 ? ` <span data-removepage="${pageIdx}" style="cursor:pointer;color:var(--danger);margin-left:8px;">remove page</span>` : ''}</div>
+    <div class="print-page" data-pageidx="${pageIdx}">
+      ${page.length === 0 ? '<div class="page-dropzone-hint">Drag a cheat sheet here</div>' : ''}
+      ${page.map(item => renderPlacedSheet(item, pageIdx)).join('')}
+      <div class="select-box" id="selectBox-${pageIdx}" style="display:none;"></div>
+    </div>
+  `).join('');
+
+  return `
+  <div class="layout-view">
+    <div class="layout-tray">
+      <div class="layout-tray-label">Drag onto page</div>
+      ${trayHtml}
+    </div>
+    <div class="layout-canvas-wrap">
+      <div class="layout-toolbar">
+        <button class="ghost-btn" id="backToLibraryBtn">← Back to library</button>
+        <button class="ghost-btn" id="addPageBtn">+ Add page</button>
+        <label style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--paper-muted);margin-left:8px;">
+          Print font size
+          <select class="meta-select" id="printFontScale" style="width:auto;padding:6px 8px;">
+            <option value="0.85" ${state.printLayout.fontScale===0.85?'selected':''}>Small</option>
+            <option value="1" ${!state.printLayout.fontScale || state.printLayout.fontScale===1?'selected':''}>Medium</option>
+            <option value="1.3" ${state.printLayout.fontScale===1.3?'selected':''}>Large</option>
+            <option value="1.6" ${state.printLayout.fontScale===1.6?'selected':''}>Extra large</option>
+          </select>
+        </label>
+        <button class="save-btn" id="printLayoutPrintBtn">⎙ Print this layout</button>
+      </div>
+      ${pagesHtml}
+    </div>
+  </div>`;
+}
+
+function renderPlacedSheet(item, pageIdx) {
+  const sheet = sheets.find(s => s.id === item.sheetId);
+  if (!sheet) return '';
+  const bodyClass = sheet.type === 'note' ? 'placed-sheet-body note-mode' : 'placed-sheet-body';
+  const isSelected = state.selectedPlacedIds.includes(item.id);
+  const bg = sheet.color || DEFAULT_SHEET_COLOR;
+  return `
+  <div class="placed-sheet ${isSelected ? 'selected' : ''}"
+       data-placedid="${item.id}" data-pageidx="${pageIdx}"
+       style="left:${item.x}px; top:${item.y}px; width:${item.w}px; height:${item.h}px;">
+    <div class="placed-sheet-head" data-draghandle="${item.id}" style="background:${bg};">
+      <div class="placed-sheet-title">${escapeHtml(sheet.title)}</div>
+      <div style="display:flex;gap:4px;flex-shrink:0;">
+        <button class="placed-sheet-remove" data-autofit="${item.id}" title="Auto-fit size">⤢</button>
+        <button class="placed-sheet-remove" data-removeplaced="${item.id}">✕</button>
+      </div>
+    </div>
+    <div class="${bodyClass}">${escapeHtml(sheet.content)}</div>
+    <div class="resize-handle" data-resizehandle="${item.id}"></div>
+  </div>`;
+}
+
+function renderEditor() {
+  const s = state.editing;
+  const catOptions = CATEGORIES.map(c => `<option value="${c.id}" ${s.category===c.id?'selected':''}>${c.name}</option>`).join('') + `<option value="__new__">+ New category…</option>`;
+  const textareaClass = s.type === 'note' ? 'editor-textarea note-mode' : 'editor-textarea';
+  const tagsHtml = s.tags.map(t => `<span class="footer-tag" style="cursor:pointer;" data-removetag="${t}">#${t} ×</span>`).join('');
+
+  return `
+  <div class="overlay" id="overlay">
+    <div class="editor-panel" onclick="event.stopPropagation()">
+      <div class="editor-head">
+        <input class="editor-title-input" id="titleInput" placeholder="Untitled cheat sheet" value="${escapeHtml(s.title)}" />
+        <div style="display:flex;gap:4px;">
+          <button class="icon-btn" id="printBtn" title="Print this sheet">⎙</button>
+          <button class="icon-btn" id="closeBtn">✕</button>
+        </div>
+      </div>
+      <div class="editor-body">
+        <div class="meta-row">
+          <div class="meta-field">
+            <label class="meta-label">Category</label>
+            <select class="meta-select" id="catSelect">${catOptions}</select>
+          </div>
+          <div class="meta-field">
+            <label class="meta-label">Type</label>
+            <div class="type-toggle">
+              <div class="type-btn ${s.type==='code'?'active':''}" data-type="code">Code</div>
+              <div class="type-btn ${s.type==='note'?'active':''}" data-type="note">Note</div>
+            </div>
+          </div>
+          <div class="meta-field" style="flex:0 0 auto;min-width:0;">
+            <label class="meta-label">Color</label>
+            <div style="display:flex;align-items:center;gap:6px;">
+              ${renderColorSwatches(s.color)}
+              <input type="color" id="colorPicker" value="${s.color || DEFAULT_SHEET_COLOR}" style="width:30px;height:30px;border:1px solid var(--border);border-radius:6px;background:none;cursor:pointer;padding:0;" title="Custom color" />
+            </div>
+          </div>
+        </div>
+        <div>
+          <label class="meta-label">Content</label>
+          <textarea class="${textareaClass}" id="contentInput" placeholder="${s.type==='code' ? 'Paste your snippet...' : 'Write your notes...'}">${escapeHtml(s.content)}</textarea>
+        </div>
+        <div>
+          <label class="meta-label">Tags</label>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+            ${tagsHtml}
+            <input class="add-tag-input" id="addTagInput" placeholder="+ tag" />
+          </div>
+        </div>
+      </div>
+      <div class="editor-footer">
+        ${s.id ? `<button class="delete-btn" id="deleteBtn">Delete</button>` : '<span></span>'}
+        <button class="save-btn" id="saveBtn">Save sheet</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function printSheet(sheet, scale) {
+  const cat = getCategory(sheet.category);
+  const contentClass = sheet.type === 'note' ? 'print-content note-mode' : 'print-content';
+  const tagsLine = sheet.tags.map(t => `#${t}`).join('  ');
+  const bg = sheet.color || DEFAULT_SHEET_COLOR;
+  const printArea = document.getElementById('printArea');
+  printArea.className = 'single-sheet-mode';
+  printArea.style.setProperty('--print-scale', scale || 1.3);
+  printArea.innerHTML = `
+    <div style="border:1px solid #e5e1d8; border-radius:10px; overflow:hidden;">
+      <div style="background:${bg}; padding:16px 20px;">
+        <div class="print-title">${escapeHtml(sheet.title)}</div>
+        <div class="print-cat">${cat.name}</div>
+      </div>
+      <div style="padding:16px 20px; background:#fff;">
+        <div class="${contentClass}">${escapeHtml(sheet.content)}</div>
+        ${sheet.tags.length ? `<div class="print-tags">${tagsLine}</div>` : ''}
+      </div>
+    </div>
+  `;
+  setTimeout(() => { window.print(); }, 50);
+}
+
+function printFullLayout() {
+  const nonEmptyPages = state.printLayout.pages.filter(page => page.length > 0);
+  const pagesToPrint = nonEmptyPages.length > 0 ? nonEmptyPages : state.printLayout.pages.slice(0, 1);
+
+  const pagesHtml = pagesToPrint.map((page, idx) => {
+    const itemsHtml = page.map(item => {
+      const sheet = sheets.find(s => s.id === item.sheetId);
+      if (!sheet) return '';
+      const bodyClass = sheet.type === 'note' ? 'layout-print-body note-mode' : 'layout-print-body';
+      const bg = sheet.color || DEFAULT_SHEET_COLOR;
+      return `<div class="layout-print-sheet" style="left:${item.x}px; top:${item.y}px; width:${item.w}px; height:${item.h}px;">
+        <div class="layout-print-head" style="background:${bg};">${escapeHtml(sheet.title)}</div>
+        <div class="${bodyClass}">${escapeHtml(sheet.content)}</div>
+      </div>`;
+    }).join('');
+    const isLast = idx === pagesToPrint.length - 1;
+    return `<div class="layout-print-page" style="${isLast ? '' : 'page-break-after: always;'}">${itemsHtml}</div>`;
+  }).join('');
+
+  const printArea = document.getElementById('printArea');
+  printArea.className = '';
+  printArea.style.setProperty('--print-scale', state.printLayout.fontScale || 1);
+  printArea.innerHTML = pagesHtml;
+  setTimeout(() => { window.print(); }, 50);
+}
+
+function measureSheetSize(sheet) {
+  const probe = document.createElement('div');
+  probe.style.position = 'absolute';
+  probe.style.visibility = 'hidden';
+  probe.style.whiteSpace = 'pre-wrap';
+  probe.style.padding = '8px 10px';
+  probe.style.boxSizing = 'border-box';
+  probe.style.fontFamily = sheet.type === 'note' ? "'Inter', sans-serif" : "'JetBrains Mono', monospace";
+  probe.style.fontSize = '10px';
+  probe.style.lineHeight = '1.6';
+  probe.style.maxWidth = '480px';
+  probe.style.width = 'max-content';
+  probe.textContent = sheet.content;
+  document.body.appendChild(probe);
+  let contentW = probe.scrollWidth;
+  document.body.removeChild(probe);
+
+  const w = Math.min(480, Math.max(180, contentW + 4));
+
+  probe.style.width = w + 'px';
+  probe.style.maxWidth = w + 'px';
+  document.body.appendChild(probe);
+  const contentH = probe.scrollHeight;
+  document.body.removeChild(probe);
+
+  const headH = 30;
+  const h = Math.min(560, Math.max(70, contentH + headH + 8));
+
+  return { w, h };
+}
+
+function attachEvents() {
+  document.querySelectorAll('[data-cat]').forEach(el => {
+    el.onclick = () => { state.activeCategory = el.dataset.cat; state.activeTag = null; state.view = 'library'; render(); };
+  });
+
+  document.querySelectorAll('[data-tag]').forEach(el => {
+    el.onclick = () => {
+      state.activeTag = state.activeTag === el.dataset.tag ? null : el.dataset.tag;
+      state.view = 'library';
+      render();
+    };
+  });
+
+  const signOutBtn = document.getElementById('signOutBtn');
+  if (signOutBtn) {
+    signOutBtn.onclick = () => signOut();
+  }
+
+  const printLayoutBtn = document.getElementById('printLayoutBtn');
+  if (printLayoutBtn) {
+    printLayoutBtn.onclick = () => { state.view = 'printLayout'; render(); };
+  }
+
+  const backToLibraryBtn = document.getElementById('backToLibraryBtn');
+  if (backToLibraryBtn) {
+    backToLibraryBtn.onclick = () => { state.view = 'library'; render(); };
+  }
+
+  const addPageBtn = document.getElementById('addPageBtn');
+  if (addPageBtn) {
+    addPageBtn.onclick = () => { state.printLayout.pages.push([]); render(); savePrintLayout(); };
+  }
+
+  document.querySelectorAll('[data-removepage]').forEach(el => {
+    el.onclick = (e) => {
+      e.stopPropagation();
+      const idx = parseInt(el.dataset.removepage);
+      state.printLayout.pages.splice(idx, 1);
+      render();
+      savePrintLayout();
+    };
+  });
+
+  const printLayoutPrintBtn = document.getElementById('printLayoutPrintBtn');
+  if (printLayoutPrintBtn) {
+    printLayoutPrintBtn.onclick = () => printFullLayout();
+  }
+
+  const printFontScale = document.getElementById('printFontScale');
+  if (printFontScale) {
+    printFontScale.onchange = (e) => {
+      state.printLayout.fontScale = parseFloat(e.target.value);
+      savePrintLayout();
+    };
+  }
+
+  // Drag sheet from tray onto a page
+  document.querySelectorAll('[data-traysheet]').forEach(el => {
+    el.ondragstart = (e) => {
+      e.dataTransfer.setData('text/plain', JSON.stringify({ type: 'tray', sheetId: parseInt(el.dataset.traysheet) }));
+    };
+  });
+
+  document.querySelectorAll('.print-page').forEach(pageEl => {
+    pageEl.ondragover = (e) => { e.preventDefault(); };
+    pageEl.ondrop = (e) => {
+      e.preventDefault();
+      const data = JSON.parse(e.dataTransfer.getData('text/plain') || '{}');
+      const pageIdx = parseInt(pageEl.dataset.pageidx);
+      const rect = pageEl.getBoundingClientRect();
+      const x = Math.max(0, e.clientX - rect.left - 90);
+      const y = Math.max(0, e.clientY - rect.top - 50);
+      if (data.type === 'tray') {
+        const sheet = sheets.find(s => s.id === data.sheetId);
+        const size = measureSheetSize(sheet);
+        const newItem = { id: Date.now(), sheetId: data.sheetId, x, y, w: size.w, h: size.h };
+        state.printLayout.pages[pageIdx].push(newItem);
+        render();
+        savePrintLayout();
+      }
+    };
+
+    // Rubber-band selection on empty page background
+    pageEl.onmousedown = (e) => {
+      if (e.target !== pageEl) return; // only start when clicking empty page area
+      const pageIdx = parseInt(pageEl.dataset.pageidx);
+      const rect = pageEl.getBoundingClientRect();
+      const startX = e.clientX - rect.left;
+      const startY = e.clientY - rect.top;
+      const selectBox = document.getElementById('selectBox-' + pageIdx);
+      selectBox.style.display = 'block';
+      selectBox.style.left = startX + 'px';
+      selectBox.style.top = startY + 'px';
+      selectBox.style.width = '0px';
+      selectBox.style.height = '0px';
+
+      function onMove(ev) {
+        const curX = ev.clientX - rect.left;
+        const curY = ev.clientY - rect.top;
+        const boxX = Math.min(startX, curX), boxY = Math.min(startY, curY);
+        const boxW = Math.abs(curX - startX), boxH = Math.abs(curY - startY);
+        selectBox.style.left = boxX + 'px';
+        selectBox.style.top = boxY + 'px';
+        selectBox.style.width = boxW + 'px';
+        selectBox.style.height = boxH + 'px';
+
+        // live highlight intersecting placed sheets
+        const items = state.printLayout.pages[pageIdx];
+        items.forEach(item => {
+          const intersects = !(item.x > boxX + boxW || item.x + item.w < boxX || item.y > boxY + boxH || item.y + item.h < boxY);
+          const itemEl = pageEl.querySelector(`[data-placedid="${item.id}"]`);
+          if (itemEl) itemEl.classList.toggle('selected', intersects);
+        });
+      }
+      function onUp(ev) {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        const boxLeft = parseFloat(selectBox.style.left), boxTop = parseFloat(selectBox.style.top);
+        const boxW = parseFloat(selectBox.style.width), boxH = parseFloat(selectBox.style.height);
+        selectBox.style.display = 'none';
+
+        if (boxW < 4 && boxH < 4) {
+          state.selectedPlacedIds = [];
+        } else {
+          const items = state.printLayout.pages[pageIdx];
+          state.selectedPlacedIds = items.filter(item =>
+            !(item.x > boxLeft + boxW || item.x + item.w < boxLeft || item.y > boxTop + boxH || item.y + item.h < boxTop)
+          ).map(i => i.id);
+        }
+        render();
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    };
+  });
+
+  // Drag-move placed sheets (single or multi-selected together)
+  document.querySelectorAll('[data-draghandle]').forEach(el => {
+    el.onmousedown = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const placedId = parseInt(el.dataset.draghandle);
+      const pageEl = el.closest('.print-page');
+      const pageIdx = parseInt(pageEl.dataset.pageidx);
+      const items = state.printLayout.pages[pageIdx];
+
+      // If this sheet isn't part of the current selection, select just this one
+      if (!state.selectedPlacedIds.includes(placedId)) {
+        state.selectedPlacedIds = [placedId];
+        render();
+      }
+
+      const movingIds = state.selectedPlacedIds.length ? state.selectedPlacedIds : [placedId];
+      const movingItems = items.filter(i => movingIds.includes(i.id));
+      const startPositions = movingItems.map(i => ({ item: i, origX: i.x, origY: i.y }));
+      const startX = e.clientX, startY = e.clientY;
+
+      function onMove(ev) {
+        const dx = ev.clientX - startX, dy = ev.clientY - startY;
+        startPositions.forEach(({ item, origX, origY }) => {
+          item.x = Math.max(0, origX + dx);
+          item.y = Math.max(0, origY + dy);
+          const itemEl = pageEl.querySelector(`[data-placedid="${item.id}"]`);
+          if (itemEl) { itemEl.style.left = item.x + 'px'; itemEl.style.top = item.y + 'px'; }
+        });
+      }
+      function onUp() {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        savePrintLayout();
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    };
+  });
+
+  // Resize placed sheets
+  document.querySelectorAll('[data-resizehandle]').forEach(el => {
+    el.onmousedown = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const placedId = parseInt(el.dataset.resizehandle);
+      const placedEl = el.closest('.placed-sheet');
+      const pageEl = el.closest('.print-page');
+      const pageIdx = parseInt(pageEl.dataset.pageidx);
+      const item = state.printLayout.pages[pageIdx].find(i => i.id === placedId);
+      const startX = e.clientX, startY = e.clientY;
+      const origW = item.w, origH = item.h;
+
+      function onMove(ev) {
+        const dx = ev.clientX - startX, dy = ev.clientY - startY;
+        item.w = Math.max(140, origW + dx);
+        item.h = Math.max(80, origH + dy);
+        placedEl.style.width = item.w + 'px';
+        placedEl.style.height = item.h + 'px';
+      }
+      function onUp() {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        savePrintLayout();
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    };
+  });
+
+  document.querySelectorAll('[data-removeplaced]').forEach(el => {
+    el.onclick = (e) => {
+      e.stopPropagation();
+      const placedId = parseInt(el.dataset.removeplaced);
+      state.printLayout.pages.forEach(page => {
+        const idx = page.findIndex(i => i.id === placedId);
+        if (idx > -1) page.splice(idx, 1);
+      });
+      render();
+      savePrintLayout();
+    };
+  });
+
+  document.querySelectorAll('[data-autofit]').forEach(el => {
+    el.onclick = (e) => {
+      e.stopPropagation();
+      const placedId = parseInt(el.dataset.autofit);
+      let found = null;
+      state.printLayout.pages.forEach(page => {
+        const item = page.find(i => i.id === placedId);
+        if (item) found = item;
+      });
+      if (found) {
+        const sheet = sheets.find(s => s.id === found.sheetId);
+        const size = measureSheetSize(sheet);
+        found.w = size.w;
+        found.h = size.h;
+        render();
+        savePrintLayout();
+      }
+    };
+  });
+
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.oninput = (e) => { state.search = e.target.value; render(); preserveFocus('searchInput'); };
+  }
+
+  const sortSelect = document.getElementById('sortSelect');
+  if (sortSelect) {
+    sortSelect.onchange = (e) => { state.sortMode = e.target.value; render(); };
+  }
+
+  document.querySelectorAll('.sheet-card').forEach(el => {
+    el.onclick = (e) => {
+      if (e.target.closest('.card-drag-handle') || e.target.closest('[data-printid]')) return;
+      const id = parseInt(el.dataset.id);
+      const sheet = sheets.find(s => s.id === id);
+      state.editing = { ...sheet, tags: [...sheet.tags] };
+      state.isNew = false;
+      render();
+    };
+  });
+
+  // Manual drag-to-reorder
+  document.querySelectorAll('.card-drag-handle').forEach(handle => {
+    handle.ondragstart = (e) => {
+      e.stopPropagation();
+      e.dataTransfer.setData('text/plain', JSON.stringify({ type: 'reorder', cardId: parseInt(handle.dataset.cardid) }));
+      handle.closest('.sheet-card').classList.add('dragging-card');
+    };
+    handle.ondragend = () => {
+      handle.closest('.sheet-card')?.classList.remove('dragging-card');
+    };
+  });
+
+  document.querySelectorAll('[data-cardwrapper]').forEach(cardEl => {
+    cardEl.ondragover = (e) => { e.preventDefault(); cardEl.classList.add('drag-over'); };
+    cardEl.ondragleave = () => { cardEl.classList.remove('drag-over'); };
+    cardEl.ondrop = (e) => {
+      e.preventDefault();
+      cardEl.classList.remove('drag-over');
+      let data;
+      try { data = JSON.parse(e.dataTransfer.getData('text/plain') || '{}'); } catch { return; }
+      if (data.type !== 'reorder') return;
+      const targetId = parseInt(cardEl.dataset.cardwrapper);
+      const sourceId = data.cardId;
+      if (sourceId === targetId) return;
+
+      const visible = filteredSheets();
+      const sourceIdx = visible.findIndex(s => s.id === sourceId);
+      const targetIdx = visible.findIndex(s => s.id === targetId);
+      if (sourceIdx === -1 || targetIdx === -1) return;
+
+      const reordered = [...visible];
+      const [moved] = reordered.splice(sourceIdx, 1);
+      reordered.splice(targetIdx, 0, moved);
+      reordered.forEach((s, i) => { s.order = i; });
+
+      render();
+
+      state.dbStatus = 'syncing';
+      updateDbBadge();
+      Promise.all(reordered.map(s => sb.from('sheets').update({ sort_order: s.order }).eq('id', s.id)))
+        .then(() => { state.dbStatus = 'connected'; updateDbBadge(); })
+        .catch(err => {
+          console.error('reorder save failed', err);
+          state.dbStatus = 'error';
+          updateDbBadge();
+          showToast('Could not save new order', true);
+        });
+    };
+  });
+
+  document.querySelectorAll('[data-printid]').forEach(el => {
+    el.onclick = (e) => {
+      e.stopPropagation();
+      const id = parseInt(el.dataset.printid);
+      const sheet = sheets.find(s => s.id === id);
+      printSheet(sheet, state.printLayout.fontScale);
+    };
+  });
+
+  const printBtn = document.getElementById('printBtn');
+  if (printBtn) {
+    printBtn.onclick = () => printSheet(state.editing, state.printLayout.fontScale);
+  }
+
+  const newBtn = document.getElementById('newBtn');
+  if (newBtn) {
+    newBtn.onclick = () => {
+      state.editing = { id: null, title: '', category: CATEGORIES[0].id, type: 'code', content: '', tags: [], color: DEFAULT_SHEET_COLOR };
+      state.isNew = true;
+      render();
+    };
+  }
+
+  const overlay = document.getElementById('overlay');
+  if (overlay) {
+    overlay.onclick = () => { state.editing = null; render(); };
+  }
+
+  const closeBtn = document.getElementById('closeBtn');
+  if (closeBtn) {
+    closeBtn.onclick = () => { state.editing = null; render(); };
+  }
+
+  document.querySelectorAll('.type-btn').forEach(el => {
+    el.onclick = () => { state.editing.type = el.dataset.type; render(); restoreEditorFocus(); };
+  });
+
+  const titleInput = document.getElementById('titleInput');
+  if (titleInput) {
+    titleInput.oninput = (e) => { state.editing.title = e.target.value; };
+  }
+
+  const contentInput = document.getElementById('contentInput');
+  if (contentInput) {
+    contentInput.oninput = (e) => { state.editing.content = e.target.value; };
+  }
+
+  const catSelect = document.getElementById('catSelect');
+  if (catSelect) {
+    catSelect.onchange = async (e) => {
+      if (e.target.value === '__new__') {
+        const name = prompt('New category name:');
+        if (name && name.trim()) {
+          const id = await addCategory(name);
+          if (id) state.editing.category = id;
+        }
+        render();
+        restoreEditorFocus();
+        return;
+      }
+      state.editing.category = e.target.value;
+    };
+  }
+
+  document.querySelectorAll('[data-swatch]').forEach(el => {
+    el.onclick = () => {
+      state.editing.color = el.dataset.swatch;
+      render();
+      restoreEditorFocus();
+    };
+  });
+
+  const colorPicker = document.getElementById('colorPicker');
+  if (colorPicker) {
+    colorPicker.oninput = (e) => {
+      state.editing.color = e.target.value;
+      const activeSwatch = document.querySelector('.color-swatch.active');
+      if (activeSwatch) activeSwatch.classList.remove('active');
+    };
+  }
+
+  const addTagInput = document.getElementById('addTagInput');
+  if (addTagInput) {
+    addTagInput.onkeydown = (e) => {
+      if (e.key === 'Enter' && e.target.value.trim()) {
+        const tag = e.target.value.trim().toLowerCase().replace(/\s+/g, '-');
+        if (!state.editing.tags.includes(tag)) state.editing.tags.push(tag);
+        render();
+        restoreEditorFocus();
+      }
+    };
+  }
+
+  document.querySelectorAll('[data-removetag]').forEach(el => {
+    el.onclick = () => {
+      state.editing.tags = state.editing.tags.filter(t => t !== el.dataset.removetag);
+      render();
+      restoreEditorFocus();
+    };
+  });
+
+  const saveBtn = document.getElementById('saveBtn');
+  if (saveBtn) {
+    saveBtn.onclick = async () => {
+      const e = state.editing;
+      if (!e.title.trim()) { e.title = 'Untitled cheat sheet'; }
+
+      const payload = {
+        title: e.title,
+        category: e.category,
+        type: e.type,
+        content: e.content,
+        tags: e.tags,
+        color: e.color,
+        updated_at: new Date().toISOString(),
+      };
+
+      state.dbStatus = 'syncing';
+      updateDbBadge();
+      try {
+        if (e.id) {
+          payload.sort_order = e.order;
+          const { data, error } = await sb.from('sheets').update(payload).eq('id', e.id).select().single();
+          if (error) throw error;
+          const idx = sheets.findIndex(s => s.id === e.id);
+          sheets[idx] = rowToSheet(data);
+        } else {
+          const maxOrder = sheets.length ? Math.max(...sheets.map(s => s.order ?? 0)) : -1;
+          payload.sort_order = maxOrder + 1;
+          payload.user_id = currentUser.id;
+          const { data, error } = await sb.from('sheets').insert(payload).select().single();
+          if (error) throw error;
+          sheets.push(rowToSheet(data));
+        }
+        state.dbStatus = 'connected';
+      } catch (err) {
+        console.error('save sheet failed', err);
+        state.dbStatus = 'error';
+        showToast('Could not save sheet', true);
+      }
+
+      state.editing = null;
+      render();
+    };
+  }
+
+  const deleteBtn = document.getElementById('deleteBtn');
+  if (deleteBtn) {
+    deleteBtn.onclick = async () => {
+      const id = state.editing.id;
+      state.dbStatus = 'syncing';
+      updateDbBadge();
+      try {
+        const { error } = await sb.from('sheets').delete().eq('id', id);
+        if (error) throw error;
+        sheets = sheets.filter(s => s.id !== id);
+        state.dbStatus = 'connected';
+      } catch (err) {
+        console.error('delete sheet failed', err);
+        state.dbStatus = 'error';
+        showToast('Could not delete sheet', true);
+      }
+      state.editing = null;
+      render();
+    };
+  }
+}
+
+function preserveFocus(id) {
+  const el = document.getElementById(id);
+  if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
+}
+
+function restoreEditorFocus() {}
+
+render();
+initAuth();
+</script>
+
+</body>
+</html>
