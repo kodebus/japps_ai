@@ -3,17 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Deed Map — Real Estate Exam Game</title>
-<meta name="theme-color" content="#23262B" />
-<meta name="description" content="Deed Map: a board game to help you study for the real estate licensing exam." />
+<title>Real Estate Learning Path — Japps.ai</title>
+<meta name="theme-color" content="#5B8DEF" />
+<meta name="description" content="Learn real estate from scratch: a kid-simple picture-book explainer that leads into the Deed Map exam-prep board game." />
 <style>
-  html, body { margin: 0; padding: 0; background: #FCEFD8; font-family: 'Trebuchet MS', Verdana, sans-serif; }
-  #root { max-width: 760px; margin: 0 auto; padding: 10px; box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #EAF6FF; font-family: 'Trebuchet MS', Verdana, sans-serif; }
+  #root { box-sizing: border-box; }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  button { touch-action: manipulation; }
-  @media (max-width: 480px) {
-    #root { padding: 4px; }
-  }
+  button, a { touch-action: manipulation; }
 </style>
 </head>
 <body>
@@ -361,6 +358,697 @@ var e,a,n="function"==typeof Symbol?Symbol:{},t=n.iterator||"@@iterator",r=n.toS
 //# sourceMappingURL=babel.min.js.map
 </script>
 <script type="text/plain" id="app-source">
+var RealEstateABCsApp = (function () {
+const { useState, useEffect } = React;
+
+const SKY = "#AEE9FF";
+const SKY_DEEP = "#7FD4FF";
+const GRASS = "#8FE388";
+const SUN = "#FFD93D";
+const ROOF = "#FF6B5E";
+const WALL = "#FFFBF0";
+const DOOR = "#8B5A2B";
+const INK = "#2B2B2B";
+const ACCENT = "#5B8DEF";
+const ACCENT_DARK = "#3A6BCB";
+const PINK = "#FF8FB1";
+const PURPLE = "#A66BFF";
+const GOLD = "#FFC93C";
+
+const STORAGE_KEY = "realestateabc-progress-v1";
+const NEXT_APP_URL = "../deedmapgame/index.html";
+
+const STYLE = `
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  @keyframes wiggle { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+  @keyframes popIn { 0% { opacity:0; transform: scale(0.85) translateY(10px); } 100% { opacity:1; transform: scale(1) translateY(0); } }
+  @keyframes floatCloud { 0% { transform: translateX(0); } 100% { transform: translateX(20px); } }
+  @keyframes sparkle { 0%,100% { opacity: 0.4; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.15); } }
+  .bounce { animation: bounce 1.6s ease-in-out infinite; }
+  .wiggle { animation: wiggle 2.2s ease-in-out infinite; }
+  .popIn { animation: popIn 0.4s cubic-bezier(.2,.9,.3,1.3); }
+  .sparkle { animation: sparkle 1.4s ease-in-out infinite; }
+  button { touch-action: manipulation; }
+`;
+
+function Cloud({ x, y, scale }) {
+  return (
+    <g style={{ animation: "floatCloud 6s ease-in-out infinite alternate" }} transform={"translate(" + x + "," + y + ") scale(" + scale + ")"}>
+      <ellipse cx="0" cy="0" rx="22" ry="13" fill="#fff" opacity="0.9" />
+      <ellipse cx="16" cy="-5" rx="16" ry="11" fill="#fff" opacity="0.9" />
+      <ellipse cx="-16" cy="-3" rx="14" ry="10" fill="#fff" opacity="0.9" />
+    </g>
+  );
+}
+
+function Sun() {
+  return (
+    <g transform="translate(265,30)">
+      <circle r="18" fill={SUN} />
+      {Array.from({ length: 8 }).map((_, i) => {
+        const angle = (i / 8) * Math.PI * 2;
+        const x1 = Math.cos(angle) * 24, y1 = Math.sin(angle) * 24;
+        const x2 = Math.cos(angle) * 31, y2 = Math.sin(angle) * 31;
+        return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={SUN} strokeWidth="4" strokeLinecap="round" />;
+      })}
+    </g>
+  );
+}
+
+function SceneFrame({ children }) {
+  return (
+    <svg viewBox="0 0 300 220" width="100%" height="220" style={{ display: "block" }}>
+      <rect x="0" y="0" width="300" height="160" fill={SKY} />
+      <rect x="0" y="150" width="300" height="70" fill={GRASS} />
+      <Sun />
+      <Cloud x={60} y={35} scale={0.9} />
+      <Cloud x={150} y={20} scale={0.7} />
+      {children}
+    </svg>
+  );
+}
+
+function Hobie({ x, y, scale, mood }) {
+  const s = scale || 1;
+  const mouth = mood === "wave" ? (
+    <path d="M -10,8 Q 0,16 10,8" stroke={INK} strokeWidth="2.2" fill="none" strokeLinecap="round" />
+  ) : (
+    <path d="M -9,7 Q 0,14 9,7" stroke={INK} strokeWidth="2.2" fill="none" strokeLinecap="round" />
+  );
+  return (
+    <g transform={"translate(" + x + "," + y + ") scale(" + s + ")"} className="wiggle">
+      <polygon points="-26,0 0,-26 26,0" fill={ROOF} stroke={INK} strokeWidth="2" />
+      <rect x="-22" y="0" width="44" height="34" rx="6" fill={WALL} stroke={INK} strokeWidth="2" />
+      <circle cx="-9" cy="14" r="3.6" fill={INK} />
+      <circle cx="9" cy="14" r="3.6" fill={INK} />
+      {mouth}
+      <rect x="-6" y="22" width="12" height="12" rx="2" fill={DOOR} />
+    </g>
+  );
+}
+
+function PriceHouse({ tag }) {
+  return (
+    <g transform="translate(150,150)">
+      <polygon points="-40,0 0,-40 40,0" fill={ROOF} stroke={INK} strokeWidth="2" />
+      <rect x="-34" y="0" width="68" height="46" rx="4" fill={WALL} stroke={INK} strokeWidth="2" />
+      <rect x="-9" y="20" width="18" height="26" fill={DOOR} />
+      <g transform="translate(46,-10) rotate(15)">
+        <rect x="-2" y="-12" width="38" height="20" rx="4" fill={GOLD} stroke={INK} strokeWidth="2" />
+        <circle cx="2" cy="-2" r="3" fill="#fff" />
+        <text x="20" y="2" textAnchor="middle" fontSize="11" fontWeight="bold" fill={INK}>{tag}</text>
+      </g>
+    </g>
+  );
+}
+
+function PiggyBank({ filled }) {
+  return (
+    <g transform="translate(150,160)">
+      <ellipse cx="0" cy="0" rx="50" ry="34" fill={PINK} stroke={INK} strokeWidth="2.5" />
+      <circle cx="-30" cy="-10" r="9" fill={PINK} stroke={INK} strokeWidth="2.5" />
+      <circle cx="-32" cy="-13" r="2" fill={INK} />
+      <rect x="38" y="-20" width="6" height="10" fill={PINK} stroke={INK} strokeWidth="2" />
+      <rect x="-10" y="-32" width="20" height="6" rx="3" fill={INK} />
+      <rect x="-22" y="20" width="10" height="14" rx="3" fill={PINK} stroke={INK} strokeWidth="2" />
+      <rect x="12" y="20" width="10" height="14" rx="3" fill={PINK} stroke={INK} strokeWidth="2" />
+      {filled && [0, 1, 2].map((i) => (
+        <circle key={i} cx={-15 + i * 15} cy={-45 - i * 6} r="7" fill={GOLD} stroke={INK} strokeWidth="1.5" className="bounce" style={{ animationDelay: i * 0.2 + "s" }} />
+      ))}
+    </g>
+  );
+}
+
+function Bank() {
+  return (
+    <g transform="translate(150,155)">
+      <polygon points="-55,-15 0,-45 55,-15" fill={ACCENT} stroke={INK} strokeWidth="2" />
+      <rect x="-55" y="-15" width="110" height="55" fill={WALL} stroke={INK} strokeWidth="2" />
+      {[-38, -13, 13, 38].map((x, i) => (
+        <rect key={i} x={x - 6} y="-8" width="12" height="40" fill={ACCENT} opacity="0.8" />
+      ))}
+      <text x="0" y="-22" textAnchor="middle" fontSize="14" fontWeight="bold" fill="#fff">$</text>
+    </g>
+  );
+}
+
+function ContractScene() {
+  return (
+    <g transform="translate(150,150)">
+      <rect x="-45" y="-45" width="90" height="60" rx="6" fill="#fff" stroke={INK} strokeWidth="2.5" />
+      <line x1="-32" y1="-28" x2="32" y2="-28" stroke="#ccc" strokeWidth="3" />
+      <line x1="-32" y1="-16" x2="32" y2="-16" stroke="#ccc" strokeWidth="3" />
+      <path d="M-30,-2 L 0,8 L 30,-2" stroke={ACCENT} strokeWidth="3" fill="none" strokeLinecap="round" />
+      <g transform="translate(38,18) rotate(40)">
+        <rect x="0" y="-2" width="34" height="6" rx="3" fill={GOLD} />
+        <polygon points="34,-4 42,1 34,6" fill={INK} />
+      </g>
+    </g>
+  );
+}
+
+function HandshakeScene() {
+  return (
+    <g transform="translate(150,150)">
+      <circle cx="-50" cy="-25" r="13" fill={WALL} stroke={INK} strokeWidth="2" />
+      <rect x="-65" y="-12" width="30" height="34" rx="8" fill={ACCENT} stroke={INK} strokeWidth="2" />
+      <circle cx="50" cy="-25" r="13" fill={WALL} stroke={INK} strokeWidth="2" />
+      <rect x="35" y="-12" width="30" height="34" rx="8" fill={PINK} stroke={INK} strokeWidth="2" />
+      <rect x="-22" y="0" width="44" height="14" rx="7" fill="#FFDD99" stroke={INK} strokeWidth="2" />
+    </g>
+  );
+}
+
+function InspectorScene() {
+  return (
+    <g transform="translate(150,150)">
+      <polygon points="-40,-10 0,-50 40,-10" fill={ROOF} stroke={INK} strokeWidth="2" />
+      <rect x="-34" y="-10" width="68" height="46" rx="4" fill={WALL} stroke={INK} strokeWidth="2" />
+      <g transform="translate(55,10)">
+        <circle cx="0" cy="-26" r="11" fill={WALL} stroke={INK} strokeWidth="2" />
+        <rect x="-14" y="-15" width="28" height="32" rx="8" fill={GOLD} stroke={INK} strokeWidth="2" />
+        <rect x="-10" y="-8" width="20" height="24" rx="2" fill="#fff" stroke={INK} strokeWidth="1.5" />
+        <line x1="-6" y1="-2" x2="6" y2="-2" stroke={INK} strokeWidth="1.2" />
+        <line x1="-6" y1="3" x2="6" y2="3" stroke={INK} strokeWidth="1.2" />
+      </g>
+      <path d="M 8,5 L 18,15 L 34,-8" stroke="#3FA34D" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+    </g>
+  );
+}
+
+function SigningScene() {
+  return (
+    <g transform="translate(150,150)">
+      <rect x="-60" y="-20" width="120" height="60" rx="6" fill="#D9C8A8" stroke={INK} strokeWidth="2" />
+      <rect x="-40" y="-35" width="50" height="34" rx="4" fill="#fff" stroke={INK} strokeWidth="2" />
+      <line x1="-32" y1="-22" x2="-2" y2="-22" stroke="#ccc" strokeWidth="2" />
+      <line x1="-32" y1="-13" x2="-2" y2="-13" stroke="#ccc" strokeWidth="2" />
+      <path d="M-28,-5 Q -15,2 -2,-5" stroke={ACCENT} strokeWidth="2" fill="none" />
+      <g transform="translate(15,-12) rotate(50)">
+        <rect x="0" y="-2" width="28" height="5" rx="2.5" fill={GOLD} />
+      </g>
+      <circle cx="40" cy="-30" r="10" fill={WALL} stroke={INK} strokeWidth="2" />
+    </g>
+  );
+}
+
+function KeysScene() {
+  return (
+    <g transform="translate(150,150)">
+      <circle cx="-10" cy="-10" r="22" fill="none" stroke={GOLD} strokeWidth="6" />
+      <rect x="8" y="-13" width="34" height="6" fill={GOLD} />
+      <rect x="34" y="-13" width="6" height="12" fill={GOLD} />
+      <rect x="22" y="-13" width="6" height="10" fill={GOLD} />
+      {[0, 1, 2].map((i) => (
+        <circle key={i} cx={-40 + i * 40} cy={-55} r="4" fill={GOLD} className="sparkle" style={{ animationDelay: i * 0.3 + "s" }} />
+      ))}
+    </g>
+  );
+}
+
+function MovingScene() {
+  return (
+    <g transform="translate(150,160)">
+      <rect x="-50" y="-30" width="55" height="30" rx="4" fill={ACCENT} stroke={INK} strokeWidth="2" />
+      <circle cx="-38" cy="2" r="7" fill={INK} />
+      <circle cx="-8" cy="2" r="7" fill={INK} />
+      <rect x="-44" y="-44" width="20" height="14" fill="#D9A45B" stroke={INK} strokeWidth="1.5" />
+      <polygon points="20,-10 60,-10 70,-40 30,-40" fill={ROOF} stroke={INK} strokeWidth="2" />
+      <rect x="25" y="-10" width="40" height="35" fill={WALL} stroke={INK} strokeWidth="2" />
+      <rect x="38" y="2" width="14" height="23" fill={DOOR} />
+    </g>
+  );
+}
+
+function FamilyHome() {
+  return (
+    <g transform="translate(150,150)">
+      <polygon points="-45,-5 0,-48 45,-5" fill={ROOF} stroke={INK} strokeWidth="2" />
+      <rect x="-38" y="-5" width="76" height="50" rx="4" fill={WALL} stroke={INK} strokeWidth="2" />
+      <rect x="-10" y="13" width="20" height="32" fill={DOOR} />
+      <circle cx="-22" cy="8" r="7" fill="#FFE0B2" stroke={INK} strokeWidth="1.5" />
+      <circle cx="22" cy="8" r="7" fill="#FFE0B2" stroke={INK} strokeWidth="1.5" />
+      <circle cx="0" cy="-22" r="9" fill="#fff" />
+      <circle cx="-3" cy="-22" r="1.6" fill={INK} />
+      <circle cx="3" cy="-22" r="1.6" fill={INK} />
+    </g>
+  );
+}
+
+function RentVsOwn() {
+  return (
+    <g>
+      <g transform="translate(75,150)">
+        <polygon points="-30,-5 0,-35 30,-5" fill="#FFD49C" stroke={INK} strokeWidth="2" />
+        <rect x="-26" y="-5" width="52" height="35" rx="3" fill={WALL} stroke={INK} strokeWidth="2" />
+        <text x="0" y="55" textAnchor="middle" fontSize="11" fontWeight="bold" fill={INK}>renting</text>
+        <text x="0" y="68" textAnchor="middle" fontSize="9" fill={INK}>(borrowing)</text>
+      </g>
+      <g transform="translate(225,150)">
+        <polygon points="-30,-5 0,-35 30,-5" fill={ROOF} stroke={INK} strokeWidth="2" />
+        <rect x="-26" y="-5" width="52" height="35" rx="3" fill={WALL} stroke={INK} strokeWidth="2" />
+        <circle cx="20" cy="-30" r="6" fill={GOLD} className="sparkle" />
+        <text x="0" y="55" textAnchor="middle" fontSize="11" fontWeight="bold" fill={INK}>owning</text>
+        <text x="0" y="68" textAnchor="middle" fontSize="9" fill={INK}>(all yours!)</text>
+      </g>
+    </g>
+  );
+}
+
+function PeopleRow() {
+  return (
+    <g transform="translate(150,150)">
+      <g transform="translate(-70,0)">
+        <circle cx="0" cy="-30" r="13" fill={WALL} stroke={INK} strokeWidth="2" />
+        <rect x="-16" y="-17" width="32" height="38" rx="9" fill={PINK} stroke={INK} strokeWidth="2" />
+        <text x="0" y="36" textAnchor="middle" fontSize="10" fontWeight="bold" fill={INK}>buyer</text>
+      </g>
+      <polygon points="-25,-15 25,-15 25,15 35,0" fill={ROOF} transform="translate(0,-15)" />
+      <g transform="translate(0,-5)">
+        <polygon points="-30,0 0,-32 30,0" fill={ROOF} stroke={INK} strokeWidth="2" />
+        <rect x="-25" y="0" width="50" height="34" rx="3" fill={WALL} stroke={INK} strokeWidth="2" />
+      </g>
+      <g transform="translate(70,0)">
+        <circle cx="0" cy="-30" r="13" fill={WALL} stroke={INK} strokeWidth="2" />
+        <rect x="-16" y="-17" width="32" height="38" rx="9" fill={ACCENT} stroke={INK} strokeWidth="2" />
+        <text x="0" y="36" textAnchor="middle" fontSize="10" fontWeight="bold" fill={INK}>seller</text>
+      </g>
+    </g>
+  );
+}
+
+function AgentScene() {
+  return (
+    <g transform="translate(150,150)">
+      <polygon points="-35,-5 0,-38 35,-5" fill={ROOF} stroke={INK} strokeWidth="2" />
+      <rect x="-30" y="-5" width="60" height="40" rx="3" fill={WALL} stroke={INK} strokeWidth="2" />
+      <g transform="translate(58,15)">
+        <circle cx="0" cy="-28" r="12" fill={WALL} stroke={INK} strokeWidth="2" />
+        <rect x="-15" y="-16" width="30" height="34" rx="8" fill={PURPLE} stroke={INK} strokeWidth="2" />
+        <rect x="-18" y="-30" width="22" height="9" rx="3" fill="#fff" stroke={INK} strokeWidth="1.3" />
+        <text x="-7" y="-23" fontSize="6.5" fontWeight="bold" fill={INK}>AGENT</text>
+      </g>
+      <path d="M 40,5 Q 48,0 54,-2" stroke={INK} strokeWidth="2" fill="none" strokeDasharray="3,3" />
+    </g>
+  );
+}
+
+function ApartmentScene() {
+  return (
+    <g transform="translate(150,150)">
+      <g transform="translate(-55,0)">
+        <polygon points="-28,-5 0,-30 28,-5" fill={ROOF} stroke={INK} strokeWidth="2" />
+        <rect x="-24" y="-5" width="48" height="35" rx="3" fill={WALL} stroke={INK} strokeWidth="2" />
+        <rect x="-8" y="12" width="16" height="18" fill={DOOR} />
+        <text x="0" y="46" textAnchor="middle" fontSize="9" fontWeight="bold" fill={INK}>house</text>
+      </g>
+      <g transform="translate(60,-25)">
+        <rect x="-30" y="-35" width="60" height="65" fill={ACCENT} stroke={INK} strokeWidth="2" />
+        {[0, 1, 2].map((row) =>
+          [0, 1].map((col) => (
+            <rect key={row + "-" + col} x={-22 + col * 26} y={-26 + row * 20} width="14" height="12" fill={WALL} stroke={INK} strokeWidth="1" />
+          ))
+        )}
+        <text x="0" y="71" textAnchor="middle" fontSize="9" fontWeight="bold" fill={INK}>apartment</text>
+      </g>
+    </g>
+  );
+}
+
+function ForSaleScene() {
+  return (
+    <g transform="translate(150,150)">
+      <polygon points="-38,-5 0,-38 38,-5" fill={ROOF} stroke={INK} strokeWidth="2" />
+      <rect x="-32" y="-5" width="64" height="42" rx="3" fill={WALL} stroke={INK} strokeWidth="2" />
+      <rect x="-9" y="14" width="18" height="23" fill={DOOR} />
+      <line x1="48" y1="37" x2="48" y2="0" stroke="#8B5A2B" strokeWidth="4" />
+      <rect x="40" y="-22" width="44" height="26" rx="3" fill="#fff" stroke={INK} strokeWidth="2.5" />
+      <text x="62" y="-7" textAnchor="middle" fontSize="9" fontWeight="bold" fill={ROOF}>FOR SALE</text>
+    </g>
+  );
+}
+
+function TitleScene() {
+  return (
+    <g transform="translate(150,150)">
+      <rect x="-45" y="-50" width="90" height="64" rx="6" fill="#fff" stroke={INK} strokeWidth="2.5" />
+      <text x="0" y="-30" textAnchor="middle" fontSize="9" fontWeight="bold" fill={ACCENT}>TITLE</text>
+      <polygon points="-15,-15 0,-25 15,-15" fill={ROOF} stroke={INK} strokeWidth="1.5" />
+      <rect x="-12" y="-15" width="24" height="14" fill={WALL} stroke={INK} strokeWidth="1.5" />
+      <line x1="-30" y1="6" x2="30" y2="6" stroke="#ccc" strokeWidth="2" />
+      <text x="0" y="2" textAnchor="middle" fontSize="7" fill={INK}>owner: YOU!</text>
+    </g>
+  );
+}
+
+function RepairScene() {
+  return (
+    <g transform="translate(150,150)">
+      <polygon points="-38,-5 0,-38 38,-5" fill={ROOF} stroke={INK} strokeWidth="2" />
+      <rect x="-32" y="-5" width="64" height="42" rx="3" fill={WALL} stroke={INK} strokeWidth="2" />
+      <rect x="-9" y="14" width="18" height="23" fill={DOOR} />
+      <g transform="translate(46,8) rotate(25)">
+        <rect x="-5" y="-22" width="10" height="32" rx="3" fill="#8B8B8B" stroke={INK} strokeWidth="1.5" />
+        <rect x="-9" y="-30" width="18" height="10" rx="3" fill="#8B8B8B" stroke={INK} strokeWidth="1.5" />
+      </g>
+    </g>
+  );
+}
+
+function TaxScene() {
+  return (
+    <g transform="translate(150,150)">
+      <g transform="translate(-50,0)">
+        <polygon points="-26,-5 0,-30 26,-5" fill={ROOF} stroke={INK} strokeWidth="2" />
+        <rect x="-22" y="-5" width="44" height="32" rx="3" fill={WALL} stroke={INK} strokeWidth="2" />
+      </g>
+      <g transform="translate(55,-10)">
+        <rect x="-30" y="-5" width="60" height="30" fill="#D9C8A8" stroke={INK} strokeWidth="2" />
+        <polygon points="-30,-5 0,-25 30,-5" fill="#B89B6E" stroke={INK} strokeWidth="2" />
+        <rect x="-6" y="5" width="12" height="20" fill={DOOR} />
+      </g>
+      {[0, 1, 2].map((i) => (
+        <circle key={i} cx={-5 + i * 10} cy={5 - i * 4} r="5" fill={GOLD} stroke={INK} strokeWidth="1" />
+      ))}
+    </g>
+  );
+}
+
+function InsuranceScene() {
+  return (
+    <g transform="translate(150,160)">
+      <path d="M-55,5 A55,40 0 0,1 55,5 L 48,5 A 48,35 0 0,0 -48,5 Z" fill={ACCENT} stroke={INK} strokeWidth="2" />
+      <line x1="0" y1="5" x2="0" y2="35" stroke={INK} strokeWidth="3" />
+      <g transform="translate(0,-25)">
+        <polygon points="-26,0 0,-25 26,0" fill={ROOF} stroke={INK} strokeWidth="2" />
+        <rect x="-22" y="0" width="44" height="26" rx="3" fill={WALL} stroke={INK} strokeWidth="2" />
+      </g>
+    </g>
+  );
+}
+
+function AddressScene() {
+  return (
+    <g transform="translate(150,150)">
+      <polygon points="-38,-5 0,-38 38,-5" fill={ROOF} stroke={INK} strokeWidth="2" />
+      <rect x="-32" y="-5" width="64" height="42" rx="3" fill={WALL} stroke={INK} strokeWidth="2" />
+      <rect x="-9" y="14" width="18" height="23" fill={DOOR} />
+      <rect x="-18" y="-20" width="36" height="14" rx="3" fill="#fff" stroke={INK} strokeWidth="2" />
+      <text x="0" y="-9" textAnchor="middle" fontSize="9" fontWeight="bold" fill={ACCENT}>123 Maple St</text>
+    </g>
+  );
+}
+
+function LoveHomeScene() {
+  return (
+    <g transform="translate(150,150)">
+      <polygon points="-40,-5 0,-40 40,-5" fill={ROOF} stroke={INK} strokeWidth="2" />
+      <rect x="-34" y="-5" width="68" height="44" rx="3" fill={WALL} stroke={INK} strokeWidth="2" />
+      <rect x="-9" y="16" width="18" height="23" fill={DOOR} />
+      <path d="M0,-50 C -14,-62 -30,-50 -14,-36 L 0,-22 L 14,-36 C 30,-50 14,-62 0,-50 Z" fill={PINK} stroke={INK} strokeWidth="2" className="bounce" />
+    </g>
+  );
+}
+
+function RecapGrid() {
+  const items = [
+    { emoji: "\u{1F3E0}", label: "home" }, { emoji: "\u{1F465}", label: "buyer & seller" },
+    { emoji: "\u{1F4BC}", label: "agent" }, { emoji: "\u{1F4B0}", label: "money" },
+    { emoji: "\u{1F3E6}", label: "loan" }, { emoji: "\u{1F4DC}", label: "contract" },
+    { emoji: "\u{1F50D}", label: "inspector" }, { emoji: "\u{1F511}", label: "keys!" },
+    { emoji: "\u{1F4C4}", label: "title" }, { emoji: "\u{1F527}", label: "repairs" },
+    { emoji: "\u{1F3DB}\uFE0F", label: "taxes" }, { emoji: "\u2602\uFE0F", label: "insurance" },
+  ];
+  return (
+    <g>
+      {items.map((it, i) => {
+        const col = i % 4, row = Math.floor(i / 4);
+        const x = 45 + col * 70, y = 55 + row * 75;
+        return (
+          <g key={i} transform={"translate(" + x + "," + y + ")"}>
+            <circle r="26" fill="#fff" stroke={ACCENT} strokeWidth="2.5" />
+            <text x="0" y="8" textAnchor="middle" fontSize="20">{it.emoji}</text>
+            <text x="0" y="40" textAnchor="middle" fontSize="8.5" fontWeight="bold" fill={INK}>{it.label}</text>
+          </g>
+        );
+      })}
+    </g>
+  );
+}
+
+const PAGES = [
+  {
+    title: "Hi! I'm Hobie!",
+    body: "I'm a house, and I'm going to teach you all about homes — and how grown-ups buy and sell them!",
+    illo: () => <SceneFrame><Hobie x={150} y={150} scale={1.6} mood="wave" /></SceneFrame>,
+  },
+  {
+    title: "What is \"real estate\"?",
+    body: "Real estate just means land, and anything built on it — like a house! That's it. Not so scary, right?",
+    illo: () => <SceneFrame><FamilyHome /></SceneFrame>,
+  },
+  {
+    title: "A house can be a HOME",
+    body: "A house is the building. A home is what it becomes when people live there, feel safe, and feel happy.",
+    illo: () => <SceneFrame><FamilyHome /></SceneFrame>,
+  },
+  {
+    title: "Different Kinds of Homes",
+    body: "Homes come in different shapes! A house stands alone. An apartment is one of many homes stacked in a big building. Both can be just as cozy!",
+    illo: () => <SceneFrame><ApartmentScene /></SceneFrame>,
+  },
+  {
+    title: "Your Address",
+    body: "Every home has its very own address — like a name tag that tells people exactly where you live, so mail (and friends!) can find you.",
+    illo: () => <SceneFrame><AddressScene /></SceneFrame>,
+  },
+  {
+    title: "Renting vs. Owning",
+    body: "Renting is like borrowing a toy — you give it back later. Owning means the house is yours to keep, forever!",
+    illo: () => <SceneFrame><RentVsOwn /></SceneFrame>,
+  },
+  {
+    title: "Buyer and Seller",
+    body: "When a house is sold, there are always two people: someone who wants to BUY it, and someone who wants to SELL it.",
+    illo: () => <SceneFrame><PeopleRow /></SceneFrame>,
+  },
+  {
+    title: "The For Sale Sign",
+    body: "When someone wants to sell their home, they often put up a sign in the yard that says FOR SALE — so buyers walking by know to take a look!",
+    illo: () => <SceneFrame><ForSaleScene /></SceneFrame>,
+  },
+  {
+    title: "The Agent — a helper!",
+    body: "An agent is like a friendly guide. They know all about houses and help buyers and sellers do everything the right way.",
+    illo: () => <SceneFrame><AgentScene /></SceneFrame>,
+  },
+  {
+    title: "Houses cost money",
+    body: "Just like a toy at the store has a price tag, a house has a price too — usually a BIG price!",
+    illo: () => <SceneFrame><PriceHouse tag="$$$$$" /></SceneFrame>,
+  },
+  {
+    title: "Saving up: the Down Payment",
+    body: "Before buying a house, people save up some money themselves first — like putting coins in a piggy bank. That part is called a down payment.",
+    illo: () => <SceneFrame><PiggyBank filled /></SceneFrame>,
+  },
+  {
+    title: "The Bank helps with the rest",
+    body: "Nobody has to save ALL the money. A bank can lend the rest! This is called a loan, or a mortgage. You pay the bank back a little bit every month.",
+    illo: () => <SceneFrame><Bank /></SceneFrame>,
+  },
+  {
+    title: "Whose House Is It? The Title",
+    body: "Every home has an owner. There's a special paper called a TITLE with the owner's name on it — kind of like a name tag for the whole house!",
+    illo: () => <SceneFrame><TitleScene /></SceneFrame>,
+  },
+  {
+    title: "A Contract is a big promise",
+    body: "When people agree on a house deal, they write it down on paper and both sign it. That's called a contract — like a pinky-promise, but official!",
+    illo: () => <SceneFrame><ContractScene /></SceneFrame>,
+  },
+  {
+    title: "Offer... and \"Yes!\"",
+    body: "The buyer says, \"I'll give you this much money for your house!\" If the seller says yes, they shake hands and the deal moves forward!",
+    illo: () => <SceneFrame><HandshakeScene /></SceneFrame>,
+  },
+  {
+    title: "The Inspector checks up on the house",
+    body: "Before buying, someone called an inspector checks the house carefully — kind of like a doctor's check-up, but for buildings!",
+    illo: () => <SceneFrame><InspectorScene /></SceneFrame>,
+  },
+  {
+    title: "Closing Day: signing time!",
+    body: "On closing day, everyone signs a bunch of important papers. This is the last step before the house officially changes hands.",
+    illo: () => <SceneFrame><SigningScene /></SceneFrame>,
+  },
+  {
+    title: "Here are the KEYS!",
+    body: "After everything is signed, the buyer finally gets the keys. That means the house is officially, really theirs now!",
+    illo: () => <SceneFrame><KeysScene /></SceneFrame>,
+  },
+  {
+    title: "Moving day!",
+    body: "Time to pack up the boxes and move in. Welcome home!",
+    illo: () => <SceneFrame><MovingScene /></SceneFrame>,
+  },
+  {
+    title: "Taking Care of Your Home",
+    body: "Owning a home means taking care of it too — fixing things when they break, like a leaky faucet or a squeaky door!",
+    illo: () => <SceneFrame><RepairScene /></SceneFrame>,
+  },
+  {
+    title: "A Little Money for the Town",
+    body: "Homeowners pay a small amount called property tax. It helps pay for things like schools, parks, and roads in the neighborhood!",
+    illo: () => <SceneFrame><TaxScene /></SceneFrame>,
+  },
+  {
+    title: "What if Something Breaks? Insurance",
+    body: "Insurance is like a safety net for a home. If something bad happens — like a big storm — insurance helps pay to fix it.",
+    illo: () => <SceneFrame><InsuranceScene /></SceneFrame>,
+  },
+  {
+    title: "Why a Home Matters",
+    body: "A home is where memories are made — birthdays, sleepovers, and cozy mornings. That's why people work hard to have one of their own!",
+    illo: () => <SceneFrame><LoveHomeScene /></SceneFrame>,
+  },
+  {
+    title: "Look what you learned!",
+    body: "Home, buyer & seller, agent, money, loan, contract, inspector, keys, title, repairs, taxes, and insurance. You know all the big pieces now!",
+    illo: () => <svg viewBox="0 0 300 280" width="100%" height="260"><rect width="300" height="280" fill={SKY} /><RecapGrid /></svg>,
+  },
+];
+
+function ProgressDots({ count, current }) {
+  return (
+    <div style={{ display: "flex", gap: "6px", justifyContent: "center", marginBottom: "14px" }}>
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} style={{
+          width: i === current ? "10px" : "7px", height: i === current ? "10px" : "7px",
+          borderRadius: "50%", background: i <= current ? ACCENT : "#d8e6fb",
+          transition: "all 0.2s",
+        }} />
+      ))}
+    </div>
+  );
+}
+
+function App({ onFinish }) {
+  const [page, setPage] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await window.storage.get(STORAGE_KEY);
+        if (r) {
+          const saved = JSON.parse(r.value);
+          if (typeof saved.page === "number" && saved.page < PAGES.length) setPage(saved.page);
+        }
+      } catch (e) {}
+      setLoaded(true);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
+    window.storage.set(STORAGE_KEY, JSON.stringify({ page })).catch(() => {});
+  }, [page, loaded]);
+
+  const isLast = page === PAGES.length - 1;
+  const isFirst = page === 0;
+  const current = PAGES[page];
+
+  const goNext = () => { if (!isLast) setPage((p) => p + 1); };
+  const goBack = () => { if (!isFirst) setPage((p) => p - 1); };
+
+  return (
+    <div style={{
+      fontFamily: "'Comic Sans MS', 'Trebuchet MS', sans-serif", background: "linear-gradient(180deg,#EAF6FF,#FFF8E8)",
+      minHeight: "560px", borderRadius: "20px", border: "4px solid " + INK, overflow: "hidden",
+      maxWidth: "480px", margin: "0 auto", boxShadow: "6px 6px 0 " + INK,
+    }}>
+      <style>{STYLE}</style>
+      <div style={{
+        background: ACCENT, color: "#fff", padding: "14px 18px", display: "flex",
+        alignItems: "center", justifyContent: "space-between", borderBottom: "4px solid " + INK,
+      }}>
+        <div style={{ fontSize: "18px", fontWeight: "bold" }}>&#127968; Real Estate ABCs</div>
+        <div style={{ fontSize: "12px", opacity: 0.9 }}>with Hobie!</div>
+      </div>
+
+      <div style={{ padding: "20px" }}>
+        <ProgressDots count={PAGES.length} current={page} />
+        <div key={page} className="popIn" style={{
+          background: "#fff", borderRadius: "16px", border: "3px solid " + INK, padding: "16px",
+          boxShadow: "4px 4px 0 " + INK, marginBottom: "16px",
+        }}>
+          <div style={{ borderRadius: "10px", overflow: "hidden", marginBottom: "12px", border: "2px solid " + INK }}>
+            {current.illo()}
+          </div>
+          <div style={{ fontSize: "19px", fontWeight: "bold", color: INK, textAlign: "center", marginBottom: "8px" }}>
+            {current.title}
+          </div>
+          <div style={{ fontSize: "15px", color: INK, textAlign: "center", lineHeight: 1.5 }}>
+            {current.body}
+          </div>
+        </div>
+
+        {!isLast ? (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <button onClick={goBack} disabled={isFirst} style={{
+              padding: "12px 18px", borderRadius: "12px", border: "3px solid " + INK,
+              background: isFirst ? "#eee" : "#fff", color: isFirst ? "#bbb" : INK,
+              cursor: isFirst ? "not-allowed" : "pointer", fontFamily: "inherit", fontSize: "15px", fontWeight: "bold",
+            }}>
+              &#8592; Back
+            </button>
+            <button onClick={goNext} style={{
+              flex: 1, padding: "12px 18px", borderRadius: "12px", border: "3px solid " + INK,
+              background: GOLD, color: INK, cursor: "pointer", fontFamily: "inherit", fontSize: "16px", fontWeight: "bold",
+              boxShadow: "3px 3px 0 " + INK,
+            }}>
+              Next! &#8594;
+            </button>
+          </div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <div style={{ textAlign: "center", fontSize: "14px", color: INK, marginBottom: "2px" }}>
+              Ready to play a game with bigger words?
+            </div>
+            {onFinish ? (
+              <button onClick={onFinish} style={{
+                display: "block", textAlign: "center", padding: "14px", borderRadius: "12px", border: "3px solid " + INK,
+                background: ROOF, color: "#fff", cursor: "pointer", fontFamily: "inherit", fontSize: "16px", fontWeight: "bold",
+                boxShadow: "3px 3px 0 " + INK,
+              }}>
+                &#127942; Let's play Deed Map!
+              </button>
+            ) : (
+              <a href={NEXT_APP_URL} style={{
+                display: "block", textAlign: "center", padding: "14px", borderRadius: "12px", border: "3px solid " + INK,
+                background: ROOF, color: "#fff", cursor: "pointer", fontFamily: "inherit", fontSize: "16px", fontWeight: "bold",
+                boxShadow: "3px 3px 0 " + INK, textDecoration: "none",
+              }}>
+                &#127942; Let's play Deed Map!
+              </a>
+            )}
+            <button onClick={goBack} style={{
+              padding: "10px", borderRadius: "10px", border: "2px solid " + INK, background: "#fff",
+              color: INK, cursor: "pointer", fontFamily: "inherit", fontSize: "13px",
+            }}>
+              &#8592; Read it again
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+return App;
+})();
+var DeedMapAppComponent = (function () {
 const { useState, useEffect, useCallback, useRef } = React;
 
 
@@ -371,6 +1059,7 @@ const GOLD = "#F2B33D";
 const GOLD_DARK = "#C8852A";
 
 const TOPIC_COLORS = [
+  { fill: "#3FB985", soft: "#D9F5E6" },
   { fill: "#FF6B5E", soft: "#FFE2DE" },
   { fill: "#FF9F45", soft: "#FFEBD6" },
   { fill: "#FFD23F", soft: "#FFF6D6" },
@@ -387,6 +1076,25 @@ const PLAYER_TOKENS = [
 ];
 
 const TOPICS = [
+  {
+    id: "basics", name: "Real Estate Basics", short: "ABC",
+    lessons: [
+      { title: "Buyer & Seller", body: "Every house sale has two people: a buyer who wants to purchase the home, and a seller who wants to sell it." },
+      { title: "The Agent", body: "An agent is a helper who knows all about houses and guides both the buyer and seller through the sale." },
+      { title: "Price & Down Payment", body: "Every house has a price. Buyers usually save up some of that money themselves first — that part is called the down payment." },
+      { title: "The Loan (Mortgage)", body: "A bank lends the buyer the rest of the money. This is called a loan, or a mortgage, and it's paid back a little at a time." },
+      { title: "Contract & Offer", body: "The buyer makes an offer, and if the seller agrees, both sides sign a contract — a written, official promise to go through with the deal." },
+      { title: "Recap — Real Estate Basics", body: "Buyer wants to buy, seller wants to sell, the agent helps, the down payment + loan cover the price, and a signed contract makes it official." },
+    ],
+    questions: [
+      { q: "Who wants to BUY the house?", choices: ["Buyer", "Seller", "Agent", "Inspector"], a: 0, why: "The buyer is the person who wants to purchase the home." },
+      { q: "Who helps the buyer and seller make the deal happen?", choices: ["The agent", "The mailman", "A stranger", "The neighbor"], a: 0, why: "An agent is a helper who guides both sides through the sale." },
+      { q: "What's it called when you save up money to pay first?", choices: ["Down payment", "Allowance", "Rent", "Tax"], a: 0, why: "A down payment is the part of the price the buyer pays upfront from savings." },
+      { q: "Who lends the buyer the rest of the money?", choices: ["The bank", "The seller", "The agent", "A friend"], a: 0, why: "A bank provides a loan, or mortgage, for the rest of the price." },
+      { q: "What do both people sign to make their deal official?", choices: ["A contract", "A coloring book", "A map", "A receipt"], a: 0, why: "A contract is the written, signed promise both sides agree to." },
+      { q: "What does the buyer get on closing day?", choices: ["The keys", "A trophy", "A new toy", "A library card"], a: 0, why: "After everything is signed, the buyer finally receives the keys to their new home." },
+    ],
+  },
   {
     id: "ownership", name: "Ownership", short: "OWN",
     lessons: [
@@ -560,24 +1268,19 @@ const FINAL_EXAM_SIZE = 12;
 const START_CASH = 5;
 const STORAGE_KEY = "deedmap-board-v2";
 
+const SQUARE_PATTERN = ["learn", "learn", "quiz", "learn", "chance", "learn", "quiz", "learn", "quiz", "learn", "chance", "quiz", "learn", "quiz", "quiz"];
+
 function buildBoard() {
   const squares = [{ type: "start" }];
   TOPICS.forEach((t) => {
-    squares.push({ type: "learn", topicId: t.id, li: 0 });
-    squares.push({ type: "learn", topicId: t.id, li: 1 });
-    squares.push({ type: "quiz", topicId: t.id, qi: 0 });
-    squares.push({ type: "learn", topicId: t.id, li: 2 });
-    squares.push({ type: "chance" });
-    squares.push({ type: "learn", topicId: t.id, li: 3 });
-    squares.push({ type: "quiz", topicId: t.id, qi: 1 });
-    squares.push({ type: "learn", topicId: t.id, li: 4 });
-    squares.push({ type: "quiz", topicId: t.id, qi: 2 });
-    squares.push({ type: "learn", topicId: t.id, li: 5 });
-    squares.push({ type: "chance" });
-    squares.push({ type: "quiz", topicId: t.id, qi: 3 });
-    squares.push({ type: "learn", topicId: t.id, li: 6 });
-    squares.push({ type: "quiz", topicId: t.id, qi: 4 });
-    squares.push({ type: "quiz", topicId: t.id, qi: 5 });
+    const L = t.lessons.length;
+    const Q = t.questions.length;
+    let li = 0, qi = 0;
+    SQUARE_PATTERN.forEach((type) => {
+      if (type === "learn") { squares.push({ type: "learn", topicId: t.id, li: li % L }); li++; }
+      else if (type === "quiz") { squares.push({ type: "quiz", topicId: t.id, qi: qi % Q }); qi++; }
+      else { squares.push({ type: "chance" }); }
+    });
   });
   squares.push({ type: "finish" });
   return squares;
@@ -1397,6 +2100,56 @@ function HouseIcon({ x, y, w, fill, faded }) {
 }
 
 const ILLO = {
+  "Buyer & Seller": (c) => (
+    <svg viewBox="0 0 160 100" width="100%" height="90">
+      <Stick x={30} y={15} fill={c} label="buyer" />
+      <HouseIcon x={80} y={70} w={40} fill={c} />
+      <Stick x={130} y={15} fill={c} label="seller" />
+      <text x="80" y="20" textAnchor="middle" fontSize="8" fill={c}>the house</text>
+    </svg>
+  ),
+  "The Agent": (c) => (
+    <svg viewBox="0 0 160 100" width="100%" height="90">
+      <Stick x={80} y={8} fill={c} label="agent" />
+      <line x1="80" y1="60" x2="35" y2="78" stroke={c} strokeWidth="2" />
+      <line x1="80" y1="60" x2="125" y2="78" stroke={c} strokeWidth="2" />
+      <HouseIcon x={35} y={90} w={26} fill={c} />
+      <HouseIcon x={125} y={90} w={26} fill={c} />
+      <text x="35" y="68" textAnchor="middle" fontSize="7" fill={c}>seller</text>
+      <text x="125" y="68" textAnchor="middle" fontSize="7" fill={c}>buyer</text>
+    </svg>
+  ),
+  "Price & Down Payment": (c) => (
+    <svg viewBox="0 0 160 100" width="100%" height="90">
+      <HouseIcon x={45} y={70} w={44} fill={c} />
+      <rect x={70} y={25} width="38" height="16" rx="3" fill={c} />
+      <text x={89} y={36} textAnchor="middle" fontSize="8" fill="#fff" fontWeight="bold">PRICE</text>
+      {[0, 1, 2].map((i) => (
+        <circle key={i} cx={120 + i * 12} cy={75 - i * 3} r="7" fill={c} opacity="0.85" />
+      ))}
+      <text x="132" y="92" textAnchor="middle" fontSize="7" fill={c}>your savings</text>
+    </svg>
+  ),
+  "The Loan (Mortgage)": (c) => (
+    <svg viewBox="0 0 160 100" width="100%" height="90">
+      <defs><marker id="arrowBasic" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill={c} /></marker></defs>
+      <polygon points="15,40 45,15 75,40" fill="none" stroke={c} strokeWidth="2" />
+      <rect x="15" y="40" width="60" height="30" fill="none" stroke={c} strokeWidth="2" />
+      <text x="45" y="58" textAnchor="middle" fontSize="9" fill={c} fontWeight="bold">bank</text>
+      <line x1="80" y1="50" x2="110" y2="50" stroke={c} strokeWidth="2" markerEnd="url(#arrowBasic)" />
+      <text x="95" y="42" textAnchor="middle" fontSize="7" fill={c}>loan</text>
+      <HouseIcon x={130} y={68} w={32} fill={c} />
+    </svg>
+  ),
+  "Contract & Offer": (c) => (
+    <svg viewBox="0 0 160 100" width="100%" height="90">
+      <rect x="50" y="15" width="60" height="45" rx="4" fill="none" stroke={c} strokeWidth="2" />
+      <line x1="60" y1="28" x2="100" y2="28" stroke={c} strokeWidth="2" />
+      <line x1="60" y1="38" x2="100" y2="38" stroke={c} strokeWidth="2" />
+      <path d="M62,50 L72,56 L100,46" fill="none" stroke={c} strokeWidth="2" />
+      <text x="80" y="78" textAnchor="middle" fontSize="8" fill={c} fontWeight="bold">both people sign!</text>
+    </svg>
+  ),
   "Fee simple absolute": (c) => (
     <svg viewBox="0 0 160 100" width="100%" height="90">
       <HouseIcon x={80} y={75} w={60} fill={c} />
@@ -1812,6 +2565,7 @@ function recapIcons(letters, c) {
   );
 }
 const RECAP_LETTERS = {
+  "Recap — Real Estate Basics": ["B", "S", "A", "$", "K"],
   "Recap — Ownership": ["FS", "LE", "JT", "TC"],
   "Recap — Land Use": ["P", "E", "T", "E"],
   "Recap — Valuation": ["SC", "CA", "IA"],
@@ -2069,24 +2823,70 @@ function CenterCard({ title, body, tone, actions, confetti }) {
     </div>
   );
 }
+
+return DeedMap;
+})();
+const HUB_INK = "#23262B";
+const HUB_GOLD = "#F2B33D";
+const HUB_ACCENT = "#5B8DEF";
+
+function CombinedApp() {
+  const { useState } = React;
+  const [view, setView] = useState("abc");
+
+  const tabStyle = (active) => ({
+    flex: 1, padding: "10px 14px", borderRadius: "10px", border: "2px solid " + HUB_INK,
+    background: active ? HUB_GOLD : "#fff", color: HUB_INK, fontWeight: "bold",
+    cursor: "pointer", fontFamily: "'Trebuchet MS', sans-serif", fontSize: "13px",
+  });
+
+  return (
+    <div style={{
+      minHeight: "100vh", background: "#EAF6FF", padding: "14px 10px",
+      display: "flex", flexDirection: "column", alignItems: "center",
+    }}>
+      <div style={{ width: "100%", maxWidth: "760px" }}>
+        <div style={{
+          display: "flex", gap: "8px", marginBottom: "14px", background: "#fff",
+          border: "2px solid " + HUB_INK, borderRadius: "12px", padding: "6px",
+          boxShadow: "3px 3px 0 " + HUB_INK,
+        }}>
+          <button onClick={() => setView("abc")} style={tabStyle(view === "abc")}>
+            &#128214; Learn the Basics
+          </button>
+          <button onClick={() => setView("deedmap")} style={tabStyle(view === "deedmap")}>
+            &#127922; Play Deed Map
+          </button>
+        </div>
+
+        {view === "abc" ? (
+          <RealEstateABCsApp onFinish={() => setView("deedmap")} />
+        ) : (
+          <DeedMapAppComponent />
+        )}
+      </div>
+    </div>
+  );
+}
+
+const __rootEl = document.getElementById("root");
+const __root = ReactDOM.createRoot(__rootEl);
+__root.render(React.createElement(CombinedApp));
 </script>
 <script>
 (function () {
-  var srcEl = document.getElementById("app-source");
-  var src = srcEl.textContent;
+  var src = document.getElementById("app-source").textContent;
   var errorBox = function (msg) {
     document.getElementById("root").innerHTML =
-      '<div style="font-family:sans-serif;padding:24px;color:#A8392F;border:2px solid #A8392F;border-radius:8px;background:#FCE0E0;">' +
-      '<strong>Something went wrong loading the game:</strong><br><pre style="white-space:pre-wrap;font-size:12px;">' +
+      '<div style="font-family:sans-serif;padding:24px;color:#A8392F;border:2px solid #A8392F;border-radius:8px;background:#FCE0E0;margin:20px;">' +
+      '<strong>Something went wrong loading the page:</strong><br><pre style="white-space:pre-wrap;font-size:12px;">' +
       msg.replace(/</g, "&lt;") + '</pre></div>';
   };
   try {
     var out = Babel.transform(src, { presets: [["react", { runtime: "classic" }]] }).code;
     var script = document.createElement("script");
-    script.text = out + "\nwindow.__DeedMap = DeedMap;";
+    script.text = out;
     document.body.appendChild(script);
-    var root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(React.createElement(window.__DeedMap));
   } catch (e) {
     errorBox((e && e.stack) || String(e));
   }
