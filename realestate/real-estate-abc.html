@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>Real Estate ABCs — Learn the Basics with Hobie</title>
 <meta name="theme-color" content="#5B8DEF" />
-<meta name="description" content="A friendly, illustrated explainer that teaches real estate basics from scratch." />
+<meta name="description" content="A friendly, illustrated explainer that teaches real estate basics from scratch, level by level, with a quick test after each one." />
 <style>
   html, body { margin: 0; padding: 0; background: #EAF6FF; font-family: 'Comic Sans MS', 'Trebuchet MS', sans-serif; }
   #root { padding: 16px; box-sizing: border-box; }
@@ -766,16 +766,17 @@ function RecapGrid() {
   const items = [
     { emoji: "\u{1F3E0}", label: "home" }, { emoji: "\u{1F465}", label: "buyer & seller" },
     { emoji: "\u{1F4BC}", label: "agent" }, { emoji: "\u{1F4B0}", label: "money" },
-    { emoji: "\u{1F3E6}", label: "loan" }, { emoji: "\u{1F4DC}", label: "contract" },
-    { emoji: "\u{1F50D}", label: "inspector" }, { emoji: "\u{1F511}", label: "keys!" },
-    { emoji: "\u{1F4C4}", label: "title" }, { emoji: "\u{1F527}", label: "repairs" },
-    { emoji: "\u{1F3DB}\uFE0F", label: "taxes" }, { emoji: "\u2602\uFE0F", label: "insurance" },
+    { emoji: "\u{1F3E6}", label: "loan" }, { emoji: "\u{1F4C4}", label: "title" },
+    { emoji: "\u{1F4DC}", label: "contract" }, { emoji: "\u{1F50D}", label: "inspector" },
+    { emoji: "\u{1F4DD}", label: "deed" }, { emoji: "\u{1F511}", label: "keys!" },
+    { emoji: "\u{1F527}", label: "repairs" }, { emoji: "\u{1F3DB}\uFE0F", label: "taxes" },
+    { emoji: "\u2602\uFE0F", label: "insurance" },
   ];
   return (
     <g>
       {items.map((it, i) => {
         const col = i % 4, row = Math.floor(i / 4);
-        const x = 45 + col * 70, y = 55 + row * 75;
+        const x = 45 + col * 70, y = 50 + row * 75;
         return (
           <g key={i} transform={"translate(" + x + "," + y + ")"}>
             <circle r="26" fill="#fff" stroke={ACCENT} strokeWidth="2.5" />
@@ -788,126 +789,195 @@ function RecapGrid() {
   );
 }
 
-const PAGES = [
+function DeedScene() {
+  return (
+    <g transform="translate(150,150)">
+      <rect x="-48" y="-52" width="96" height="68" rx="6" fill="#FFF8E2" stroke={INK} strokeWidth="2.5" />
+      <text x="0" y="-32" textAnchor="middle" fontSize="11" fontWeight="bold" fill={ROOF}>DEED</text>
+      <polygon points="-16,-12 0,-24 16,-12" fill={ROOF} stroke={INK} strokeWidth="1.5" />
+      <rect x="-13" y="-12" width="26" height="16" fill={WALL} stroke={INK} strokeWidth="1.5" />
+      <line x1="-32" y1="10" x2="32" y2="10" stroke="#ccc" strokeWidth="2" />
+      <circle cx="26" cy="6" r="9" fill={GOLD} stroke={INK} strokeWidth="1.5" />
+      <text x="26" y="9" textAnchor="middle" fontSize="8" fontWeight="bold" fill={INK}>&#10003;</text>
+    </g>
+  );
+}
+
+const LEVELS = [
   {
-    title: "Hi! I'm Hobie!",
-    body: "I'm a house, and I'm going to teach you all about homes — and how grown-ups buy and sell them!",
-    illo: () => <SceneFrame><Hobie x={150} y={150} scale={1.6} mood="wave" /></SceneFrame>,
+    id: "homes", title: "What's a Home?", blurb: "The very beginning",
+    pages: [
+      {
+        title: "Hi! I'm Hobie!",
+        body: "I'm a house, and I'm going to teach you all about homes — and how grown-ups buy and sell them!",
+        illo: () => <SceneFrame><Hobie x={150} y={150} scale={1.6} mood="wave" /></SceneFrame>,
+      },
+      {
+        title: "What is \"real estate\"?",
+        body: "Real estate just means land, and anything built on it — like a house! That's it. Not so scary, right?",
+        illo: () => <SceneFrame><FamilyHome /></SceneFrame>,
+      },
+      {
+        title: "A house can be a HOME",
+        body: "A house is the building. A home is what it becomes when people live there, feel safe, and feel happy.",
+        illo: () => <SceneFrame><FamilyHome /></SceneFrame>,
+      },
+      {
+        title: "Different Kinds of Homes",
+        body: "Homes come in different shapes! A house stands alone. An apartment is one of many homes stacked in a big building. Both can be just as cozy!",
+        illo: () => <SceneFrame><ApartmentScene /></SceneFrame>,
+      },
+      {
+        title: "Your Address",
+        body: "Every home has its very own address — like a name tag that tells people exactly where you live, so mail (and friends!) can find you.",
+        illo: () => <SceneFrame><AddressScene /></SceneFrame>,
+      },
+    ],
+    quiz: [
+      { q: "What does \"real estate\" mean?", choices: ["Land and anything built on it", "Just toys", "Only apartments", "A type of car"], a: 0, why: "Real estate is land, plus whatever is built on it — like a house!" },
+      { q: "What turns a house into a HOME?", choices: ["People living there and feeling happy", "A fresh coat of paint", "A new roof", "The mailbox"], a: 0, why: "A home is what a house becomes once people live there and feel safe and happy." },
+      { q: "What is your address for?", choices: ["Telling people exactly where you live", "Buying groceries", "Naming your pet", "Painting your room"], a: 0, why: "An address tells people exactly which home is yours, so mail and friends can find you." },
+    ],
   },
   {
-    title: "What is \"real estate\"?",
-    body: "Real estate just means land, and anything built on it — like a house! That's it. Not so scary, right?",
-    illo: () => <SceneFrame><FamilyHome /></SceneFrame>,
+    id: "buying", title: "Buying & Selling", blurb: "Meet the people in a sale",
+    pages: [
+      {
+        title: "Renting vs. Owning",
+        body: "Renting is like borrowing a toy — you give it back later. Owning means the house is yours to keep, forever!",
+        illo: () => <SceneFrame><RentVsOwn /></SceneFrame>,
+      },
+      {
+        title: "Buyer and Seller",
+        body: "When a house is sold, there are always two people: someone who wants to BUY it, and someone who wants to SELL it.",
+        illo: () => <SceneFrame><PeopleRow /></SceneFrame>,
+      },
+      {
+        title: "The For Sale Sign",
+        body: "When someone wants to sell their home, they often put up a sign in the yard that says FOR SALE — so buyers walking by know to take a look!",
+        illo: () => <SceneFrame><ForSaleScene /></SceneFrame>,
+      },
+      {
+        title: "The Agent — a helper!",
+        body: "An agent is like a friendly guide. They know all about houses and help buyers and sellers do everything the right way.",
+        illo: () => <SceneFrame><AgentScene /></SceneFrame>,
+      },
+    ],
+    quiz: [
+      { q: "Who wants to BUY a house?", choices: ["The buyer", "The seller", "The agent", "The mailman"], a: 0, why: "The buyer is the person who wants to purchase the home." },
+      { q: "What does a FOR SALE sign mean?", choices: ["The owner wants to sell", "The house is haunted", "Nobody lives there", "It's a school"], a: 0, why: "A FOR SALE sign tells people the owner wants to sell their home." },
+      { q: "Who helps guide both the buyer and seller?", choices: ["The agent", "A stranger", "The neighbor", "The mail carrier"], a: 0, why: "An agent helps guide both sides through the sale." },
+    ],
   },
   {
-    title: "A house can be a HOME",
-    body: "A house is the building. A home is what it becomes when people live there, feel safe, and feel happy.",
-    illo: () => <SceneFrame><FamilyHome /></SceneFrame>,
+    id: "money", title: "Money Matters", blurb: "Prices, savings, and loans",
+    pages: [
+      {
+        title: "Houses cost money",
+        body: "Just like a toy at the store has a price tag, a house has a price too — usually a BIG price!",
+        illo: () => <SceneFrame><PriceHouse tag="$$$$$" /></SceneFrame>,
+      },
+      {
+        title: "Saving up: the Down Payment",
+        body: "Before buying a house, people save up some money themselves first — like putting coins in a piggy bank. That part is called a down payment.",
+        illo: () => <SceneFrame><PiggyBank filled /></SceneFrame>,
+      },
+      {
+        title: "The Bank helps with the rest",
+        body: "Nobody has to save ALL the money. A bank can lend the rest! This is called a loan, or a mortgage. You pay the bank back a little bit every month.",
+        illo: () => <SceneFrame><Bank /></SceneFrame>,
+      },
+    ],
+    quiz: [
+      { q: "What is a down payment?", choices: ["Money the buyer saves and pays first", "A type of pillow", "A monthly rent check", "A free gift"], a: 0, why: "A down payment is the part of the price the buyer saves up and pays upfront." },
+      { q: "Who lends the buyer the rest of the money?", choices: ["The bank", "The seller", "The agent", "A friend"], a: 0, why: "A bank lends the rest of the money, called a loan." },
+      { q: "What's another word for a home loan?", choices: ["Mortgage", "Allowance", "Receipt", "Address"], a: 0, why: "A home loan is also called a mortgage." },
+    ],
   },
   {
-    title: "Different Kinds of Homes",
-    body: "Homes come in different shapes! A house stands alone. An apartment is one of many homes stacked in a big building. Both can be just as cozy!",
-    illo: () => <SceneFrame><ApartmentScene /></SceneFrame>,
+    id: "official", title: "Making It Official", blurb: "Papers, promises, and the big day",
+    pages: [
+      {
+        title: "Whose House Is It? The Title",
+        body: "Every home has an owner. \"Title\" means who legally owns it — like an invisible badge that says whose home this is.",
+        illo: () => <SceneFrame><TitleScene /></SceneFrame>,
+      },
+      {
+        title: "A Contract is a big promise",
+        body: "When people agree on a house deal, they write it down on paper and both sign it. That's called a contract — like a pinky-promise, but official!",
+        illo: () => <SceneFrame><ContractScene /></SceneFrame>,
+      },
+      {
+        title: "Offer... and \"Yes!\"",
+        body: "The buyer says, \"I'll give you this much money for your house!\" If the seller says yes, they shake hands and the deal moves forward!",
+        illo: () => <SceneFrame><HandshakeScene /></SceneFrame>,
+      },
+      {
+        title: "The Inspector checks up on the house",
+        body: "Before buying, someone called an inspector checks the house carefully — kind of like a doctor's check-up, but for buildings!",
+        illo: () => <SceneFrame><InspectorScene /></SceneFrame>,
+      },
+      {
+        title: "Closing Day: signing time!",
+        body: "On closing day, everyone signs a bunch of important papers. This is the last step before the house officially changes hands.",
+        illo: () => <SceneFrame><SigningScene /></SceneFrame>,
+      },
+      {
+        title: "What's a Deed?",
+        body: "A deed is the special paper that actually hands ownership from the seller to the buyer. If \"title\" is WHO owns the home, the deed is the paper that PROVES it — signed, sealed, official!",
+        illo: () => <SceneFrame><DeedScene /></SceneFrame>,
+      },
+      {
+        title: "Here are the KEYS!",
+        body: "After the deed is signed, the buyer finally gets the keys. That means the house is officially, really theirs now!",
+        illo: () => <SceneFrame><KeysScene /></SceneFrame>,
+      },
+    ],
+    quiz: [
+      { q: "What is a contract?", choices: ["A written, signed promise both people agree to", "A type of toy", "A grocery list", "A birthday card"], a: 0, why: "A contract is the written, official promise both the buyer and seller sign." },
+      { q: "What does a deed do?", choices: ["Proves and hands over ownership of the home", "Paints the walls", "Waters the lawn", "Locks the door forever"], a: 0, why: "A deed is the paper that officially proves and transfers ownership to the buyer." },
+      { q: "What does the buyer get after everything is signed?", choices: ["The keys", "A trophy", "A new toy", "A library card"], a: 0, why: "Once the deed and papers are signed, the buyer gets the keys to their new home." },
+    ],
   },
   {
-    title: "Your Address",
-    body: "Every home has its very own address — like a name tag that tells people exactly where you live, so mail (and friends!) can find you.",
-    illo: () => <SceneFrame><AddressScene /></SceneFrame>,
-  },
-  {
-    title: "Renting vs. Owning",
-    body: "Renting is like borrowing a toy — you give it back later. Owning means the house is yours to keep, forever!",
-    illo: () => <SceneFrame><RentVsOwn /></SceneFrame>,
-  },
-  {
-    title: "Buyer and Seller",
-    body: "When a house is sold, there are always two people: someone who wants to BUY it, and someone who wants to SELL it.",
-    illo: () => <SceneFrame><PeopleRow /></SceneFrame>,
-  },
-  {
-    title: "The For Sale Sign",
-    body: "When someone wants to sell their home, they often put up a sign in the yard that says FOR SALE — so buyers walking by know to take a look!",
-    illo: () => <SceneFrame><ForSaleScene /></SceneFrame>,
-  },
-  {
-    title: "The Agent — a helper!",
-    body: "An agent is like a friendly guide. They know all about houses and help buyers and sellers do everything the right way.",
-    illo: () => <SceneFrame><AgentScene /></SceneFrame>,
-  },
-  {
-    title: "Houses cost money",
-    body: "Just like a toy at the store has a price tag, a house has a price too — usually a BIG price!",
-    illo: () => <SceneFrame><PriceHouse tag="$$$$$" /></SceneFrame>,
-  },
-  {
-    title: "Saving up: the Down Payment",
-    body: "Before buying a house, people save up some money themselves first — like putting coins in a piggy bank. That part is called a down payment.",
-    illo: () => <SceneFrame><PiggyBank filled /></SceneFrame>,
-  },
-  {
-    title: "The Bank helps with the rest",
-    body: "Nobody has to save ALL the money. A bank can lend the rest! This is called a loan, or a mortgage. You pay the bank back a little bit every month.",
-    illo: () => <SceneFrame><Bank /></SceneFrame>,
-  },
-  {
-    title: "Whose House Is It? The Title",
-    body: "Every home has an owner. There's a special paper called a TITLE with the owner's name on it — kind of like a name tag for the whole house!",
-    illo: () => <SceneFrame><TitleScene /></SceneFrame>,
-  },
-  {
-    title: "A Contract is a big promise",
-    body: "When people agree on a house deal, they write it down on paper and both sign it. That's called a contract — like a pinky-promise, but official!",
-    illo: () => <SceneFrame><ContractScene /></SceneFrame>,
-  },
-  {
-    title: "Offer... and \"Yes!\"",
-    body: "The buyer says, \"I'll give you this much money for your house!\" If the seller says yes, they shake hands and the deal moves forward!",
-    illo: () => <SceneFrame><HandshakeScene /></SceneFrame>,
-  },
-  {
-    title: "The Inspector checks up on the house",
-    body: "Before buying, someone called an inspector checks the house carefully — kind of like a doctor's check-up, but for buildings!",
-    illo: () => <SceneFrame><InspectorScene /></SceneFrame>,
-  },
-  {
-    title: "Closing Day: signing time!",
-    body: "On closing day, everyone signs a bunch of important papers. This is the last step before the house officially changes hands.",
-    illo: () => <SceneFrame><SigningScene /></SceneFrame>,
-  },
-  {
-    title: "Here are the KEYS!",
-    body: "After everything is signed, the buyer finally gets the keys. That means the house is officially, really theirs now!",
-    illo: () => <SceneFrame><KeysScene /></SceneFrame>,
-  },
-  {
-    title: "Moving day!",
-    body: "Time to pack up the boxes and move in. Welcome home!",
-    illo: () => <SceneFrame><MovingScene /></SceneFrame>,
-  },
-  {
-    title: "Taking Care of Your Home",
-    body: "Owning a home means taking care of it too — fixing things when they break, like a leaky faucet or a squeaky door!",
-    illo: () => <SceneFrame><RepairScene /></SceneFrame>,
-  },
-  {
-    title: "A Little Money for the Town",
-    body: "Homeowners pay a small amount called property tax. It helps pay for things like schools, parks, and roads in the neighborhood!",
-    illo: () => <SceneFrame><TaxScene /></SceneFrame>,
-  },
-  {
-    title: "What if Something Breaks? Insurance",
-    body: "Insurance is like a safety net for a home. If something bad happens — like a big storm — insurance helps pay to fix it.",
-    illo: () => <SceneFrame><InsuranceScene /></SceneFrame>,
-  },
-  {
-    title: "Why a Home Matters",
-    body: "A home is where memories are made — birthdays, sleepovers, and cozy mornings. That's why people work hard to have one of their own!",
-    illo: () => <SceneFrame><LoveHomeScene /></SceneFrame>,
-  },
-  {
-    title: "Look what you learned!",
-    body: "Home, buyer & seller, agent, money, loan, contract, inspector, keys, title, repairs, taxes, and insurance. You know all the big pieces now!",
-    illo: () => <svg viewBox="0 0 300 280" width="100%" height="260"><rect width="300" height="280" fill={SKY} /><RecapGrid /></svg>,
+    id: "owning", title: "Owning Your Home", blurb: "Life after closing day",
+    pages: [
+      {
+        title: "Moving day!",
+        body: "Time to pack up the boxes and move in. Welcome home!",
+        illo: () => <SceneFrame><MovingScene /></SceneFrame>,
+      },
+      {
+        title: "Taking Care of Your Home",
+        body: "Owning a home means taking care of it too — fixing things when they break, like a leaky faucet or a squeaky door!",
+        illo: () => <SceneFrame><RepairScene /></SceneFrame>,
+      },
+      {
+        title: "A Little Money for the Town",
+        body: "Homeowners pay a small amount called property tax. It helps pay for things like schools, parks, and roads in the neighborhood!",
+        illo: () => <SceneFrame><TaxScene /></SceneFrame>,
+      },
+      {
+        title: "What if Something Breaks? Insurance",
+        body: "Insurance is like a safety net for a home. If something bad happens — like a big storm — insurance helps pay to fix it.",
+        illo: () => <SceneFrame><InsuranceScene /></SceneFrame>,
+      },
+      {
+        title: "Why a Home Matters",
+        body: "A home is where memories are made — birthdays, sleepovers, and cozy mornings. That's why people work hard to have one of their own!",
+        illo: () => <SceneFrame><LoveHomeScene /></SceneFrame>,
+      },
+      {
+        title: "Look what you learned!",
+        body: "Home, buyer & seller, agent, money, loan, title, contract, inspector, deed, keys, repairs, taxes, and insurance. You know all the big pieces now!",
+        illo: () => <svg viewBox="0 0 300 350" width="100%" height="320"><rect width="300" height="350" fill={SKY} /><RecapGrid /></svg>,
+      },
+    ],
+    quiz: [
+      { q: "What is property tax for?", choices: ["Helping pay for schools, parks, and roads", "Buying candy", "Paying the mailman", "Decorating the house"], a: 0, why: "Property tax helps pay for things the whole neighborhood uses, like schools and roads." },
+      { q: "What does insurance help with?", choices: ["Paying to fix the house if something bad happens", "Picking paint colors", "Choosing furniture", "Mowing the lawn"], a: 0, why: "Insurance is like a safety net that helps pay to fix the house after something bad happens." },
+      { q: "Why do people love having a home?", choices: ["It's where memories are made", "It's required by law", "It's the only option", "Houses are free"], a: 0, why: "A home is where everyday moments and memories happen — that's a big reason people work hard for one." },
+    ],
   },
 ];
 
@@ -925,9 +995,17 @@ function ProgressDots({ count, current }) {
   );
 }
 
-function App() {
-  const [page, setPage] = useState(0);
+const LEVEL_COLORS = ["#5B8DEF", "#3FB985", "#FFB23C", "#FF6B5E", "#A66BFF"];
+
+function defaultProgress() {
+  return { unlockedLevel: 0, levelIdx: null, page: 0, completedLevels: {} };
+}
+
+function App({ onFinish }) {
+  const [progress, setProgress] = useState(null);
   const [loaded, setLoaded] = useState(false);
+  const [showLevelDone, setShowLevelDone] = useState(false);
+  const [quizState, setQuizState] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -935,24 +1013,258 @@ function App() {
         const r = await window.storage.get(STORAGE_KEY);
         if (r) {
           const saved = JSON.parse(r.value);
-          if (typeof saved.page === "number" && saved.page < PAGES.length) setPage(saved.page);
+          setProgress({ ...defaultProgress(), ...saved });
+        } else {
+          setProgress(defaultProgress());
         }
-      } catch (e) {}
+      } catch (e) {
+        setProgress(defaultProgress());
+      }
       setLoaded(true);
     })();
   }, []);
 
-  useEffect(() => {
-    if (!loaded) return;
-    window.storage.set(STORAGE_KEY, JSON.stringify({ page })).catch(() => {});
-  }, [page, loaded]);
+  const save = (next) => {
+    setProgress(next);
+    window.storage.set(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
+  };
 
-  const isLast = page === PAGES.length - 1;
-  const isFirst = page === 0;
-  const current = PAGES[page];
+  if (!loaded || !progress) {
+    return (
+      <div style={{ fontFamily: "'Comic Sans MS', 'Trebuchet MS', sans-serif", textAlign: "center", padding: "3rem", color: INK }}>
+        Getting Hobie ready…
+      </div>
+    );
+  }
 
-  const goNext = () => { if (!isLast) setPage((p) => p + 1); };
-  const goBack = () => { if (!isFirst) setPage((p) => p - 1); };
+  const openLevel = (idx) => { setQuizState(null); save({ ...progress, levelIdx: idx, page: 0 }); };
+  const backToLevels = () => { setQuizState(null); save({ ...progress, levelIdx: null }); };
+
+  if (progress.levelIdx === null) {
+    return (
+      <div style={{
+        fontFamily: "'Comic Sans MS', 'Trebuchet MS', sans-serif", background: "linear-gradient(180deg,#EAF6FF,#FFF8E8)",
+        minHeight: "560px", borderRadius: "20px", border: "4px solid " + INK, overflow: "hidden",
+        maxWidth: "480px", margin: "0 auto", boxShadow: "6px 6px 0 " + INK,
+      }}>
+        <style>{STYLE}</style>
+        <div style={{
+          background: ACCENT, color: "#fff", padding: "14px 18px", display: "flex",
+          alignItems: "center", justifyContent: "space-between", borderBottom: "4px solid " + INK,
+        }}>
+          <div style={{ fontSize: "18px", fontWeight: "bold" }}>&#127968; Real Estate ABCs</div>
+          <div style={{ fontSize: "12px", opacity: 0.9 }}>with Hobie!</div>
+        </div>
+        <div style={{ padding: "20px" }}>
+          <p style={{ fontSize: "13px", color: "#555", marginTop: 0, marginBottom: "16px", textAlign: "center" }}>
+            Pick a level! Finish one to unlock the next.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            {LEVELS.map((lvl, i) => {
+              const locked = i > progress.unlockedLevel;
+              const done = !!progress.completedLevels[lvl.id];
+              const color = LEVEL_COLORS[i % LEVEL_COLORS.length];
+              return (
+                <button key={lvl.id} disabled={locked} onClick={() => openLevel(i)} style={{
+                  display: "flex", alignItems: "center", gap: "14px", padding: "14px 16px",
+                  borderRadius: "14px", border: "3px solid " + (locked ? "#ccc" : color),
+                  background: locked ? "#f2f2f2" : "#fff", cursor: locked ? "not-allowed" : "pointer",
+                  textAlign: "left", fontFamily: "inherit", boxShadow: locked ? "none" : "3px 3px 0 " + color,
+                }}>
+                  <div style={{
+                    width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0,
+                    background: locked ? "#ddd" : done ? "#3FB985" : color, color: "#fff",
+                    display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontSize: "16px",
+                  }}>
+                    {locked ? "\u{1F512}" : done ? "\u2713" : i + 1}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: "bold", fontSize: "15px", color: locked ? "#999" : INK }}>{lvl.title}</div>
+                    <div style={{ fontSize: "11px", color: locked ? "#aaa" : "#666" }}>{lvl.blurb} &middot; {lvl.pages.length} cards</div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const level = LEVELS[progress.levelIdx];
+  const page = progress.page;
+  const isLastPageOfLevel = page === level.pages.length - 1;
+  const isFirstPageOfLevel = page === 0;
+  const isLastLevel = progress.levelIdx === LEVELS.length - 1;
+  const current = level.pages[page];
+  const color = LEVEL_COLORS[progress.levelIdx % LEVEL_COLORS.length];
+
+  const goNext = () => { if (!isLastPageOfLevel) save({ ...progress, page: page + 1 }); };
+  const goBack = () => { if (!isFirstPageOfLevel) save({ ...progress, page: page - 1 }); };
+
+  const finishLevel = () => {
+    const next = {
+      ...progress,
+      completedLevels: { ...progress.completedLevels, [level.id]: true },
+      unlockedLevel: Math.max(progress.unlockedLevel, Math.min(progress.levelIdx + 1, LEVELS.length - 1)),
+    };
+    save(next);
+  };
+
+  const startQuiz = () => setQuizState({ idx: 0, score: 0, selected: null, revealed: false });
+
+  const answerQuiz = (i) => {
+    if (!quizState || quizState.revealed) return;
+    const q = level.quiz[quizState.idx];
+    const correct = i === q.a;
+    setQuizState((prev) => ({ ...prev, selected: i, revealed: true, score: correct ? prev.score + 1 : prev.score }));
+  };
+
+  const nextQuizQuestion = () => {
+    const isLastQ = quizState.idx + 1 >= level.quiz.length;
+    if (isLastQ) {
+      finishLevel();
+      setShowLevelDone(true);
+    } else {
+      setQuizState((prev) => ({ ...prev, idx: prev.idx + 1, selected: null, revealed: false }));
+    }
+  };
+
+  if (showLevelDone) {
+    const nextLevel = !isLastLevel ? LEVELS[progress.levelIdx + 1] : null;
+    const score = quizState ? quizState.score : 0;
+    const total = level.quiz.length;
+    return (
+      <div style={{
+        fontFamily: "'Comic Sans MS', 'Trebuchet MS', sans-serif", background: "linear-gradient(180deg,#EAF6FF,#FFF8E8)",
+        minHeight: "560px", borderRadius: "20px", border: "4px solid " + INK, overflow: "hidden",
+        maxWidth: "480px", margin: "0 auto", boxShadow: "6px 6px 0 " + INK, display: "flex",
+        flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "30px 20px",
+      }}>
+        <style>{STYLE}</style>
+        <div className="popIn" style={{ fontSize: "50px", marginBottom: "10px" }}>&#127881;</div>
+        <div style={{ fontSize: "20px", fontWeight: "bold", color: INK, marginBottom: "8px", textAlign: "center" }}>
+          Level {progress.levelIdx + 1} complete!
+        </div>
+        <div style={{
+          fontSize: "15px", fontWeight: "bold", color: score === total ? "#3FB985" : ACCENT,
+          background: "#fff", border: "2px solid " + INK, borderRadius: "10px", padding: "8px 16px", marginBottom: "14px",
+        }}>
+          You got {score} / {total} on the test! {score === total ? "Perfect! \u2B50" : "Nice work!"}
+        </div>
+        <p style={{ fontSize: "14px", color: "#555", textAlign: "center", marginBottom: "20px" }}>
+          {isLastLevel
+            ? "You finished every level! Ready for bigger words?"
+            : "You finished \"" + level.title + "\". Next up: \"" + nextLevel.title + "\"!"}
+        </p>
+        {isLastLevel ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%" }}>
+            {onFinish ? (
+              <button onClick={onFinish} style={{
+                padding: "14px", borderRadius: "12px", border: "3px solid " + INK, background: ROOF,
+                color: "#fff", cursor: "pointer", fontFamily: "inherit", fontSize: "16px", fontWeight: "bold",
+                boxShadow: "3px 3px 0 " + INK,
+              }}>
+                &#127942; Let's play Deed Map!
+              </button>
+            ) : (
+              <a href={NEXT_APP_URL} style={{
+                display: "block", textAlign: "center", padding: "14px", borderRadius: "12px", border: "3px solid " + INK,
+                background: ROOF, color: "#fff", cursor: "pointer", fontFamily: "inherit", fontSize: "16px", fontWeight: "bold",
+                boxShadow: "3px 3px 0 " + INK, textDecoration: "none",
+              }}>
+                &#127942; Let's play Deed Map!
+              </a>
+            )}
+            <button onClick={() => { setShowLevelDone(false); setQuizState(null); backToLevels(); }} style={{
+              padding: "10px", borderRadius: "10px", border: "2px solid " + INK, background: "#fff",
+              color: INK, cursor: "pointer", fontFamily: "inherit", fontSize: "13px",
+            }}>
+              &#8592; All levels
+            </button>
+          </div>
+        ) : (
+          <div style={{ display: "flex", gap: "10px", width: "100%" }}>
+            <button onClick={() => { setShowLevelDone(false); setQuizState(null); backToLevels(); }} style={{
+              flex: 1, padding: "12px", borderRadius: "12px", border: "3px solid " + INK, background: "#fff",
+              color: INK, cursor: "pointer", fontFamily: "inherit", fontSize: "13px", fontWeight: "bold",
+            }}>
+              All levels
+            </button>
+            <button onClick={() => { setShowLevelDone(false); setQuizState(null); save({ ...progress, levelIdx: progress.levelIdx + 1, page: 0 }); }} style={{
+              flex: 1, padding: "12px", borderRadius: "12px", border: "3px solid " + INK, background: GOLD,
+              color: INK, cursor: "pointer", fontFamily: "inherit", fontSize: "13px", fontWeight: "bold",
+              boxShadow: "3px 3px 0 " + INK,
+            }}>
+              Next level &#8594;
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  if (quizState) {
+    const q = level.quiz[quizState.idx];
+    const isLastQ = quizState.idx + 1 >= level.quiz.length;
+    return (
+      <div style={{
+        fontFamily: "'Comic Sans MS', 'Trebuchet MS', sans-serif", background: "linear-gradient(180deg,#EAF6FF,#FFF8E8)",
+        minHeight: "560px", borderRadius: "20px", border: "4px solid " + INK, overflow: "hidden",
+        maxWidth: "480px", margin: "0 auto", boxShadow: "6px 6px 0 " + INK,
+      }}>
+        <style>{STYLE}</style>
+        <div style={{
+          background: color, color: "#fff", padding: "14px 18px", display: "flex",
+          alignItems: "center", justifyContent: "space-between", borderBottom: "4px solid " + INK,
+        }}>
+          <div style={{ fontSize: "15px", fontWeight: "bold" }}>&#9999;&#65039; Quick Test: {level.title}</div>
+          <div style={{ fontSize: "12px" }}>{quizState.idx + 1} / {level.quiz.length}</div>
+        </div>
+        <div style={{ padding: "20px" }}>
+          <div className="popIn" key={quizState.idx} style={{
+            background: "#fff", borderRadius: "16px", border: "3px solid " + INK, padding: "16px",
+            boxShadow: "4px 4px 0 " + INK, marginBottom: "16px",
+          }}>
+            <div style={{ fontSize: "16px", fontWeight: "bold", color: INK, marginBottom: "14px", textAlign: "center" }}>
+              {q.q}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              {q.choices.map((ch, i) => {
+                let bg = "#f7f7f7", border = "#ddd";
+                if (quizState.revealed) {
+                  if (i === q.a) { bg = "#E2F6E1"; border = "#3FB985"; }
+                  else if (i === quizState.selected) { bg = "#FCE0E0"; border = "#E0716A"; }
+                }
+                return (
+                  <button key={i} disabled={quizState.revealed} onClick={() => answerQuiz(i)} style={{
+                    textAlign: "left", padding: "11px 14px", borderRadius: "10px", border: "2px solid " + border,
+                    background: bg, cursor: quizState.revealed ? "default" : "pointer", fontFamily: "inherit", fontSize: "14px",
+                  }}>
+                    {ch}
+                  </button>
+                );
+              })}
+            </div>
+            {quizState.revealed && (
+              <div style={{ marginTop: "12px", fontSize: "12px", color: "#666", fontStyle: "italic", textAlign: "center" }}>
+                {q.why}
+              </div>
+            )}
+          </div>
+          {quizState.revealed && (
+            <button onClick={nextQuizQuestion} style={{
+              width: "100%", padding: "14px", borderRadius: "12px", border: "3px solid " + INK,
+              background: GOLD, color: INK, cursor: "pointer", fontFamily: "inherit", fontSize: "16px", fontWeight: "bold",
+              boxShadow: "3px 3px 0 " + INK,
+            }}>
+              {isLastQ ? "See my results! \u2B50" : "Next question \u2192"}
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{
@@ -962,16 +1274,23 @@ function App() {
     }}>
       <style>{STYLE}</style>
       <div style={{
-        background: ACCENT, color: "#fff", padding: "14px 18px", display: "flex",
-        alignItems: "center", justifyContent: "space-between", borderBottom: "4px solid " + INK,
+        background: color, color: "#fff", padding: "14px 18px", display: "flex",
+        alignItems: "center", justifyContent: "space-between", borderBottom: "4px solid " + INK, gap: "10px",
       }}>
-        <div style={{ fontSize: "18px", fontWeight: "bold" }}>&#127968; Real Estate ABCs</div>
-        <div style={{ fontSize: "12px", opacity: 0.9 }}>with Hobie!</div>
+        <div style={{ fontSize: "15px", fontWeight: "bold" }}>
+          Level {progress.levelIdx + 1}: {level.title}
+        </div>
+        <button onClick={backToLevels} style={{
+          background: "rgba(255,255,255,0.25)", border: "1.5px solid rgba(255,255,255,0.6)", borderRadius: "8px",
+          color: "#fff", padding: "5px 10px", cursor: "pointer", fontFamily: "inherit", fontSize: "11px", fontWeight: "bold",
+        }}>
+          All levels
+        </button>
       </div>
 
       <div style={{ padding: "20px" }}>
-        <ProgressDots count={PAGES.length} current={page} />
-        <div key={page} className="popIn" style={{
+        <ProgressDots count={level.pages.length} current={page} />
+        <div key={progress.levelIdx + "-" + page} className="popIn" style={{
           background: "#fff", borderRadius: "16px", border: "3px solid " + INK, padding: "16px",
           boxShadow: "4px 4px 0 " + INK, marginBottom: "16px",
         }}>
@@ -986,12 +1305,12 @@ function App() {
           </div>
         </div>
 
-        {!isLast ? (
+        {!isLastPageOfLevel ? (
           <div style={{ display: "flex", gap: "10px" }}>
-            <button onClick={goBack} disabled={isFirst} style={{
+            <button onClick={goBack} disabled={isFirstPageOfLevel} style={{
               padding: "12px 18px", borderRadius: "12px", border: "3px solid " + INK,
-              background: isFirst ? "#eee" : "#fff", color: isFirst ? "#bbb" : INK,
-              cursor: isFirst ? "not-allowed" : "pointer", fontFamily: "inherit", fontSize: "15px", fontWeight: "bold",
+              background: isFirstPageOfLevel ? "#eee" : "#fff", color: isFirstPageOfLevel ? "#bbb" : INK,
+              cursor: isFirstPageOfLevel ? "not-allowed" : "pointer", fontFamily: "inherit", fontSize: "15px", fontWeight: "bold",
             }}>
               &#8592; Back
             </button>
@@ -1004,29 +1323,19 @@ function App() {
             </button>
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            <div style={{ textAlign: "center", fontSize: "14px", color: INK, marginBottom: "2px" }}>
-              Ready to play a game with bigger words?
-            </div>
-            <a href={NEXT_APP_URL} style={{
-              display: "block", textAlign: "center", padding: "14px", borderRadius: "12px", border: "3px solid " + INK,
-              background: ROOF, color: "#fff", cursor: "pointer", fontFamily: "inherit", fontSize: "16px", fontWeight: "bold",
-              boxShadow: "3px 3px 0 " + INK, textDecoration: "none",
-            }}>
-              &#127942; Let's play Deed Map!
-            </a>
-            <button onClick={goBack} style={{
-              padding: "10px", borderRadius: "10px", border: "2px solid " + INK, background: "#fff",
-              color: INK, cursor: "pointer", fontFamily: "inherit", fontSize: "13px",
-            }}>
-              &#8592; Read it again
-            </button>
-          </div>
+          <button onClick={startQuiz} style={{
+            width: "100%", padding: "14px", borderRadius: "12px", border: "3px solid " + INK,
+            background: GOLD, color: INK, cursor: "pointer", fontFamily: "inherit", fontSize: "16px", fontWeight: "bold",
+            boxShadow: "3px 3px 0 " + INK,
+          }}>
+            Take the quick test! &#9999;&#65039;
+          </button>
         )}
       </div>
     </div>
   );
 }
+
 </script>
 <script>
 (function () {
