@@ -1,5 +1,5 @@
 // Lamp offline support. Bump VERSION whenever you publish changes so phones pick them up.
-const VERSION = "lamp-v1";
+const VERSION = "lamp-v2";
 const CORE = ["./", "index.html", "privacy.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
@@ -16,7 +16,7 @@ self.addEventListener("activate", e => {
 
 // Show the saved copy right away, then refresh it in the background.
 self.addEventListener("fetch", e => {
-  if (e.request.method !== "GET") return;
+  if (e.request.method !== "GET" || e.request.headers.has("range")) return;   // let audio streaming go straight to the network
   const url = new URL(e.request.url);
   const sameOrigin = url.origin === location.origin;
   const isFont = url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com";
