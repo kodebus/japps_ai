@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no" class="notranslate">
 <head>
 <meta charset="utf-8">
+<meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lamp — Bible stories, read aloud</title>
 <meta name="description" content="Short Bible stories, read aloud in English and Spanish, each with a simple explanation, a reason to do good, and a short prayer.">
@@ -27,8 +28,6 @@
   --serif:"Spectral", Georgia, "Times New Roman", serif;
   --sans:"Outfit", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -46,7 +45,7 @@ body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
 button,select{ font:inherit; color:inherit; }
 button{ cursor:pointer; }
 :focus-visible{ outline:3px solid var(--olive); outline-offset:2px; border-radius:4px; }
-.wrap{ max-width:40rem; margin:0 auto; padding:1.5rem 1.25rem 9rem; }
+.wrap{ max-width:40rem; margin:0 auto; padding:calc(1.5rem + env(safe-area-inset-top,0px)) 1.25rem calc(9rem + env(safe-area-inset-bottom,0px)); }
 
 .brand{ display:flex; align-items:center; gap:.6rem; margin:1rem 0 2rem; }
 .brand svg{ width:28px; height:28px; flex:none; }
