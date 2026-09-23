@@ -1,0 +1,228 @@
+{
+ "version": 1,
+ "model": "gpt-4o-mini-tts",
+ "voices": {
+  "en": [
+   {
+    "id": "marin",
+    "label": "Marin"
+   }
+  ],
+  "es": [
+   {
+    "id": "marin",
+    "label": "Marin"
+   }
+  ]
+ },
+ "stories": {
+  "marin/en/samaritan": {
+   "h": "2cd789f9",
+   "n": 31
+  },
+  "marin/en/loaves": {
+   "h": "097dfe87",
+   "n": 31
+  },
+  "marin/en/david": {
+   "h": "a4d258b7",
+   "n": 25
+  },
+  "marin/en/storm": {
+   "h": "059ae7d8",
+   "n": 28
+  },
+  "marin/en/prodigal": {
+   "h": "c4f0f968",
+   "n": 29
+  },
+  "marin/en/ruth": {
+   "h": "ba298b02",
+   "n": 20
+  },
+  "marin/en/joseph": {
+   "h": "f2858627",
+   "n": 23
+  },
+  "marin/en/widow": {
+   "h": "9b918411",
+   "n": 23
+  },
+  "marin/en/daniel": {
+   "h": "8e483399",
+   "n": 24
+  },
+  "marin/en/zacchaeus": {
+   "h": "74c239ac",
+   "n": 29
+  },
+  "marin/en/peter": {
+   "h": "6b5b61c2",
+   "n": 24
+  },
+  "marin/en/elijah": {
+   "h": "955995f8",
+   "n": 22
+  },
+  "marin/en/children": {
+   "h": "fa5b873b",
+   "n": 20
+  },
+  "marin/en/lepers": {
+   "h": "31d733d3",
+   "n": 30
+  },
+  "marin/en/esther": {
+   "h": "03cd351b",
+   "n": 24
+  },
+  "marin/en/sheep": {
+   "h": "3972164a",
+   "n": 24
+  },
+  "marin/en/hannah": {
+   "h": "e22a0934",
+   "n": 29
+  },
+  "marin/en/noah": {
+   "h": "eb2413b5",
+   "n": 23
+  },
+  "marin/en/redsea": {
+   "h": "ce87c4f1",
+   "n": 25
+  },
+  "marin/en/feet": {
+   "h": "347b0586",
+   "n": 25
+  },
+  "marin/en/midnight": {
+   "h": "6926e06e",
+   "n": 22
+  },
+  "marin/en/martha": {
+   "h": "4ed1ffef",
+   "n": 26
+  },
+  "marin/en/bartimaeus": {
+   "h": "ba27411f",
+   "n": 33
+  },
+  "marin/en/lazarus": {
+   "h": "590ec92c",
+   "n": 26
+  },
+  "marin/en/roof": {
+   "h": "89464fac",
+   "n": 23
+  },
+  "marin/en/cross": {
+   "h": "a8595b54",
+   "n": 26
+  },
+  "marin/es/samaritan": {
+   "h": "ef08b2af",
+   "n": 33
+  },
+  "marin/es/loaves": {
+   "h": "f557a027",
+   "n": 29
+  },
+  "marin/es/david": {
+   "h": "af1af7f0",
+   "n": 27
+  },
+  "marin/es/storm": {
+   "h": "42cba37f",
+   "n": 28
+  },
+  "marin/es/prodigal": {
+   "h": "1c3675e5",
+   "n": 28
+  },
+  "marin/es/ruth": {
+   "h": "fcb4a315",
+   "n": 21
+  },
+  "marin/es/joseph": {
+   "h": "fc808999",
+   "n": 23
+  },
+  "marin/es/widow": {
+   "h": "5110896b",
+   "n": 23
+  },
+  "marin/es/daniel": {
+   "h": "04b0824d",
+   "n": 22
+  },
+  "marin/es/zacchaeus": {
+   "h": "fa071e81",
+   "n": 28
+  },
+  "marin/es/peter": {
+   "h": "950a6304",
+   "n": 24
+  },
+  "marin/es/elijah": {
+   "h": "49d5cbac",
+   "n": 24
+  },
+  "marin/es/children": {
+   "h": "ff7e4742",
+   "n": 22
+  },
+  "marin/es/lepers": {
+   "h": "cc442f07",
+   "n": 31
+  },
+  "marin/es/esther": {
+   "h": "1d0b213a",
+   "n": 25
+  },
+  "marin/es/sheep": {
+   "h": "58d75237",
+   "n": 23
+  },
+  "marin/es/hannah": {
+   "h": "4a9eb498",
+   "n": 27
+  },
+  "marin/es/noah": {
+   "h": "8a8a4a1b",
+   "n": 23
+  },
+  "marin/es/redsea": {
+   "h": "65e32a22",
+   "n": 27
+  },
+  "marin/es/feet": {
+   "h": "788e0d50",
+   "n": 23
+  },
+  "marin/es/midnight": {
+   "h": "0bac4ff6",
+   "n": 23
+  },
+  "marin/es/martha": {
+   "h": "fcfe9c1a",
+   "n": 28
+  },
+  "marin/es/bartimaeus": {
+   "h": "06dcdc60",
+   "n": 30
+  },
+  "marin/es/lazarus": {
+   "h": "a2922ccc",
+   "n": 27
+  },
+  "marin/es/roof": {
+   "h": "13234bc1",
+   "n": 22
+  },
+  "marin/es/cross": {
+   "h": "cf849367",
+   "n": 25
+  }
+ }
+}
