@@ -1,5 +1,5 @@
 // Lamp offline support. Bump VERSION whenever you publish changes so phones pick them up.
-const VERSION = "lamp-v2";
+const VERSION = "lamp-v3";
 const CORE = ["./", "index.html", "privacy.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
