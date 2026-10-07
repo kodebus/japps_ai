@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Free interactive Java practice for coding-challenge interviews. Step through programs line by line, then answer 27 instantly checked questions.">
+<meta property="og:title" content="Java Challenge Trainer">
+<meta property="og:description" content="Step through Java programs line by line, then practice with 27 instantly checked questions.">
+<meta property="og:url" content="https://www.japps.ai/java-trainer/">
+<meta name="theme-color" content="#131C2B">
+<title>Java Challenge Trainer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column, like a test runner. Lesson tabs on top, a code panel as the one dark object, answers below it. */
+:root{
+  --bg:#F2F4F8; --surface:#FFFFFF; --ink:#16202E; --muted:#5A6678; --line:#D5DBE5;
+  --accent:#2B55C7; --accent-soft:#E3EAFB; --pass:#17794F; --pass-soft:#DDF3E8; --fail:#B93A34; --fail-soft:#FBE4E2;
+  --code-bg:#131C2B; --code-fg:#DCE4F0; --code-dim:#8795AB; --code-cur:#27406F;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0D1219; --surface:#161D28; --ink:#E6EBF2; --muted:#96A2B4; --line:#2A3443;
+  --accent:#86A8FF; --accent-soft:#1D2A47; --pass:#55C993; --pass-soft:#143326; --fail:#F27F77; --fail-soft:#3A1B1A;
+  --code-bg:#080C12; --code-fg:#DCE4F0; --code-dim:#7C899D; --code-cur:#22375F; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0D1219; --surface:#161D28; --ink:#E6EBF2; --muted:#96A2B4; --line:#2A3443;
+  --accent:#86A8FF; --accent-soft:#1D2A47; --pass:#55C993; --pass-soft:#143326; --fail:#F27F77; --fail-soft:#3A1B1A;
+  --code-bg:#080C12; --code-fg:#DCE4F0; --code-dim:#7C899D; --code-cur:#22375F; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+.wrap{max-width:780px;margin:0 auto;padding-inline:16px;padding-block:28px 56px;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.15}
+h1{font-size:clamp(1.7rem,5vw,2.3rem);font-weight:700}
+h2{font-size:1.4rem;font-weight:700}
+h3{font-size:1.02rem;font-weight:600;font-family:var(--body)}
+p{margin:0;max-width:65ch}
+.lede{color:var(--muted)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:disabled{cursor:default}
+
+.progress{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.progress .count{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.bar{flex:1;min-width:120px;height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--pass);width:0;transition:width .3s}
+
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.tab{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:.9rem;font-weight:500;display:flex;gap:8px;align-items:center;white-space:nowrap}
+.tab small{font-family:var(--mono);font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.tab[aria-current="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.tab[aria-current="true"] small{color:var(--surface)}
+.tab.done small{color:var(--pass)}
+.tab[aria-current="true"].done small{color:var(--surface)}
+
+main{display:flex;flex-direction:column;gap:18px;min-width:0}
+.intro{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+pre.code{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--mono);font-size:.84rem;line-height:1.6;padding:12px 14px;border-radius:8px;overflow-x:auto;white-space:pre;tab-size:4}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);padding:1px 5px;border-radius:4px}
+
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ex-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:var(--pass-soft);color:var(--pass);font-weight:600}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.opt{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:10px 12px;text-align:left;min-width:0;overflow-wrap:anywhere}
+.opt.mono{font-family:var(--mono);font-size:.86rem}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.right{background:var(--pass-soft);border-color:var(--pass);color:var(--pass);font-weight:600}
+.opt.wrong{background:var(--fail-soft);border-color:var(--fail);color:var(--fail);text-decoration:line-through}
+.fb{font-size:.93rem;padding:9px 12px;border-radius:8px}
+.fb.ok{background:var(--pass-soft);color:var(--pass)}
+.fb.no{background:var(--fail-soft);color:var(--fail)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.field{flex:1;min-width:140px;font-family:var(--mono);font-size:.95rem;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--surface);border-radius:8px;padding:9px 16px;font-weight:600}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:disabled{opacity:.45}
+
+.lines{display:flex;flex-direction:column;gap:4px;background:var(--code-bg);border-radius:8px;padding:8px}
+.ln{display:flex;align-items:center;gap:6px;min-width:0}
+.ln pre{flex:1;min-width:0;margin:0;font-family:var(--mono);font-size:.82rem;color:var(--code-fg);padding:7px 8px;overflow-x:auto;white-space:pre;border-radius:6px}
+.ln button.mv{flex:none;width:34px;height:32px;border:1px solid var(--code-dim);background:transparent;color:var(--code-fg);border-radius:6px;font-size:.9rem}
+.ln button.mv:disabled{opacity:.25}
+.ln button.pick{flex:1;min-width:0;text-align:left;border:1px solid transparent;background:transparent;padding:0;border-radius:6px}
+.ln button.pick:hover:not(:disabled) pre{background:var(--code-cur)}
+.ln .num{flex:none;width:1.6em;text-align:right;font-family:var(--mono);font-size:.75rem;color:var(--code-dim)}
+.ln.hit pre{background:var(--fail);color:var(--surface)}
+.ln.miss pre{opacity:.5}
+
+.tracer{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px}
+@media (max-width:640px){.tracer{grid-template-columns:minmax(0,1fr)}}
+.tr-code{background:var(--code-bg);border-radius:8px;padding:8px 0;overflow-x:auto}
+.tr-code div{font-family:var(--mono);font-size:.82rem;line-height:1.75;color:var(--code-fg);white-space:pre;padding:0 14px;border-left:3px solid transparent}
+.tr-code div.cur{background:var(--code-cur);border-left-color:var(--accent)}
+.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.box{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);min-width:0}
+.box h3{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+.vars{display:grid;grid-template-columns:auto 1fr;gap:2px 14px;font-family:var(--mono);font-size:.88rem;margin:0}
+.vars dt{color:var(--muted)} .vars dd{margin:0;overflow-wrap:anywhere;font-weight:600}
+.out{font-family:var(--mono);font-size:.88rem;white-space:pre-wrap;overflow-wrap:anywhere;min-height:1.5em;margin:0}
+.out .err{color:var(--fail)}
+.empty{color:var(--muted);font-family:var(--body);font-size:.88rem}
+.note{font-size:.95rem;border-left:3px solid var(--accent);padding-left:12px}
+textarea.field{width:100%;resize:vertical;min-height:84px;line-height:1.5}
+select.field{flex:none;font-family:var(--body)}
+label{font-size:.85rem;font-weight:600;display:block;margin-bottom:4px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padding-top:16px}
+.link{border:0;background:none;color:var(--muted);text-decoration:underline;padding:0;font-size:.85rem}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+html{color-scheme:light dark}
+body{margin:0;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}[hidden]{display:none!important}
+.sitenav{max-width:780px;margin:0 auto;padding:14px 16px 0;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.88rem}
+.sitenav a,footer a{color:var(--accent);text-decoration:none;font-weight:500}
+.sitenav a:hover,footer a:hover{text-decoration:underline}
+.sitenav span{color:var(--muted);font-family:var(--mono);font-size:.75rem}
+.foot-links{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+</style>
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site"><a href="https://japps.ai">← Back to Japps.ai</a><span>a Japps.ai app</span></nav>
+<div class="wrap">
+  <header class="intro">
+    <span class="eyebrow">Interview warm-up</span>
+    <h1>Java Challenge Trainer</h1>
+    <p class="lede">Watch a program run one line at a time, then answer short questions. Each answer is checked right away and explained.</p>
+    <div class="progress"><span class="count" id="count"></span><div class="bar" aria-hidden="true"><i id="bar"></i></div></div>
+  </header>
+  <nav class="tabs" id="tabs" aria-label="Lessons"></nav>
+  <main id="view"></main>
+  <footer>
+    <span>Your progress is saved in this browser. © 2026 Japps.ai</span>
+    <span class="foot-links"><a href="privacy.html">Privacy</a><button class="link" id="reset" type="button">Reset progress</button></span>
+  </footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- Lessons ---------- */
+const LESSONS = [
+{ id:'l1', title:'Input is text',
+  intro:'Every challenge hands you the input as text, in a variable called line. Text that looks like a number is still text, so "5" + "5" gives "55". Convert it before you do any maths.',
+  code:['String line = in.readLine();            // "5"','long n = Long.parseLong(line.trim());   // 5','System.out.println(n * n);              // 25'],
+  ex:[
+    {id:'l1a',type:'mc',q:'What does this print?',code:['String line = "5";','System.out.println(line + line);'],opts:['10','55','25','An error'],a:1,mono:true,
+     why:'line is text, and + on text joins it together. "5" joined to "5" is "55".'},
+    {id:'l1b',type:'mc',q:'What type of value does in.readLine() give you?',opts:['int','long','String','char'],a:2,mono:true,
+     why:'readLine() always returns a String, even when the line holds only digits.'},
+    {id:'l1c',type:'fill',q:'Fill the blank so the text becomes a number.',code:['long n = Long.________(line.trim());'],answers:['parseLong'],
+     why:'Long.parseLong turns text such as "5" into the number 5.'},
+    {id:'l1d',type:'mc',q:'What does this print?',code:['long n = Long.parseLong("12");','System.out.println(n * n);'],opts:['24','1212','144','12'],a:2,mono:true,
+     why:'After parseLong, n is the number 12, so n * n is 144.'}
+  ]},
+{ id:'l2', title:'Clean and convert',
+  intro:'Long.parseLong is strict. One stray space or letter makes it throw a NumberFormatException, and the test fails. Call trim() first. Prefer long over int, because int runs out of room just past 2 billion.',
+  code:['long n = Long.parseLong(line.trim());'],
+  ex:[
+    {id:'l2a',type:'mc',q:'The input line is " 7 " with a space on each side. What happens here?',code:['long n = Long.parseLong(line);'],opts:['n becomes 7','n becomes 0','It throws NumberFormatException','n becomes -7'],a:2,
+     why:'parseLong does not ignore spaces. Write Long.parseLong(line.trim()) and it works.'},
+    {id:'l2b',type:'fill',q:'Which method removes the spaces at both ends of the text?',code:['String clean = line.________();'],answers:['trim'],
+     why:'trim() returns the text with leading and trailing spaces removed.'},
+    {id:'l2c',type:'mc',q:'What does this print?',code:['int n = 100000;','System.out.println(n * n);'],opts:['10000000000','1410065408','0','An error'],a:1,mono:true,
+     why:'The real answer, 10 billion, does not fit in an int, so Java silently wraps it to a wrong number. With long you get 10000000000.'},
+    {id:'l2d',type:'bug',q:'One line stops this from compiling. Tap it.',lines:['String line = "8";','long n = line;','System.out.println(n * n);'],bug:1,
+     why:'Text cannot be stored in a long. Convert it: long n = Long.parseLong(line.trim());'}
+  ]},
+{ id:'l3', title:'Split a line',
+  intro:'When one line holds several values, split cuts it into an array of pieces. Counting starts at 0, so the first piece is parts[0]. Each piece is still text.',
+  code:['String[] parts = "3 4".split(" ");','// parts[0] is "3"   parts[1] is "4"'],
+  ex:[
+    {id:'l3a',type:'mc',q:'What is parts[1]?',code:['String[] parts = "3 4".split(" ");'],opts:['"3"','"4"','"3 4"','7'],a:1,mono:true,
+     why:'Counting starts at 0. parts[0] is "3" and parts[1] is "4".'},
+    {id:'l3b',type:'mc',q:'How many pieces does this give?',code:['String[] parts = "10,20,5".split(",");','System.out.println(parts.length);'],opts:['2','3','5','7'],a:1,mono:true,
+     why:'Two commas separate three pieces: "10", "20" and "5".'},
+    {id:'l3c',type:'mc',q:'What does this print?',code:['String[] p = "3 4".split(" ");','System.out.println(p[0] + p[1]);'],opts:['7','34','3 4','An error'],a:1,mono:true,
+     why:'The pieces are text, so + joins them into "34". Convert each piece with Long.parseLong to get 7.'},
+    {id:'l3d',type:'order',q:'Put the lines in order to add two numbers from a line such as "3 4".',
+     lines:['String[] parts = line.trim().split(" ");','long a = Long.parseLong(parts[0]);','long b = Long.parseLong(parts[1]);','System.out.println(a + b);'],start:[3,1,0,2],
+     why:'Split first, convert each piece, then print the sum.'}
+  ]},
+{ id:'l4', title:'Decisions',
+  intro:'% gives the remainder after division. Compare numbers with ==. Compare text with .equals(). The words you print must match the expected output exactly, capital letters included.',
+  code:['if (n % 2 == 0) {','    System.out.println("Even");','} else {','    System.out.println("Odd");','}'],
+  ex:[
+    {id:'l4a',type:'mc',q:'What is 7 % 2?',opts:['3','3.5','1','0'],a:2,mono:true,
+     why:'7 divided by 2 is 3 with 1 left over. % gives the leftover.'},
+    {id:'l4b',type:'mc',q:'What is -3 % 2 in Java?',opts:['1','-1','0','-2'],a:1,mono:true,
+     why:'In Java the remainder keeps the sign of the first number, so it is -1. Test for == 0 to find even numbers, never == 1 to find odd ones.'},
+    {id:'l4c',type:'fill',q:'Fill the blank so the condition is true for even numbers.',code:['if (n % 2 == ___) {'],answers:['0'],
+     why:'An even number leaves no remainder when divided by 2.'},
+    {id:'l4d',type:'bug',q:'This compiles, but it does not print Confirmed when the user types yes. Tap the faulty line.',lines:['String s = in.readLine();','if (s == "yes") {','    System.out.println("Confirmed");','}'],bug:1,
+     why:'== checks whether two texts are the same object, not whether they hold the same letters. Write s.equals("yes").'},
+    {id:'l4e',type:'mc',q:'The expected output is Even. Which line passes the test?',
+     opts:['System.out.println("even");','System.out.println("Even");','System.out.println("Even ");','System.out.println("The answer is Even");'],a:1,mono:true,
+     why:'The output is compared character by character. A different capital letter, an extra space or extra words all fail.'}
+  ]},
+{ id:'l5', title:'Loops and strings',
+  intro:'A for loop repeats a block. With text, charAt(i) reads one character and length() tells you where to stop. Positions run from 0 to length() - 1.',
+  code:['for (int i = 0; i < s.length(); i++) {','    char c = s.charAt(i);','}'],
+  ex:[
+    {id:'l5a',type:'mc',q:'What is "hello".charAt(1)?',opts:['h','e','l','o'],a:1,mono:true,
+     why:'Position 0 is h, so position 1 is e.'},
+    {id:'l5b',type:'mc',q:'What does this print?',code:['int count = 0;','for (int i = 0; i < 3; i++) {','    count = count + 2;','}','System.out.println(count);'],opts:['2','3','6','8'],a:2,mono:true,
+     why:'The loop runs three times, for i = 0, 1 and 2. Each run adds 2, which makes 6.'},
+    {id:'l5c',type:'fill',q:'Fill the blank to turn "hello" into "olleh".',code:['String r = new StringBuilder(line).________().toString();'],answers:['reverse'],
+     why:'StringBuilder has a reverse() method. toString() turns the result back into a String.'},
+    {id:'l5d',type:'mc',q:'What is "Java".length()?',opts:['3','4','5','0'],a:1,mono:true,
+     why:'There are four characters, at positions 0, 1, 2 and 3.'},
+    {id:'l5e',type:'order',q:'Put the lines in order to add up a list such as "10,20,5".',
+     lines:['long total = 0;','for (String part : line.trim().split(",")) {','    total += Long.parseLong(part.trim());','}','System.out.println(total);'],start:[4,2,0,3,1],
+     why:'Start the total at 0, add each piece inside the loop, and print once the loop has finished.'}
+  ]},
+{ id:'l6', title:'Mixed round',
+  intro:'The scored challenges mix everything. Read each question as if it were a test case, and check the edge cases before you answer.',
+  code:null,
+  ex:[
+    {id:'l6a',type:'mc',q:'What does this print?',code:['String s = "Level".toLowerCase();','String r = new StringBuilder(s).reverse().toString();','System.out.println(s.equals(r));'],opts:['true','false','level','An error'],a:0,mono:true,
+     why:'In lower case the word is "level", which reads the same backwards, so equals returns true.'},
+    {id:'l6b',type:'bug',q:'This crashes on the last pass of the loop. Tap the faulty line.',lines:['String s = "cat";','for (int i = 0; i <= s.length(); i++) {','    System.out.println(s.charAt(i));','}'],bug:1,
+     why:'<= goes one step too far. The positions are 0, 1 and 2, so charAt(3) throws StringIndexOutOfBoundsException. Use i < s.length().'},
+    {id:'l6c',type:'mc',q:'What does this print?',code:['long n = Long.parseLong("-4");','System.out.println(n * n);'],opts:['-16','16','-8','An error'],a:1,mono:true,
+     why:'parseLong accepts a minus sign. A negative times a negative is positive, so the answer is 16.'},
+    {id:'l6d',type:'order',q:'Put the lines in order to print Even or Odd.',
+     lines:['long n = Long.parseLong(line.trim());','if (n % 2 == 0) {','    System.out.println("Even");','} else {','    System.out.println("Odd");','}'],start:[2,5,0,4,1,3],
+     why:'Convert first, test the remainder, then print one word or the other.'},
+    {id:'l6e',type:'fill',q:'Fill the blank to print the total on its own line.',code:['System.out.________(total);'],answers:['println'],
+     why:'println prints the value and then moves to a new line, which is what the tests expect.'}
+  ]}
+];
+const TOTAL = LESSONS.reduce((n,l)=>n+l.ex.length,0);
+const TYPE_LABEL = {mc:'Choose the answer',fill:'Fill the blank',order:'Put the lines in order',bug:'Find the bug'};
+
+/* ---------- Stepper programs (a simulation that follows Java's rules) ---------- */
+const q = s => '"' + s + '"';
+function parseLong(t){
+  if(!/^[+-]?\d+$/.test(t)) return null;
+  const v = BigInt(t.replace(/^\+/,''));
+  if(v > 9223372036854775807n || v < -9223372036854775808n) return null;
+  return v;
+}
+function javaSplit(s,sep){
+  if(!s.includes(sep)) return [s];
+  const p = s.split(sep);
+  while(p.length && p[p.length-1]==='') p.pop();
+  return p;
+}
+const nfe = t => 'NumberFormatException: For input string: ' + q(t);
+const END = (out)=>({ln:0,vars:{line:'null'},out:out.slice(),note:'No lines are left, so readLine() returns null and the loop ends.'});
+
+const PROGRAMS = {
+  square:{ name:'Square a Number', sample:'5\n25\n-4',
+    lines:['while ((line = in.readLine()) != null) {','    long n = Long.parseLong(line.trim());','    System.out.println(n * n);','}'],
+    run(inputs){ const st=[], out=[];
+      for(const line of inputs){
+        st.push({ln:0,vars:{line:q(line)},out:out.slice(),note:'readLine() hands you the next line as text: '+q(line)+'.'});
+        const n=parseLong(line.trim());
+        if(n===null){ st.push({ln:1,vars:{line:q(line)},out:out.slice(),err:nfe(line.trim()),note:'This text is not a whole number, so parseLong stops the program.'}); return st; }
+        st.push({ln:1,vars:{line:q(line),n:String(n)},out:out.slice(),note:'trim() removes stray spaces, then parseLong turns the text into the number '+n+'.'});
+        const r=BigInt.asIntN(64,n*n); out.push(String(r));
+        st.push({ln:2,vars:{line:q(line),n:String(n)},out:out.slice(),note:n+' times '+n+' is '+r+'. println writes it to the output.'});
+      }
+      st.push(END(out)); return st; } },
+  evenodd:{ name:'Even or Odd', sample:'7\n10\n-3',
+    lines:['while ((line = in.readLine()) != null) {','    long n = Long.parseLong(line.trim());','    if (n % 2 == 0) {','        System.out.println("Even");','    } else {','        System.out.println("Odd");','    }','}'],
+    run(inputs){ const st=[], out=[];
+      for(const line of inputs){
+        st.push({ln:0,vars:{line:q(line)},out:out.slice(),note:'readLine() hands you the next line as text: '+q(line)+'.'});
+        const n=parseLong(line.trim());
+        if(n===null){ st.push({ln:1,vars:{line:q(line)},out:out.slice(),err:nfe(line.trim()),note:'This text is not a whole number, so parseLong stops the program.'}); return st; }
+        const v={line:q(line),n:String(n)};
+        st.push({ln:1,vars:v,out:out.slice(),note:'The text becomes the number '+n+'.'});
+        const rem=n%2n, even=rem===0n;
+        st.push({ln:2,vars:Object.assign({},v,{'n % 2':String(rem)}),out:out.slice(),note:'The remainder is '+rem+', so the condition is '+(even?'true':'false')+'.'});
+        out.push(even?'Even':'Odd');
+        st.push({ln:even?3:5,vars:v,out:out.slice(),note:'Java runs the '+(even?'first':'else')+' branch and prints '+(even?'Even':'Odd')+'.'});
+      }
+      st.push(END(out)); return st; } },
+  sum:{ name:'Sum a List', sample:'10,20,5\n1, 2, 3',
+    lines:['while ((line = in.readLine()) != null) {','    long total = 0;','    for (String part : line.trim().split(",")) {','        total += Long.parseLong(part.trim());','    }','    System.out.println(total);','}'],
+    run(inputs){ const st=[], out=[];
+      for(const line of inputs){
+        st.push({ln:0,vars:{line:q(line)},out:out.slice(),note:'readLine() hands you the next line as text: '+q(line)+'.'});
+        let total=0n;
+        st.push({ln:1,vars:{line:q(line),total:'0'},out:out.slice(),note:'The total starts at 0 for each new line.'});
+        for(const part of javaSplit(line.trim(),',')){
+          st.push({ln:2,vars:{line:q(line),total:String(total),part:q(part)},out:out.slice(),note:'split(",") cuts the line at each comma. The loop takes the next piece: '+q(part)+'.'});
+          const n=parseLong(part.trim());
+          if(n===null){ st.push({ln:3,vars:{line:q(line),total:String(total),part:q(part)},out:out.slice(),err:nfe(part.trim()),note:'This piece is not a whole number, so parseLong stops the program.'}); return st; }
+          total=BigInt.asIntN(64,total+n);
+          st.push({ln:3,vars:{line:q(line),total:String(total),part:q(part)},out:out.slice(),note:'The piece becomes '+n+' and is added. The total is now '+total+'.'});
+        }
+        out.push(String(total));
+        st.push({ln:5,vars:{line:q(line),total:String(total)},out:out.slice(),note:'The loop has used every piece. println writes the total.'});
+      }
+      st.push(END(out)); return st; } }
+};
+
+/* ---------- State ---------- */
+const KEY='java-challenge-trainer.v1';
+let solved=new Set(), tab='run';
+try{ const s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ solved=new Set(s.solved||[]); if(s.tab) tab=s.tab; } }catch(e){}
+if(tab!=='run' && !LESSONS.some(l=>l.id===tab)) tab='run';
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify({solved:[...solved],tab})); }catch(e){} }
+
+const $=id=>document.getElementById(id);
+function el(tag,cls,text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+function codeBlock(lines){ return el('pre','code',lines.join('\n')); }
+
+function renderProgress(){
+  $('count').textContent = solved.size + ' of ' + TOTAL + ' solved';
+  $('bar').style.width = (solved.size/TOTAL*100) + '%';
+}
+function renderTabs(){
+  const nav=$('tabs'); nav.textContent='';
+  const mk=(id,label,small,done)=>{ const b=el('button','tab'+(done?' done':'')); b.type='button'; b.append(el('span',null,label)); if(small) b.append(el('small',null,small)); if(id===tab) b.setAttribute('aria-current','true'); b.onclick=()=>go(id); nav.append(b); };
+  mk('run','Watch it run',null,false);
+  LESSONS.forEach((l,i)=>{ const n=l.ex.filter(x=>solved.has(x.id)).length; mk(l.id,(i+1)+'. '+l.title,n+'/'+l.ex.length,n===l.ex.length); });
+}
+function go(id){ tab=id; save(); renderTabs(); renderView(); try{ window.scrollTo(0,0); }catch(e){} }
+function markSolved(id){ if(solved.has(id)) return; solved.add(id); save(); renderTabs(); renderProgress(); }
+
+/* ---------- Exercises ---------- */
+function renderEx(ex,n){
+  const box=el('article','ex'); const head=el('div','ex-head');
+  head.append(el('span','eyebrow','Question '+n+' · '+TYPE_LABEL[ex.type]));
+  const chip=el('span','chip','Solved'); chip.hidden=!solved.has(ex.id); head.append(chip);
+  box.append(head, el('h3',null,ex.q));
+  if(ex.code) box.append(codeBlock(ex.code));
+  const fb=el('div','fb'); fb.setAttribute('role','status'); fb.hidden=true;
+  const say=(ok,text)=>{ fb.hidden=false; fb.className='fb '+(ok?'ok':'no'); fb.textContent=(ok?'Correct. ':'')+text; };
+  const win=()=>{ chip.hidden=false; say(true,ex.why); markSolved(ex.id); };
+  const was=solved.has(ex.id);
+
+  if(ex.type==='mc'){
+    const wrap=el('div','opts'); const btns=[];
+    if(ex.opts.some(o=>o.length>18)) wrap.style.gridTemplateColumns='minmax(0,1fr)';
+    ex.opts.forEach((o,i)=>{ const b=el('button','opt'+(ex.mono?' mono':''),o); b.type='button'; btns.push(b);
+      b.onclick=()=>{ if(i===ex.a){ b.classList.add('right'); btns.forEach(x=>x.disabled=true); win(); } else { b.classList.add('wrong'); b.disabled=true; say(false,'Not quite. Try another answer.'); } };
+      wrap.append(b); });
+    if(was){ btns[ex.a].classList.add('right'); btns.forEach(x=>x.disabled=true); say(true,ex.why); }
+    box.append(wrap);
+  }
+  else if(ex.type==='fill'){
+    const row=el('form','row'); const inp=el('input','field'); inp.id='in-'+ex.id; inp.type='text'; inp.autocomplete='off'; inp.spellcheck=false; inp.setAttribute('autocapitalize','off'); inp.setAttribute('aria-label','Your answer'); inp.placeholder='Type the missing part';
+    const b=el('button','btn','Check'); b.type='submit';
+    row.onsubmit=e=>{ e.preventDefault(); const v=inp.value.trim().replace(/;$/,'').replace(/\(\)$/,'').trim();
+      if(!v){ say(false,'Type your answer first.'); return; }
+      if(ex.answers.includes(v)){ inp.disabled=true; b.disabled=true; win(); }
+      else if(ex.answers.some(a=>a.toLowerCase()===v.toLowerCase())) say(false,'Close. Java is case-sensitive, so check your capital letters.');
+      else say(false,'Not quite. Try again.'); };
+    if(was){ inp.value=ex.answers[0]; inp.disabled=true; b.disabled=true; say(true,ex.why); }
+    row.append(inp,b); box.append(row);
+  }
+  else if(ex.type==='order'){
+    let arr=was?ex.lines.map((_,i)=>i):ex.start.slice(); let locked=was;
+    const list=el('div','lines'); const b=el('button','btn','Check order'); b.type='button';
+    const draw=()=>{ list.textContent='';
+      arr.forEach((li,pos)=>{ const r=el('div','ln');
+        const up=el('button','mv','↑'), dn=el('button','mv','↓'); up.type=dn.type='button';
+        up.setAttribute('aria-label','Move line up'); dn.setAttribute('aria-label','Move line down');
+        up.disabled=locked||pos===0; dn.disabled=locked||pos===arr.length-1;
+        up.onclick=()=>{ [arr[pos-1],arr[pos]]=[arr[pos],arr[pos-1]]; draw(); };
+        dn.onclick=()=>{ [arr[pos+1],arr[pos]]=[arr[pos],arr[pos+1]]; draw(); };
+        r.append(up,dn,el('pre',null,ex.lines[li])); list.append(r); }); };
+    b.onclick=()=>{ if(arr.every((li,pos)=>ex.lines[li]===ex.lines[pos])){ locked=true; b.disabled=true; draw(); win(); } else say(false,'Not in the right order yet. Think about what has to exist before each line can run.'); };
+    draw(); if(was){ b.disabled=true; say(true,ex.why); }
+    box.append(list, el('div','row')); box.lastChild.append(b);
+  }
+  else if(ex.type==='bug'){
+    const list=el('div','lines'); const rows=[];
+    ex.lines.forEach((t,i)=>{ const r=el('div','ln'); const p=el('button','pick'); p.type='button'; p.setAttribute('aria-label','Line '+(i+1));
+      p.append(el('pre',null,t)); r.append(el('span','num',String(i+1)),p); rows.push([r,p]);
+      p.onclick=()=>{ if(i===ex.bug){ r.classList.add('hit'); rows.forEach(x=>x[1].disabled=true); win(); } else { r.classList.add('miss'); p.disabled=true; say(false,'That line is fine. Look again.'); } };
+      list.append(r); });
+    if(was){ rows[ex.bug][0].classList.add('hit'); rows.forEach(x=>x[1].disabled=true); say(true,ex.why); }
+    box.append(list);
+  }
+  box.append(fb); return box;
+}
+
+function renderLesson(l){
+  const v=$('view'); const idx=LESSONS.indexOf(l);
+  const intro=el('section','intro'); intro.append(el('span','eyebrow','Lesson '+(idx+1)+' of '+LESSONS.length), el('h2',null,l.title), el('p',null,l.intro));
+  if(l.code) intro.append(codeBlock(l.code));
+  v.append(intro);
+  l.ex.forEach((x,i)=>v.append(renderEx(x,i+1)));
+  const nav=el('div','row'); const next=LESSONS[idx+1];
+  if(next){ const b=el('button','btn','Next lesson: '+next.title); b.type='button'; b.onclick=()=>go(next.id); nav.append(b); }
+  else { const b=el('button','btn ghost','Back to Watch it run'); b.type='button'; b.onclick=()=>go('run'); nav.append(b); }
+  v.append(nav);
+}
+
+/* ---------- Stepper ---------- */
+let tr={prog:'square',input:PROGRAMS.square.sample,idx:1};
+function renderRun(){
+  const v=$('view');
+  const intro=el('section','intro');
+  intro.append(el('span','eyebrow','Start here'), el('h2',null,'Watch it run'),
+    el('p',null,'This is the starter loop most coding-challenge sites give you. Press Step to run one line at a time and see what each variable holds. Change the input to try your own test cases, including ones that break it.'));
+  v.append(intro);
+
+  const card=el('article','ex');
+  const top=el('div','row'); const sel=el('select','field'); sel.id='prog'; sel.setAttribute('aria-label','Program');
+  Object.keys(PROGRAMS).forEach(k=>{ const o=el('option',null,PROGRAMS[k].name); o.value=k; if(k===tr.prog) o.selected=true; sel.append(o); });
+  top.append(sel); card.append(top);
+
+  const grid=el('div','tracer'); const code=el('div','tr-code'); const side=el('div','side');
+  const inBox=el('div'); const lab=el('label',null,'Input (one test value per line)'); lab.htmlFor='stdin';
+  const ta=el('textarea','field'); ta.id='stdin'; ta.spellcheck=false; ta.value=tr.input; inBox.append(lab,ta);
+  const vBox=el('div','box'); vBox.append(el('h3',null,'Variables')); const vars=el('dl','vars'); vBox.append(vars);
+  const oBox=el('div','box'); oBox.append(el('h3',null,'Output')); const out=el('pre','out'); oBox.append(out);
+  side.append(inBox,vBox,oBox); grid.append(code,side); card.append(grid);
+  const note=el('p','note'); note.setAttribute('role','status'); card.append(note);
+  const ctl=el('div','row'); const bStep=el('button','btn','Step'), bRun=el('button','btn ghost','Run to the end'), bReset=el('button','btn ghost','Start over');
+  [bStep,bRun,bReset].forEach(b=>b.type='button'); ctl.append(bStep,bRun,bReset); card.append(ctl);
+  v.append(card);
+
+  let steps=[];
+  const build=()=>{ let ins=tr.input.replace(/\r/g,'').split('\n'); if(ins.length && ins[ins.length-1]==='') ins.pop(); steps=PROGRAMS[tr.prog].run(ins); if(tr.idx>steps.length-1) tr.idx=steps.length-1; };
+  const draw=()=>{ const P=PROGRAMS[tr.prog]; const s=tr.idx>=0?steps[tr.idx]:null;
+    code.textContent=''; P.lines.forEach((t,i)=>{ const d=el('div',s&&s.ln===i?'cur':null,t); code.append(d); });
+    vars.textContent='';
+    if(s){ Object.keys(s.vars).forEach(k=>vars.append(el('dt',null,k),el('dd',null,s.vars[k]))); } else vars.append(el('dd','empty','Nothing yet.'));
+    out.textContent='';
+    const lines=s?s.out:[]; if(lines.length) out.append(document.createTextNode(lines.join('\n')));
+    if(s&&s.err){ if(lines.length) out.append(document.createTextNode('\n')); out.append(el('span','err',s.err)); }
+    if(!lines.length && !(s&&s.err)) out.append(el('span','empty','Nothing printed yet.'));
+    note.textContent=s?s.note:'Press Step to run the first line.';
+    const atEnd=tr.idx>=steps.length-1; bStep.disabled=atEnd; bRun.disabled=atEnd; };
+  bStep.onclick=()=>{ tr.idx++; draw(); };
+  bRun.onclick=()=>{ tr.idx=steps.length-1; draw(); };
+  bReset.onclick=()=>{ tr.idx=-1; draw(); };
+  ta.oninput=()=>{ tr.input=ta.value; tr.idx=-1; build(); draw(); };
+  sel.onchange=()=>{ tr.prog=sel.value; tr.input=PROGRAMS[tr.prog].sample; ta.value=tr.input; tr.idx=-1; build(); draw(); };
+  build(); draw();
+
+  const tips=el('section','intro');
+  tips.append(el('h3',null,'Things to try'),
+    el('p',null,'Type a letter, or leave a blank line, and watch where the program stops. Then pick Sum a List and enter 1, 2, 3 with spaces to see why each piece is trimmed.'));
+  const row=el('div','row'); const b=el('button','btn','Start lesson 1: '+LESSONS[0].title); b.type='button'; b.onclick=()=>go(LESSONS[0].id); row.append(b);
+  v.append(tips,row);
+}
+
+function renderView(){ const v=$('view'); v.textContent=''; if(tab==='run') renderRun(); else renderLesson(LESSONS.find(l=>l.id===tab)); }
+
+/* ---------- Reset (two taps, no dialog) ---------- */
+let armed=false, armTimer=null; const rb=$('reset');
+rb.onclick=()=>{ if(!armed){ armed=true; rb.textContent='Tap again to clear all progress'; armTimer=setTimeout(()=>{ armed=false; rb.textContent='Reset progress'; },4000); return; }
+  clearTimeout(armTimer); armed=false; rb.textContent='Reset progress'; solved=new Set(); save(); renderTabs(); renderProgress(); renderView(); };
+
+renderTabs(); renderProgress(); renderView();
+})();
+</script>
+</body>
+</html>
