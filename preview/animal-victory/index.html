@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<meta name="googlebot" content="noindex, nofollow" />
+<title>Animal Victory — Sign a Petition. Save an Animal.</title>
+<meta name="description" content="Animal Victory brings people together to take action for animals through petitions, public awareness, and advocacy." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #1b1f2a;
+    --ink-2: #2a3040;
+    --red: #b3261e;
+    --red-dark: #8c1d17;
+    --red-soft: #fbeceb;
+    --gold: #c99a2e;
+    --green: #2f7d4f;
+    --cream: #faf7f2;
+    --paper: #ffffff;
+    --muted: #5b6270;
+    --line: #e6e0d6;
+    --shadow: 0 1px 2px rgba(27,31,42,.06), 0 8px 24px rgba(27,31,42,.06);
+    --sans: 'Libre Franklin', system-ui, sans-serif;
+    --serif: 'Source Serif 4', Georgia, serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--cream); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+  button { font: inherit; cursor: pointer; }
+  input, textarea, select { font: inherit; color: inherit; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  /* Demo banner */
+  .demo-banner { background: var(--gold); color: #2a1e00; font-size: 13px; font-weight: 600; text-align: center; padding: 7px 16px; }
+  .demo-banner a { font-weight: 800; }
+
+  /* Utility bar */
+  .utility { background: var(--ink); color: #c9ccd4; font-size: 13px; }
+  .utility .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 8px; padding-bottom: 8px; flex-wrap: wrap; }
+  .utility a { text-decoration: none; color: #e9ebef; font-weight: 600; }
+  .utility a:hover { color: #fff; text-decoration: underline; }
+  .utility .links { display: flex; gap: 18px; flex-wrap: wrap; }
+  .utility .report { color: #ffb3ad; }
+
+  /* Header */
+  header.site { background: var(--paper); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+  header.site .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 14px; padding-bottom: 14px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: var(--red); display: grid; place-items: center; flex-shrink: 0; }
+  .brand-name { font-weight: 900; font-size: 20px; letter-spacing: -.5px; line-height: 1; }
+  .brand-name small { white-space: nowrap; display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 1.6px; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
+  nav.main { display: flex; align-items: center; gap: 4px; }
+  .nav-item { position: relative; }
+  .nav-item > a, .nav-item > button { white-space: nowrap; background: none; border: 0; text-decoration: none; font-size: 14.5px; font-weight: 600; padding: 10px 11px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px; color: var(--ink); }
+  .nav-item > a:hover, .nav-item > button:hover, .nav-item:focus-within > button { background: var(--cream); }
+  .dropdown { position: absolute; top: 100%; left: 0; min-width: 240px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); padding: 6px; display: none; }
+  .nav-item:hover .dropdown, .nav-item:focus-within .dropdown { display: block; }
+  .dropdown a { display: block; padding: 9px 12px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500; }
+  .dropdown a:hover { background: var(--cream); color: var(--red); }
+  .header-cta { display: flex; gap: 8px; align-items: center; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; padding: 10px 16px; font-weight: 700; font-size: 14px; text-decoration: none; border: 1.5px solid transparent; transition: background .15s, transform .15s, border-color .15s; white-space: nowrap; }
+  .btn:active { transform: translateY(1px); }
+  .btn-red { background: var(--red); color: #fff; }
+  .btn-red:hover { background: var(--red-dark); }
+  .btn-outline { border-color: var(--ink); color: var(--ink); background: transparent; }
+  .btn-outline:hover { background: var(--ink); color: #fff; }
+  .btn-ghost { background: var(--cream); color: var(--ink); border-color: var(--line); }
+  .btn-ghost:hover { border-color: var(--ink); }
+  .btn-lg { padding: 14px 22px; font-size: 16px; }
+  .btn-block { width: 100%; }
+  .menu-toggle { display: none; background: none; border: 1.5px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+  .mobile-nav { display: none; }
+
+  /* Hero */
+  .hero { background: var(--ink); color: #fff; position: relative; overflow: hidden; }
+  .hero::after { content: ''; position: absolute; right: -120px; top: -120px; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(179,38,30,.45), transparent 70%); pointer-events: none; }
+  .hero .wrap { padding-top: 56px; padding-bottom: 48px; position: relative; z-index: 1; }
+  .eyebrow { font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #ffb3ad; margin-bottom: 14px; }
+  .hero h1 { font-size: clamp(30px, 5vw, 54px); font-weight: 900; line-height: 1.05; letter-spacing: -1.5px; max-width: 780px; }
+  .hero p.lede { font-family: var(--serif); font-size: clamp(17px, 2vw, 20px); color: #d6d9e0; max-width: 640px; margin-top: 18px; }
+  .hero-actions { display: flex; gap: 10px; margin-top: 26px; flex-wrap: wrap; }
+  .hero .btn-outline { border-color: rgba(255,255,255,.5); color: #fff; }
+  .hero .btn-outline:hover { background: #fff; color: var(--ink); }
+  .hero-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 40px; max-width: 720px; }
+  .hero-stat { border-top: 2px solid rgba(255,255,255,.18); padding-top: 12px; }
+  .hero-stat b { display: block; font-size: clamp(22px, 3vw, 30px); font-weight: 900; letter-spacing: -.5px; }
+  .hero-stat span { font-size: 13px; color: #aeb3bf; }
+
+  .notice { background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 12px; padding: 16px 18px; font-size: 14px; color: var(--muted); margin-top: 28px; }
+  .notice strong { color: var(--ink); }
+  .notice p + p { margin-top: 8px; }
+
+  /* Petition browser */
+  .section { padding: 40px 0 56px; }
+  .section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+  .section-head h2 { font-size: clamp(24px, 3vw, 32px); font-weight: 900; letter-spacing: -.8px; }
+  .section-head p { color: var(--muted); font-size: 15px; }
+  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .search { position: relative; flex: 1 1 260px; max-width: 420px; }
+  .search input { width: 100%; padding: 11px 14px 11px 40px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--paper); font-size: 15px; }
+  .search input:focus { outline: none; border-color: var(--ink); }
+  .search svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+  .status-tabs { display: inline-flex; background: var(--paper); border: 1.5px solid var(--line); border-radius: 10px; padding: 3px; }
+  .status-tabs a { text-decoration: none; padding: 7px 12px; border-radius: 7px; font-size: 13.5px; font-weight: 700; color: var(--muted); }
+  .status-tabs a.active { background: var(--ink); color: #fff; }
+  .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 22px; scrollbar-width: thin; }
+  .chip { flex-shrink: 0; text-decoration: none; font-size: 13px; font-weight: 600; padding: 7px 13px; border-radius: 100px; background: var(--paper); border: 1.5px solid var(--line); color: var(--ink-2); }
+  .chip:hover { border-color: var(--ink); }
+  .chip.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s; }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .card-media { aspect-ratio: 16 / 8; position: relative; display: flex; align-items: flex-end; padding: 14px; color: #fff; overflow: hidden; }
+  .card-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .card-media .badge { position: relative; z-index: 1; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; padding: 4px 9px; border-radius: 6px; background: rgba(0,0,0,.45); backdrop-filter: blur(4px); }
+  .badge.victory { background: var(--green); }
+  .badge.past { background: #6b7280; }
+  .card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1; gap: 12px; }
+  .card h3 { font-size: 17.5px; font-weight: 800; line-height: 1.3; letter-spacing: -.2px; }
+  .card h3 a { text-decoration: none; }
+  .card h3 a:hover { color: var(--red); }
+  .card .blurb { font-family: var(--serif); font-size: 15px; color: var(--muted); }
+  .card-foot { margin-top: auto; display: flex; flex-direction: column; gap: 12px; }
+
+  .progress { height: 8px; background: #efe9df; border-radius: 99px; overflow: hidden; }
+  .progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--red), #d9483f); border-radius: 99px; transition: width .6s ease; }
+  .progress-meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .progress-meta b { color: var(--ink); }
+
+  .more { text-align: center; margin-top: 28px; }
+  .empty { text-align: center; padding: 48px 20px; color: var(--muted); background: var(--paper); border: 1px dashed var(--line); border-radius: 16px; }
+
+  /* Petition page */
+  .petition-top { background: var(--paper); border-bottom: 1px solid var(--line); }
+  .petition-top .wrap { padding-top: 28px; padding-bottom: 28px; }
+  .crumbs { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .crumbs a { text-decoration: none; font-weight: 600; }
+  .crumbs a:hover { color: var(--red); }
+  .petition-top h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 900; line-height: 1.12; letter-spacing: -1px; max-width: 860px; }
+  .byline { margin-top: 12px; font-size: 14px; color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; }
+  .petition-layout { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 36px; padding: 32px 0 56px; align-items: start; }
+  .story { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: clamp(20px, 4vw, 36px); }
+  .story .hero-img { border-radius: 12px; margin-bottom: 22px; aspect-ratio: 16/8; display: flex; align-items: flex-end; padding: 16px; color: #fff; position: relative; overflow: hidden; }
+  .story .hero-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .prose { font-family: var(--serif); font-size: 18px; line-height: 1.7; color: #262b36; }
+  .prose p { margin-bottom: 1em; }
+  .prose ul { margin: 0 0 1em 1.2em; }
+  .prose li { margin-bottom: .4em; }
+  .prose h3 { font-family: var(--sans); font-size: 20px; font-weight: 800; margin: 1.4em 0 .5em; letter-spacing: -.3px; }
+  .targets { margin-top: 26px; background: var(--cream); border-radius: 12px; padding: 18px 20px; }
+  .targets h3 { font-size: 13px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+  .targets li { list-style: none; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 15px; font-weight: 600; display: flex; gap: 10px; }
+  .targets li:last-child { border-bottom: 0; }
+  .targets li::before { content: '→'; color: var(--red); }
+
+  .sign-panel { position: sticky; top: 92px; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+  .sign-head { padding: 20px 22px 16px; border-bottom: 1px solid var(--line); }
+  .sign-count { font-size: 34px; font-weight: 900; letter-spacing: -1px; line-height: 1; }
+  .sign-count small { font-size: 14px; font-weight: 600; color: var(--muted); letter-spacing: 0; }
+  .sign-head .progress { margin-top: 12px; height: 10px; }
+  form.sign { padding: 18px 22px 22px; display: grid; gap: 10px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 4px; color: var(--ink-2); }
+  .field input, .field textarea, .field select { width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 9px; background: #fff; font-size: 15px; }
+  .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--ink); }
+  .field textarea { resize: vertical; min-height: 74px; }
+  .check { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; color: var(--ink-2); }
+  .check input { margin-top: 3px; accent-color: var(--red); width: 16px; height: 16px; flex-shrink: 0; }
+  .hp { position: absolute; left: -9999px; }
+  .form-msg { font-size: 14px; padding: 10px 12px; border-radius: 9px; display: none; }
+  .form-msg.err { display: block; background: var(--red-soft); color: var(--red-dark); }
+  .thanks { padding: 24px 22px; text-align: center; display: none; }
+  .thanks .big { font-size: 40px; }
+  .thanks h3 { font-size: 20px; font-weight: 900; margin: 6px 0; }
+  .thanks p { color: var(--muted); font-size: 14.5px; }
+  .share { padding: 16px 22px 20px; border-top: 1px solid var(--line); }
+  .share h4 { font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .share-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .share-row a, .share-row button { display: grid; place-items: center; padding: 10px; border-radius: 9px; border: 1.5px solid var(--line); background: #fff; text-decoration: none; font-size: 12px; font-weight: 700; }
+  .share-row a:hover, .share-row button:hover { border-color: var(--ink); }
+  .donate-promo { margin: 0 22px 22px; }
+
+  .signers { margin-top: 28px; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .signers-head { padding: 18px 22px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .signers-head h2 { font-size: 20px; font-weight: 900; letter-spacing: -.3px; }
+  .signer { padding: 14px 22px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 70px 1fr auto; gap: 12px; align-items: start; }
+  .signer:last-child { border-bottom: 0; }
+  .signer .num { font-size: 12.5px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .signer .who { font-weight: 700; font-size: 15px; }
+  .signer .said { font-family: var(--serif); font-size: 15px; color: #3a404d; margin-top: 2px; }
+  .signer .when { font-size: 12.5px; color: var(--muted); white-space: nowrap; padding-top: 2px; }
+  .pager { display: flex; justify-content: center; gap: 6px; padding: 14px; border-top: 1px solid var(--line); }
+  .pager button { border: 1.5px solid var(--line); background: #fff; border-radius: 8px; padding: 6px 12px; font-weight: 700; font-size: 13px; }
+  .pager button:disabled { opacity: .4; cursor: default; }
+  .pager span { font-size: 13px; color: var(--muted); align-self: center; padding: 0 6px; }
+
+  /* Support band */
+  .band { background: var(--red); color: #fff; }
+  .band .wrap { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 28px; padding-top: 44px; padding-bottom: 44px; }
+  .band h3 { font-size: 22px; font-weight: 900; letter-spacing: -.4px; margin-bottom: 8px; }
+  .band p { font-size: 15px; color: #ffe1de; margin-bottom: 14px; }
+  .band .btn-white { background: #fff; color: var(--red); }
+  .band .btn-white:hover { background: var(--ink); color: #fff; }
+  .band form { display: flex; gap: 8px; flex-wrap: wrap; }
+  .band input { flex: 1 1 180px; padding: 11px 13px; border-radius: 10px; border: 0; font-size: 15px; }
+  .band .voice { display: flex; flex-direction: column; gap: 8px; }
+  .band .voice a { color: #fff; font-weight: 700; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.35); padding: 6px 0; }
+  .band .voice a:hover { border-color: #fff; }
+
+  footer.site { background: var(--ink); color: #c9ccd4; font-size: 14px; }
+  footer.site .wrap { padding-top: 44px; padding-bottom: 28px; }
+  .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.1fr; gap: 28px; }
+  footer h4 { color: #fff; font-size: 13px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+  footer ul { list-style: none; display: grid; gap: 7px; }
+  footer a { text-decoration: none; color: #e1e4ea; }
+  footer a:hover { color: #fff; text-decoration: underline; }
+  .foot-bottom { margin-top: 32px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.1); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 13px; color: #9aa0ad; }
+
+  /* Admin */
+  .admin { padding: 32px 0 64px; }
+  .admin h1 { font-size: 30px; font-weight: 900; letter-spacing: -.8px; }
+  .admin-note { margin: 10px 0 22px; font-size: 14px; color: var(--muted); }
+  .tabs { display: flex; gap: 6px; border-bottom: 1.5px solid var(--line); margin-bottom: 20px; }
+  .tabs button { background: none; border: 0; padding: 10px 14px; font-weight: 700; font-size: 15px; color: var(--muted); border-bottom: 3px solid transparent; margin-bottom: -1.5px; }
+  .tabs button.active { color: var(--ink); border-bottom-color: var(--red); }
+  .panel { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); background: var(--cream); white-space: nowrap; }
+  td .actions { display: flex; gap: 6px; }
+  .mini { padding: 6px 10px; font-size: 12.5px; border-radius: 8px; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 12px; font-weight: 700; background: var(--cream); border: 1px solid var(--line); }
+  .pill.open { background: var(--red-soft); color: var(--red-dark); border-color: #f2c8c4; }
+  .pill.victory { background: #e6f3eb; color: var(--green); border-color: #bfe0cb; }
+  .editor { padding: 22px; display: grid; gap: 14px; }
+  .editor .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+  .cat-checks { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 9px; }
+  .cat-checks label { font-size: 13.5px; display: flex; gap: 6px; align-items: center; font-weight: 500; }
+  .hint { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .admin-bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0; visibility: hidden; pointer-events: none; background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 10px; font-weight: 600; font-size: 14px; transition: transform .25s, opacity .25s, visibility .25s; z-index: 100; max-width: calc(100% - 32px); }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
+  .mobile-sign { display: none; }
+
+  .placeholder-page { padding: 56px 0 72px; }
+  .placeholder-page .story { max-width: 760px; }
+
+  @media (max-width: 1320px) { .brand-name small { display: none; } .nav-item > a, .nav-item > button { padding: 10px 8px; font-size: 14px; } nav.main { gap: 0; } }
+  @media (max-width: 1180px) {
+    nav.main, .header-cta .btn-outline { display: none; }
+    .menu-toggle { display: inline-flex; }
+    .mobile-nav.open { display: block; border-top: 1px solid var(--line); background: var(--paper); max-height: calc(100vh - 70px); overflow-y: auto; }
+    .mobile-nav .wrap { padding-top: 10px; padding-bottom: 16px; }
+    .mobile-nav h5 { font-size: 11.5px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin: 12px 0 4px; }
+    .mobile-nav a { display: block; padding: 8px 0; text-decoration: none; font-weight: 600; }
+    .petition-layout { grid-template-columns: 1fr; }
+    .mobile-sign { display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); border-top: 1px solid var(--line); box-shadow: 0 -6px 20px rgba(27,31,42,.08); }
+    body.has-mobile-sign footer.site { padding-bottom: 76px; }
+    .sign-panel { position: static; }
+    .band .wrap { grid-template-columns: 1fr; }
+    .foot-grid { grid-template-columns: 1fr 1fr; }
+    .editor .grid3 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .hero-stats { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .hero-stat span { font-size: 12px; }
+    .grid { grid-template-columns: 1fr; }
+    .row2 { grid-template-columns: 1fr; }
+    .signer { grid-template-columns: 1fr; gap: 2px; }
+    .foot-grid { grid-template-columns: 1fr; }
+    .brand-name small { display: none; }
+    .header-cta .btn-red { padding: 9px 12px; }
+    .utility .links:first-child { display: none; }
+    .utility .wrap { justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+
+<div class="demo-banner" id="demoBanner">
+  Preview built for Animal Victory by Japps.ai — not the official site. Signatures here stay in your browser and counts are sample data. <a href="https://animalvictory.org" target="_blank" rel="noopener">Visit animalvictory.org</a>
+</div>
+
+<div class="utility">
+  <div class="wrap">
+    <div class="links">
+      <a href="https://animalvictoryfund.org/" target="_blank" rel="noopener">Nonprofit projects</a>
+      <a href="https://animalvictoryfund.org/" target="_blank" rel="noopener">America's Disaster &amp; Abuse Response</a>
+    </div>
+    <div class="links">
+      <a href="https://nationalanimalnews.com/" target="_blank" rel="noopener">National Animal News</a>
+      <a href="https://animalvictoryfund.org/the-animal-court-podcast/" target="_blank" rel="noopener">The Animal Court Podcast</a>
+      <a class="report" href="https://nationallinkcoalition.org/how-do-i-report-suspected-abuse" target="_blank" rel="noopener">Report Abuse</a>
+    </div>
+  </div>
+</div>
+
+<header class="site">
+  <div class="wrap">
+    <a href="#/" class="brand" aria-label="Animal Victory home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><ellipse cx="6" cy="9" rx="2.2" ry="2.8"/><ellipse cx="10" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="14" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="18" cy="9" rx="2.2" ry="2.8"/><path d="M12 11c-3.5 0-6.5 3.6-6.5 6.4 0 2 1.6 2.9 3.3 2.9 1.4 0 2.1-.7 3.2-.7s1.8.7 3.2.7c1.7 0 3.3-.9 3.3-2.9 0-2.8-3-6.4-6.5-6.4z"/></svg>
+      </span>
+      <span class="brand-name">Animal Victory<small>Sign a petition. Save an animal.</small></span>
+    </a>
+
+    <nav class="main" aria-label="Main">
+      <div class="nav-item"><button>Petitions ▾</button>
+        <div class="dropdown">
+          <a href="#/">Open Petitions</a>
+          <a href="#/?status=past">Past Petitions</a>
+          <a href="#/page/do-petitions-work">Do Petitions Work?</a>
+        </div>
+      </div>
+      <div class="nav-item"><button>Victories ▾</button>
+        <div class="dropdown">
+          <a href="#/?status=victory">Victories</a>
+          <a href="#/page/chart-of-victories">Chart of Victories</a>
+        </div>
+      </div>
+      <div class="nav-item"><a href="#/page/we-give-back">We Give Back</a></div>
+      <div class="nav-item"><button>Our Impact ▾</button>
+        <div class="dropdown">
+          <a href="#/page/our-impact">Our Impact</a>
+          <a href="#/page/annual-reports">Annual Reports</a>
+        </div>
+      </div>
+      <div class="nav-item"><button>Newsroom ▾</button>
+        <div class="dropdown">
+          <a href="https://animalvictoryfund.org/press-releases/" target="_blank" rel="noopener">Media Releases</a>
+          <a href="https://animalvictoryfund.org/the-animal-court-podcast/" target="_blank" rel="noopener">The Animal Court Podcast</a>
+        </div>
+      </div>
+      <div class="nav-item"><button>About ▾</button>
+        <div class="dropdown">
+          <a href="#/page/about">About</a>
+          <a href="#/page/transparency-mission">Transparency &amp; Mission</a>
+          <a href="#/page/about-our-founder">About Our Founder</a>
+          <a href="#/page/contact-us">Contact Us</a>
+        </div>
+      </div>
+      <div class="nav-item"><button>Resources ▾</button>
+        <div class="dropdown">
+          <a href="#/page/animal-abuse-laws-humane-standards">Shelter Standards &amp; Reporting Concerns</a>
+          <a href="#/page/laws-that-changed-animal-protection">Laws That Changed Animal Protection</a>
+          <a href="#/page/why-a-federal-animal-abuse-registry-does-not-exist">Why a Federal Animal Abuse Registry Does Not Exist</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="header-cta">
+      <a class="btn btn-outline" href="https://mailchi.mp/animalvictory.org/animal-victory-sign-up-page" target="_blank" rel="noopener">Join Us</a>
+      <a class="btn btn-red" data-donate href="https://animalvictory.org/donate/fighting-animal-abusers-with-petitions/" target="_blank" rel="noopener">Donate</a>
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <div class="wrap">
+      <h5>Petitions</h5>
+      <a href="#/">Open Petitions</a><a href="#/?status=past">Past Petitions</a><a href="#/page/do-petitions-work">Do Petitions Work?</a>
+      <h5>Victories</h5>
+      <a href="#/?status=victory">Victories</a><a href="#/page/chart-of-victories">Chart of Victories</a>
+      <h5>Impact</h5>
+      <a href="#/page/we-give-back">We Give Back</a><a href="#/page/our-impact">Our Impact</a><a href="#/page/annual-reports">Annual Reports</a>
+      <h5>About</h5>
+      <a href="#/page/about">About</a><a href="#/page/transparency-mission">Transparency &amp; Mission</a><a href="#/page/about-our-founder">About Our Founder</a><a href="#/page/contact-us">Contact Us</a>
+      <h5>Get involved</h5>
+      <a href="https://mailchi.mp/animalvictory.org/animal-victory-sign-up-page" target="_blank" rel="noopener">Join Us</a>
+      <a href="https://nationallinkcoalition.org/how-do-i-report-suspected-abuse" target="_blank" rel="noopener">Report Abuse</a>
+    </div>
+  </div>
+</header>
+
+<main id="app" tabindex="-1"></main>
+
+<section class="band" aria-label="Support Animal Victory">
+  <div class="wrap">
+    <div>
+      <h3>Be their champion.</h3>
+      <p>A one-time or monthly gift helps abused animals seek justice and raises the bar for animal welfare in the courtroom.</p>
+      <a class="btn btn-white btn-lg" data-donate href="https://animalvictory.org/donate/fighting-animal-abusers-with-petitions/" target="_blank" rel="noopener">Donate</a>
+    </div>
+    <div>
+      <h3>Be in the loop.</h3>
+      <p>Updates on every case, straight to your inbox.</p>
+      <form id="subscribeForm">
+        <label class="sr-only" for="subEmail">Email address</label>
+        <input id="subEmail" type="email" required placeholder="you@email.com" />
+        <button class="btn btn-white" type="submit">Subscribe</button>
+      </form>
+      <p style="font-size:12.5px;margin-top:8px;margin-bottom:0;opacity:.85">You may unsubscribe anytime.</p>
+    </div>
+    <div class="voice">
+      <h3>Be their voice.</h3>
+      <a href="#/">Sign a petition →</a>
+      <a data-donate href="https://animalvictory.org/donate/fighting-animal-abusers-with-petitions/" target="_blank" rel="noopener">Donate →</a>
+      <a href="https://nationallinkcoalition.org/how-do-i-report-suspected-abuse" target="_blank" rel="noopener">Report abuse →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>Animal Victory</h4>
+        <p>Animal Victory brings people together to take action for animals through petitions, public awareness, and advocacy.</p>
+        <p style="margin-top:12px;font-size:13px;color:#9aa0ad">Animal Victory is a non-political platform. Every animal deserves justice, no exceptions.</p>
+      </div>
+      <div>
+        <h4>Take Action</h4>
+        <ul>
+          <li><a href="#/">Sign a Petition</a></li>
+          <li><a href="#/?status=victory">Victories</a></li>
+          <li><a href="#/page/chart-of-victories">Chart of Victories</a></li>
+          <li><a href="#/page/our-impact">Our Impact</a></li>
+          <li><a href="#/page/we-give-back">We Give Back</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#/page/about">About</a></li>
+          <li><a href="#/page/animal-abuse-laws-humane-standards">Animal Abuse Laws</a></li>
+          <li><a href="#/page/laws-that-changed-animal-protection">Laws That Changed Animal Protection</a></li>
+          <li><a href="https://animalvictoryfund.org/press-releases/" target="_blank" rel="noopener">Press Releases</a></li>
+          <li><a href="https://animalvictoryfund.org/" target="_blank" rel="noopener">Animal Victory Fund</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>1319 Military Cutoff Road<br/>Suite CC, Unit 101<br/>Wilmington, NC 28405</p>
+        <p style="margin-top:10px"><a href="mailto:info@animalvictory.org">info@animalvictory.org</a><br/><a href="tel:+18006343439">800-634-3439</a></p>
+        <p style="margin-top:10px"><a href="https://www.instagram.com/animalvictory_/" target="_blank" rel="noopener">Instagram</a> · <a href="https://x.com/animal_victory" target="_blank" rel="noopener">X</a> · <a href="https://www.facebook.com/AnimalVictory/" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.linkedin.com/in/janellebabington/" target="_blank" rel="noopener">LinkedIn</a></p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2019–2026 Animal Victory. All Rights Reserved.</span>
+      <span><a href="#/page/terms-of-use">Terms of Use</a> · <a href="#/page/privacy-policy">Privacy Policy</a> · <a href="#/admin">Admin</a></span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   CONFIG
+   Leave SUPABASE_URL empty to run in demo mode (data lives in this browser).
+   Fill both values in to run live against Supabase (see schema.sql).
+   ===================================================================== */
+const CONFIG = {
+  SUPABASE_URL: '',
+  SUPABASE_ANON_KEY: '',
+  DEFAULT_DONATE_URL: 'https://animalvictory.org/donate/fighting-animal-abusers-with-petitions/',
+  MAILCHIMP_SIGNUP_URL: 'https://mailchi.mp/animalvictory.org/animal-victory-sign-up-page',
+  CURRENT_SITE: 'https://animalvictory.org',
+  PAGE_SIZE: 9,
+  SIGNERS_PAGE_SIZE: 10
+};
+const LIVE = !!(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
+
+const CATEGORIES = [
+  ['dogs', 'Dogs'], ['cats', 'Cats'], ['horses', 'Horses'], ['dog-fighting', 'Dog Fighting'],
+  ['puppy-mill', 'Puppy Mill'], ['rescue-animals', 'Shelter & Rescue'], ['federal-prosecuting-cases', 'Federal & PACT Act'],
+  ['feral-cats', 'Feral Cats'], ['farm-animals', 'Farm Animals'], ['pigs', 'Pigs'], ['birds', 'Birds'],
+  ['exotic-animals', 'Exotic Animals'], ['wildlife-animals', 'Wildlife'], ['crushing-animal-torture', 'Crushing (Animal Torture)'],
+  ['no-justice', 'No Justice'], ['change-catalysts', 'Petitions That Created Change']
+];
+const CAT_NAME = Object.fromEntries(CATEGORIES);
+const CAT_COLORS = { dogs: '#7a3b1e', cats: '#4b3a6b', horses: '#5b4a2a', 'dog-fighting': '#6b1f1a', 'puppy-mill': '#7a4b2a',
+  'rescue-animals': '#2d4f5e', 'federal-prosecuting-cases': '#1f3350', 'no-justice': '#3a3f4b', 'change-catalysts': '#2f5d43' };
+
+/* Content pages: in this prototype they link to the current site.
+   Phase 2 migrates their text into the CMS. */
+const PAGES = {
+  'do-petitions-work': ['Do Petitions Work?', '/do-petitions-work/'],
+  'chart-of-victories': ['Chart of Victories', '/chart-of-victories/'],
+  'we-give-back': ['We Give Back', '/we-give-back/'],
+  'our-impact': ['Our Impact', '/our-impact/'],
+  'annual-reports': ['Annual Reports', '/annual-reports/'],
+  'about': ['About', '/about/'],
+  'transparency-mission': ['Transparency & Mission', '/transparency-mission/'],
+  'about-our-founder': ['About Our Founder: Janelle Babington', '/about-our-founder-janelle-babington/'],
+  'contact-us': ['Contact Us', '/contact-us/'],
+  'animal-abuse-laws-humane-standards': ['Shelter Standards & Reporting Concerns', '/animal-abuse-laws-humane-standards/'],
+  'laws-that-changed-animal-protection': ['Laws That Changed Animal Protection', '/laws-that-changed-animal-protection/'],
+  'why-a-federal-animal-abuse-registry-does-not-exist': ['Why a Federal Animal Abuse Registry Does Not Exist', '/why-a-federal-animal-abuse-registry-does-not-exist/'],
+  'terms-of-use': ['Terms of Use', '/terms-of-use/'],
+  'privacy-policy': ['Privacy Policy', '/privacy-policy/']
+};
+
+/* ---------------- Demo seed data ---------------- */
+const SAMPLE_STORY = 'Demo placeholder. In the live site, the full investigative story, photos, news links, and case updates for this petition are migrated from the current petition page and edited in the admin panel.\n\n### Our request\n- Investigate this case fully\n- Prosecute to the fullest extent of the law\n- Keep the public informed as the case moves through court';
+
+function seedPetitions() {
+  const d = (s) => new Date(s + 'T12:00:00').toISOString();
+  return [
+    { slug: 'pass-shellys-law', title: "Pass Shelly's Law: Sentenced to 54 Months for Torturing Kittens, Free the Same Day",
+      summary: 'Illinois law turned a 54-month sentence into zero days behind bars. Shelly\'s Law would close the loopholes that made it possible.',
+      categories: ['cats', 'no-justice'], goal: 20000, legacy_count: 17500, status: 'open', author: 'Lead Investigative Writer', published_at: d('2026-07-19'),
+      donate_url: 'https://donorbox.org/pass-shelly-s-law-he-was-sentenced-to-54-months-for-torturing-kittens',
+      targets: ['Illinois Governor JB Pritzker, Office of the Governor, Springfield, IL', 'Illinois Senate President Don Harmon', 'Illinois House Speaker Emanuel "Chris" Welch', 'The members of the Illinois General Assembly'],
+      story: 'This petition builds on our earlier campaign for this case, which drew tens of thousands of signatures. After a last-minute plea deal, the defendant received a 54-month sentence, and because of how Illinois credits pretrial home monitoring and serves animal torture sentences at 50 percent, he was released the same day he entered prison.\n\nNobody broke the rules. The law, as written, guaranteed this result. That is why Shelly\'s Law targets the statutes themselves.\n\n### What Shelly\'s Law would do\n- End prison sentence credit for pretrial home electronic monitoring in felony animal torture cases\n- Recognize each animal victim at sentencing, including consecutive sentences where appropriate\n- Strengthen accountability for the most serious acts of animal cruelty in Illinois\n\n### Our request\nBy signing, I urge my State Senator and State Representative to introduce, support, and pass Shelly\'s Law.\n\nLearn more at ShellysLaw.org.' },
+    { slug: 'shelter-worker-kitten-euthanasia', title: 'Shelter Worker Accused of Torturing a Kitten During Euthanasia and Laughing When Confronted', summary: 'A shelter is supposed to be a safe place. Demand a full investigation and accountability.', categories: ['cats', 'rescue-animals'], goal: 15000, legacy_count: 9214, status: 'open', author: 'Lead Investigative Writer', published_at: d('2026-10-15'), targets: ['County District Attorney', 'Shelter Board of Directors'], story: SAMPLE_STORY },
+    { slug: 'video-women-throwing-kittens', title: 'Demand Investigation! Video Shows Women Hurling Kittens Into the Air', summary: 'The video is circulating online. Demand that authorities identify those responsible and investigate.', categories: ['cats'], goal: 15000, legacy_count: 11873, status: 'open', author: 'Investigative Writer', published_at: d('2026-10-09'), targets: ['Local Police Department', 'County District Attorney'], story: SAMPLE_STORY },
+    { slug: 'puppy-lured-run-over', title: 'She Lured Her Own Puppy With Food, Then Ran Him Over With Her Car', summary: 'Demand the strongest possible charges and a ban on future animal ownership.', categories: ['dogs'], goal: 20000, legacy_count: 14402, status: 'open', author: 'Investigative Writer', published_at: d('2026-10-02'), targets: ['County District Attorney'], story: SAMPLE_STORY },
+    { slug: 'husky-hostage-gunshot', title: 'A Car Was the Demand. A Husky Was the Hostage. Then Came the Gunshot.', summary: 'A dog was used as leverage in a dispute and shot. Demand justice for him.', categories: ['dogs'], goal: 15000, legacy_count: 8760, status: 'open', author: 'Investigative Writer', published_at: d('2026-09-24'), targets: ['County District Attorney'], story: SAMPLE_STORY },
+    { slug: 'service-dog-rex', title: 'Video Shows Service Dog, Rex, Being Lifted and Slammed to the Ground', summary: 'Rex was a working service dog. Demand cruelty charges be filed and pursued.', categories: ['dogs'], goal: 20000, legacy_count: 16120, status: 'open', author: 'Investigative Writer', published_at: d('2026-09-17'), targets: ['City Police Chief', 'County District Attorney'], story: SAMPLE_STORY },
+    { slug: 'teens-cat-thrown-to-dogs', title: "15-Year-Old's Beloved Cat Killed After Neighbor Allegedly Throws Him to Dogs", summary: 'A family pet, a grieving teen, and a neighbor who must be held accountable.', categories: ['cats', 'dogs'], goal: 15000, legacy_count: 7395, status: 'open', author: 'Investigative Writer', published_at: d('2026-09-10'), targets: ['County District Attorney'], story: SAMPLE_STORY },
+    { slug: 'dog-bound-in-wire-heat', title: 'Dog Bound in Wire, Head Covered, in Extreme Heat — Woman Arrested', summary: 'An arrest has been made. Now make sure the charges stick.', categories: ['dogs'], goal: 15000, legacy_count: 10288, status: 'open', author: 'Investigative Writer', published_at: d('2026-09-03'), targets: ['County District Attorney', 'Presiding Judge'], story: SAMPLE_STORY },
+    { slug: 'man-whipping-tethered-horse', title: 'Laughing Man Arrested After Whipping Tethered Horse Over 17 Times', summary: 'Horses deserve protection too. Demand full prosecution.', categories: ['horses'], goal: 15000, legacy_count: 12011, status: 'open', author: 'Investigative Writer', published_at: d('2026-08-27'), targets: ['County District Attorney'], story: SAMPLE_STORY },
+    { slug: 'akc-breeder-36-border-collies', title: "Former AKC Breeder Charged After 36 Border Collies Found Living in 'House of Horrors'", summary: 'Thirty-six dogs found in deplorable conditions. Demand accountability and a lifetime ban.', categories: ['dogs', 'puppy-mill'], goal: 20000, legacy_count: 15340, status: 'open', author: 'Investigative Writer', published_at: d('2026-08-20'), targets: ['County District Attorney'], story: SAMPLE_STORY },
+    { slug: 'animal-control-incinerator', title: 'Animal Control Officer Accused of Throwing Live Puppies Into Incinerator', summary: 'Those trusted to protect animals must be held to the highest standard.', categories: ['dogs', 'rescue-animals'], goal: 25000, legacy_count: 21460, status: 'open', author: 'Investigative Writer', published_at: d('2026-08-13'), targets: ['County District Attorney', 'County Commissioners'], story: SAMPLE_STORY },
+    { slug: 'german-shepherd-box-truck', title: 'Elderly German Shepherd Dumped From Box Truck and Abandoned', summary: 'Video shows a senior dog abandoned on the roadside. Demand cruelty charges.', categories: ['dogs'], goal: 15000, legacy_count: 9930, status: 'open', author: 'Investigative Writer', published_at: d('2026-08-06'), targets: ['County District Attorney'], story: SAMPLE_STORY },
+    { slug: 'sample-past-petition', title: '[Sample] Closed Petition — Delivered to the Prosecutor', summary: 'Example of how a closed petition appears under Past Petitions. Replace with migrated content.', categories: ['dogs'], goal: 10000, legacy_count: 10000, status: 'past', author: 'Investigative Writer', published_at: d('2026-03-01'), targets: ['County District Attorney'], story: SAMPLE_STORY },
+    { slug: 'sample-victory', title: '[Sample] Victory — Maximum Sentence Handed Down', summary: 'Example of how a won case appears under Victories. Replace with migrated content.', categories: ['cats', 'change-catalysts'], goal: 10000, legacy_count: 12500, status: 'victory', author: 'Investigative Writer', published_at: d('2026-02-01'), targets: ['County District Attorney'], story: SAMPLE_STORY }
+  ].map((p, i) => ({ id: 'p' + (i + 1), image_url: '', donate_url: p.donate_url || '', ...p }));
+}
+
+function seedSignatures(petitions) {
+  const first = ['Maria','James','Linda','Robert','Patricia','Michael','Jennifer','David','Susan','Karen','Daniel','Nancy','Lisa','Mark','Sandra','Paul','Donna','Carol','Kevin','Michelle','Laura','Brian','Amy','Rachel','Teresa','Angela'];
+  const last = 'ABCDEFGHJKLMNPRSTVW';
+  const comments = ['Every animal deserves justice.', '', 'Please hold them accountable.', '', 'Stronger laws now.', '', 'Signed and shared.', 'Thank you for following this case.', '', 'They cannot speak for themselves. We can.', ''];
+  const out = [];
+  let n = 1;
+  petitions.forEach((p, pi) => {
+    const count = p.slug === 'pass-shellys-law' ? 30 : 4 + (pi % 5);
+    for (let i = 0; i < count; i++) {
+      const hidden = (i + pi) % 7 === 0;
+      const f = first[(i * 7 + pi * 3) % first.length];
+      const l = last[(i * 5 + pi) % last.length];
+      const ts = new Date(Date.now() - (count - i) * 3.7 * 3600 * 1000).toISOString();
+      out.push({ id: 's' + (n++), petition_id: p.id, first_name: f, last_name: l + 'demo', email: `${f.toLowerCase()}.${l.toLowerCase()}@example.com`,
+        comment: comments[(i + pi) % comments.length], hide_name: hidden, created_at: ts });
+    }
+  });
+  return out;
+}
+
+/* ---------------- Data layer: demo adapter ---------------- */
+const STORE_KEY = 'av-demo-v1';
+const mem = {};
+function storeGet(k) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return mem[k] || null; } }
+function storeSet(k, v) { mem[k] = v; try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+const DemoDB = {
+  _load() {
+    let db = storeGet(STORE_KEY);
+    if (!db) { const petitions = seedPetitions(); db = { petitions, signatures: seedSignatures(petitions) }; storeSet(STORE_KEY, db); }
+    return db;
+  },
+  _save(db) { storeSet(STORE_KEY, db); },
+  _withTotals(db, p) {
+    const sigs = db.signatures.filter(s => s.petition_id === p.id).length;
+    return { ...p, signature_count: sigs, total: (p.legacy_count || 0) + sigs };
+  },
+  async listPetitions({ status = 'open', category = '', q = '', limit = 9, offset = 0 } = {}) {
+    const db = this._load();
+    let list = db.petitions.filter(p => p.status === status);
+    if (category) list = list.filter(p => (p.categories || []).includes(category));
+    if (q) { const t = q.toLowerCase(); list = list.filter(p => (p.title + ' ' + (p.summary || '')).toLowerCase().includes(t)); }
+    list.sort((a, b) => b.published_at.localeCompare(a.published_at));
+    return { rows: list.slice(offset, offset + limit).map(p => this._withTotals(db, p)), count: list.length };
+  },
+  async getPetition(slug) {
+    const db = this._load();
+    const p = db.petitions.find(x => x.slug === slug);
+    return p ? this._withTotals(db, p) : null;
+  },
+  async listPublicSignatures(petitionId, page = 0, size = 10) {
+    const db = this._load();
+    const all = db.signatures.filter(s => s.petition_id === petitionId).sort((a, b) => b.created_at.localeCompare(a.created_at));
+    const p = db.petitions.find(x => x.id === petitionId);
+    const base = (p && p.legacy_count) || 0;
+    const rows = all.slice(page * size, page * size + size).map((s, i) => ({
+      number: base + all.length - (page * size + i),
+      display_name: s.hide_name ? 'Anonymous' : `${s.first_name} ${(s.last_name || '').charAt(0)}.`,
+      comment: s.comment, created_at: s.created_at
+    }));
+    return { rows, count: all.length };
+  },
+  async sign(petitionId, s) {
+    const db = this._load();
+    const dup = db.signatures.some(x => x.petition_id === petitionId && x.email.toLowerCase() === s.email.toLowerCase());
+    if (dup) throw new Error('DUPLICATE');
+    db.signatures.push({ id: 's' + Date.now(), petition_id: petitionId, ...s, created_at: new Date().toISOString() });
+    this._save(db);
+  },
+  /* admin */
+  async adminListPetitions() { const db = this._load(); return db.petitions.map(p => this._withTotals(db, p)).sort((a, b) => b.published_at.localeCompare(a.published_at)); },
+  async savePetition(p) {
+    const db = this._load();
+    if (db.petitions.some(x => x.slug === p.slug && x.id !== p.id)) throw new Error('That URL slug is already used by another petition.');
+    if (p.id) { const i = db.petitions.findIndex(x => x.id === p.id); db.petitions[i] = { ...db.petitions[i], ...p }; }
+    else { p.id = 'p' + Date.now(); db.petitions.push(p); }
+    this._save(db); return p;
+  },
+  async deletePetition(id) { const db = this._load(); db.petitions = db.petitions.filter(p => p.id !== id); db.signatures = db.signatures.filter(s => s.petition_id !== id); this._save(db); },
+  async adminSignatures(petitionId) { const db = this._load(); return db.signatures.filter(s => s.petition_id === petitionId).sort((a, b) => b.created_at.localeCompare(a.created_at)); },
+  async deleteSignature(id) { const db = this._load(); db.signatures = db.signatures.filter(s => s.id !== id); this._save(db); },
+  async reset() { try { localStorage.removeItem(STORE_KEY); } catch (e) {} delete mem[STORE_KEY]; },
+  async session() { return { ok: true, demo: true }; }
+};
+
+/* ---------------- Data layer: Supabase adapter ---------------- */
+let sb = null;
+const LiveDB = {
+  async listPetitions({ status = 'open', category = '', q = '', limit = 9, offset = 0 } = {}) {
+    let qry = sb.from('petitions_with_totals').select('*', { count: 'exact' }).eq('status', status).order('published_at', { ascending: false }).range(offset, offset + limit - 1);
+    if (category) qry = qry.contains('categories', [category]);
+    if (q) qry = qry.ilike('title', `%${q}%`);
+    const { data, count, error } = await qry; if (error) throw error;
+    return { rows: data, count };
+  },
+  async getPetition(slug) {
+    const { data, error } = await sb.from('petitions_with_totals').select('*').eq('slug', slug).maybeSingle();
+    if (error) throw error; return data;
+  },
+  async listPublicSignatures(petitionId, page = 0, size = 10) {
+    const { data, count, error } = await sb.from('public_signatures').select('*', { count: 'exact' }).eq('petition_id', petitionId)
+      .order('created_at', { ascending: false }).range(page * size, page * size + size - 1);
+    if (error) throw error; return { rows: data, count };
+  },
+  async sign(petitionId, s) {
+    const { error } = await sb.from('signatures').insert({ petition_id: petitionId, ...s });
+    if (error) { if (error.code === '23505') throw new Error('DUPLICATE'); throw error; }
+  },
+  async adminListPetitions() { const { data, error } = await sb.from('petitions_with_totals').select('*').order('published_at', { ascending: false }); if (error) throw error; return data; },
+  async savePetition(p) {
+    const row = { ...p }; delete row.total; delete row.signature_count;
+    const { data, error } = row.id ? await sb.from('petitions').update(row).eq('id', row.id).select().single()
+                                   : await sb.from('petitions').insert(row).select().single();
+    if (error) throw error; return data;
+  },
+  async deletePetition(id) { const { error } = await sb.from('petitions').delete().eq('id', id); if (error) throw error; },
+  async adminSignatures(petitionId) {
+    const all = []; let from = 0; const step = 1000;
+    while (true) {
+      const { data, error } = await sb.from('signatures').select('*').eq('petition_id', petitionId).order('created_at', { ascending: false }).range(from, from + step - 1);
+      if (error) throw error; all.push(...data); if (data.length < step) break; from += step;
+    }
+    return all;
+  },
+  async deleteSignature(id) { const { error } = await sb.from('signatures').delete().eq('id', id); if (error) throw error; },
+  async session() {
+    const { data } = await sb.auth.getSession();
+    if (!data.session) return { ok: false };
+    const { data: isAdmin } = await sb.rpc('has_role', { _user_id: data.session.user.id, _role: 'admin' });
+    return { ok: !!isAdmin, user: data.session.user };
+  },
+  async login(email, password) { const { error } = await sb.auth.signInWithPassword({ email, password }); if (error) throw error; },
+  async logout() { await sb.auth.signOut(); }
+};
+
+let DB = DemoDB;
+
+/* ---------------- Helpers ---------------- */
+const $ = (s, el = document) => el.querySelector(s);
+const app = $('#app');
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = (n) => Number(n || 0).toLocaleString('en-US');
+const pct = (p) => Math.min(100, Math.round(((p.total || 0) / Math.max(1, p.goal || 1)) * 100));
+const fmtDate = (s) => new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const slugify = (s) => s.toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80);
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2600); }
+function parseHash() {
+  const h = location.hash.replace(/^#/, '') || '/';
+  const [path, qs] = h.split('?');
+  return { parts: path.split('/').filter(Boolean), params: new URLSearchParams(qs || '') };
+}
+function mediaStyle(p) {
+  const c = CAT_COLORS[(p.categories || [])[0]] || '#3a3f4b';
+  return `background: linear-gradient(135deg, ${c}, #1b1f2a);`;
+}
+function mediaInner(p, label) {
+  const img = p.image_url ? `<img src="${esc(p.image_url)}" alt="" loading="lazy" onerror="this.remove()">` : '';
+  return img + label;
+}
+/* Story: plain text. Blank line = new paragraph, "### " = heading, "- " = bullet. No raw HTML, so writers can't break the page. */
+function renderStory(text) {
+  const blocks = String(text || '').split(/\n\s*\n/);
+  return blocks.map(b => {
+    const lines = b.split('\n').filter(l => l.trim() !== '');
+    let html = '', list = [];
+    const flush = () => { if (list.length) { html += '<ul>' + list.map(li => `<li>${esc(li)}</li>`).join('') + '</ul>'; list = []; } };
+    const para = [];
+    lines.forEach(l => {
+      if (/^###\s+/.test(l)) { flush(); if (para.length) { html += `<p>${esc(para.join(' '))}</p>`; para.length = 0; } html += `<h3>${esc(l.replace(/^###\s+/, ''))}</h3>`; }
+      else if (/^\s*-\s+/.test(l)) { if (para.length) { html += `<p>${esc(para.join(' '))}</p>`; para.length = 0; } list.push(l.replace(/^\s*-\s+/, '')); }
+      else { flush(); para.push(l.trim()); }
+    });
+    flush(); if (para.length) html += `<p>${esc(para.join(' '))}</p>`;
+    return html;
+  }).join('');
+}
+function relTime(s) {
+  const diff = (Date.now() - new Date(s)) / 1000;
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return Math.floor(diff / 60) + ' min ago';
+  if (diff < 86400) return Math.floor(diff / 3600) + ' hr ago';
+  return fmtDate(s);
+}
+
+/* ---------------- Views ---------------- */
+async function viewHome(params) {
+  const status = ['open', 'past', 'victory'].includes(params.get('status')) ? params.get('status') : 'open';
+  const category = params.get('cat') || '';
+  const q = params.get('q') || '';
+  let limit = CONFIG.PAGE_SIZE;
+  const heading = { open: 'Open Petitions', past: 'Past Petitions', victory: 'Victories' }[status];
+  const qs = (o) => { const p = new URLSearchParams({ status, cat: category, q, ...o }); [...p.keys()].forEach(k => { if (!p.get(k) || (k === 'status' && p.get(k) === 'open')) p.delete(k); }); const s = p.toString(); return '#/' + (s ? '?' + s : ''); };
+
+  app.innerHTML = `
+    ${status === 'open' && !category && !q ? `
+    <section class="hero">
+      <div class="wrap">
+        <div class="eyebrow">Fighting animal abusers with petitions</div>
+        <h1>Do you want to stop animals from being abused?</h1>
+        <p class="lede">Sign a petition. We bring cruelty cases into the spotlight, deliver your signatures to the people who decide them, and follow every case through court.</p>
+        <div class="hero-actions">
+          <a class="btn btn-red btn-lg" href="#petitions">Sign a petition</a>
+          <a class="btn btn-outline btn-lg" href="#/?status=victory">See our victories</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>6.5M+</b><span>Signatures collected</span></div>
+          <div class="hero-stat"><b>100+</b><span>Partner shelters &amp; NGOs</span></div>
+          <div class="hero-stat"><b>Since 2019</b><span>Following cases to verdict</span></div>
+        </div>
+      </div>
+    </section>` : ''}
+    <section class="section" id="petitions">
+      <div class="wrap">
+        ${status === 'open' && !category && !q ? `
+        <div class="notice">
+          <p><strong>Content warning:</strong> petitions may include graphic depictions of animal abuse. Some images may be AI-generated illustrations used for illustrative purposes only.</p>
+          <p>Animal Victory is and always will be a non-political platform. When sufficient donations are received, funds are distributed directly to the rescues featured in each case.</p>
+        </div><div style="height:28px"></div>` : ''}
+        <div class="section-head">
+          <div>
+            <h2>${heading}${category ? ` · ${esc(CAT_NAME[category] || category)}` : ''}</h2>
+            <p id="resultCount">Loading…</p>
+          </div>
+        </div>
+        <div class="toolbar">
+          <form class="search" id="searchForm" role="search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <label class="sr-only" for="q">Search petitions</label>
+            <input id="q" type="search" placeholder="Search for a specific petition" value="${esc(q)}" />
+          </form>
+          <div class="status-tabs" role="tablist">
+            <a href="${qs({ status: 'open', cat: '', q: '' })}" class="${status === 'open' ? 'active' : ''}">Open</a>
+            <a href="${qs({ status: 'past', cat: '', q: '' })}" class="${status === 'past' ? 'active' : ''}">Past</a>
+            <a href="${qs({ status: 'victory', cat: '', q: '' })}" class="${status === 'victory' ? 'active' : ''}">Victories</a>
+          </div>
+        </div>
+        <div class="chips" aria-label="Categories">
+          <a class="chip ${!category ? 'active' : ''}" href="${qs({ cat: '' })}">All</a>
+          ${CATEGORIES.map(([s, n]) => `<a class="chip ${category === s ? 'active' : ''}" href="${qs({ cat: s })}">${esc(n)}</a>`).join('')}
+        </div>
+        <div class="grid" id="grid"></div>
+        <div class="more" id="more"></div>
+      </div>
+    </section>`;
+
+  $('#searchForm').addEventListener('submit', (e) => { e.preventDefault(); location.hash = qs({ q: $('#q').value.trim() }); });
+
+  const load = async () => {
+    const grid = $('#grid');
+    try {
+      const { rows, count } = await DB.listPetitions({ status, category, q, limit, offset: 0 });
+      $('#resultCount').textContent = count === 0 ? 'No petitions found.' : `${fmt(count)} petition${count === 1 ? '' : 's'}${q ? ` matching “${q}”` : ''}`;
+      grid.innerHTML = rows.length ? rows.map(cardHTML).join('') : `<div class="empty" style="grid-column:1/-1">No petitions here yet. <a href="#/">Browse open petitions</a></div>`;
+      $('#more').innerHTML = rows.length < count ? `<button class="btn btn-outline btn-lg" id="moreBtn">View more petitions</button>` : (count ? '<p style="color:var(--muted);font-size:14px">No more petitions to show</p>' : '');
+      const mb = $('#moreBtn'); if (mb) mb.onclick = () => { limit += CONFIG.PAGE_SIZE; load(); };
+    } catch (err) { console.error(err); grid.innerHTML = `<div class="empty" style="grid-column:1/-1">Couldn't load petitions right now. Please try again.</div>`; }
+  };
+  load();
+}
+
+function cardHTML(p) {
+  const badge = p.status === 'victory' ? '<span class="badge victory">Victory</span>' : p.status === 'past' ? '<span class="badge past">Closed</span>' : `<span class="badge">${esc(CAT_NAME[(p.categories || [])[0]] || 'Petition')}</span>`;
+  return `
+  <article class="card">
+    <a class="card-media" href="#/petition/${esc(p.slug)}" style="${mediaStyle(p)}" aria-hidden="true" tabindex="-1">${mediaInner(p, badge)}</a>
+    <div class="card-body">
+      <h3><a href="#/petition/${esc(p.slug)}">${esc(p.title)}</a></h3>
+      ${p.summary ? `<p class="blurb">${esc(p.summary)}</p>` : ''}
+      <div class="card-foot">
+        <div>
+          <div class="progress" aria-label="${pct(p)}% of goal"><span style="width:${pct(p)}%"></span></div>
+          <div class="progress-meta"><span><b>${fmt(p.total)}</b> signed</span><span>Goal ${fmt(p.goal)}</span></div>
+        </div>
+        <a class="btn ${p.status === 'open' ? 'btn-red' : 'btn-ghost'} btn-block" href="#/petition/${esc(p.slug)}">${p.status === 'open' ? 'Sign petition' : 'Read the case'}</a>
+      </div>
+    </div>
+  </article>`;
+}
+
+async function viewPetition(slug) {
+  app.innerHTML = `<div class="wrap" style="padding:60px 20px;color:var(--muted)">Loading petition…</div>`;
+  let p;
+  try { p = await DB.getPetition(slug); } catch (e) { console.error(e); }
+  if (!p) { app.innerHTML = `<div class="wrap placeholder-page"><div class="story"><h1 style="font-size:28px;font-weight:900">Petition not found</h1><p style="margin-top:10px"><a href="#/">Browse open petitions →</a></p></div></div>`; return; }
+  document.title = `Sign: ${p.title} — Animal Victory`;
+  const url = CONFIG.CURRENT_SITE + '/petition/' + p.slug + '/';
+  const shareText = encodeURIComponent('Sign: ' + p.title);
+  const open = p.status === 'open';
+  const donate = p.donate_url || CONFIG.DEFAULT_DONATE_URL;
+
+  app.innerHTML = `
+    <section class="petition-top">
+      <div class="wrap">
+        <div class="crumbs"><a href="#/">Petitions</a> / ${(p.categories || []).map(c => `<a href="#/?cat=${esc(c)}">${esc(CAT_NAME[c] || c)}</a>`).join(', ')}</div>
+        <h1>${open ? 'Sign: ' : ''}${esc(p.title)}</h1>
+        <div class="byline"><span><b>Published:</b> ${fmtDate(p.published_at)}</span><span><b>Author:</b> ${esc(p.author || 'Animal Victory')}</span>${p.status !== 'open' ? `<span class="pill ${p.status}">${p.status === 'victory' ? 'Victory' : 'Closed'}</span>` : ''}</div>
+      </div>
+    </section>
+    <div class="wrap">
+      <div class="petition-layout">
+        <div>
+          <article class="story">
+            <div class="hero-img" style="${mediaStyle(p)}">${mediaInner(p, `<span class="badge">${esc(CAT_NAME[(p.categories || [])[0]] || 'Petition')}</span>`)}</div>
+            <div class="prose">${renderStory(p.story)}</div>
+            ${(p.targets || []).length ? `<div class="targets"><h3>Who this petition targets</h3><ul>${p.targets.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>` : ''}
+          </article>
+          <section class="signers" id="signers" aria-label="Latest signatures">
+            <div class="signers-head"><h2 id="supCount">${fmt(p.total)} supporters</h2><span style="font-size:13px;color:var(--muted)">Latest signatures</span></div>
+            <div id="signerList"></div>
+            <div class="pager" id="pager"></div>
+          </section>
+        </div>
+
+        <aside class="sign-panel" id="sign" aria-label="Sign this petition">
+          <div class="sign-head">
+            <div class="sign-count" id="signCount">${fmt(p.total)} <small>signatures</small></div>
+            <div class="progress"><span id="signBar" style="width:${pct(p)}%"></span></div>
+            <div class="progress-meta"><span id="signPct">${pct(p)}% of goal</span><span>Goal ${fmt(p.goal)}</span></div>
+          </div>
+          ${open ? `
+          <form class="sign" id="signForm" novalidate>
+            <div class="row2">
+              <div class="field"><label for="fn">First name</label><input id="fn" autocomplete="given-name" required maxlength="60" /></div>
+              <div class="field"><label for="ln">Last name</label><input id="ln" autocomplete="family-name" required maxlength="60" /></div>
+            </div>
+            <div class="field"><label for="em">Email</label><input id="em" type="email" autocomplete="email" required maxlength="120" /></div>
+            <div class="field"><label for="cm">Comment <span style="font-weight:500;color:var(--muted)">(optional)</span></label><textarea id="cm" maxlength="500" placeholder="Why are you signing?"></textarea></div>
+            <div class="hp" aria-hidden="true"><label for="website">Leave this field empty</label><input id="website" tabindex="-1" autocomplete="off" /></div>
+            <label class="check"><input type="checkbox" id="hide" /> Hide my name from the public list</label>
+            <label class="check"><input type="checkbox" id="news" checked /> Send me updates on this case and new petitions</label>
+            <label class="check"><input type="checkbox" id="terms" required /> <span>I agree to the <a href="#/page/terms-of-use">terms and conditions</a></span></label>
+            <div class="form-msg" id="formMsg" role="alert"></div>
+            <button class="btn btn-red btn-lg btn-block" type="submit" id="signBtn">Sign now</button>
+          </form>
+          <div class="thanks" id="thanks">
+            <div class="big" aria-hidden="true">🐾</div>
+            <h3>Thank you for signing!</h3>
+            <p>Your voice is now part of this case. Share it so more people can stand up for this animal.</p>
+          </div>` : `
+          <div class="thanks" style="display:block"><h3>${p.status === 'victory' ? 'This petition won.' : 'This petition is closed.'}</h3><p>Thank you to everyone who signed. <a href="#/">See open petitions →</a></p></div>`}
+          <div class="share">
+            <h4>Share this petition</h4>
+            <div class="share-row">
+              <a href="https://www.facebook.com/sharer.php?u=${encodeURIComponent(url)}" target="_blank" rel="noopener">Facebook</a>
+              <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${shareText}" target="_blank" rel="noopener">X</a>
+              <a href="mailto:?subject=${shareText}&body=${encodeURIComponent(url)}">Email</a>
+              <button type="button" id="copyLink">Copy</button>
+            </div>
+          </div>
+          <div class="donate-promo"><a class="btn btn-ghost btn-block" href="${esc(donate)}" target="_blank" rel="noopener">♥ Donate to promote this petition</a></div>
+        </aside>
+      </div>
+    </div>`;
+
+  if (open) {
+    const bar = document.createElement('div'); bar.className = 'mobile-sign'; bar.id = 'mobileSign';
+    bar.innerHTML = `<button class="btn btn-red btn-lg btn-block" type="button">Sign this petition · ${pct(p)}% of goal</button>`;
+    bar.querySelector('button').onclick = () => { $('#sign').scrollIntoView({ behavior: 'smooth', block: 'start' }); setTimeout(() => { const f = $('#fn'); if (f) f.focus({ preventScroll: true }); }, 450); };
+    document.body.appendChild(bar); document.body.classList.add('has-mobile-sign');
+    const io = new IntersectionObserver(([e]) => { bar.style.display = e.isIntersecting ? 'none' : ''; }, { threshold: 0.15 });
+    io.observe($('#sign'));
+  }
+  $('#copyLink').onclick = async () => { try { await navigator.clipboard.writeText(url); toast('Link copied'); } catch (e) { toast(url); } };
+
+  let page = 0;
+  const loadSigners = async () => {
+    try {
+      const { rows, count } = await DB.listPublicSignatures(p.id, page, CONFIG.SIGNERS_PAGE_SIZE);
+      $('#signerList').innerHTML = rows.length ? rows.map(s => `
+        <div class="signer">
+          <div class="num">#${fmt(s.number)}</div>
+          <div><div class="who">${esc(s.display_name)}</div>${s.comment ? `<div class="said">${esc(s.comment)}</div>` : ''}</div>
+          <div class="when">${relTime(s.created_at)}</div>
+        </div>`).join('') : `<div class="signer" style="grid-template-columns:1fr;color:var(--muted)">Be the first to sign online.</div>`;
+      const pages = Math.max(1, Math.ceil(count / CONFIG.SIGNERS_PAGE_SIZE));
+      $('#pager').innerHTML = pages > 1 ? `<button id="pgPrev" ${page === 0 ? 'disabled' : ''}>‹ Newer</button><span>Page ${page + 1} of ${pages}</span><button id="pgNext" ${page >= pages - 1 ? 'disabled' : ''}>Older ›</button>` : '';
+      const pr = $('#pgPrev'), nx = $('#pgNext');
+      if (pr) pr.onclick = () => { page--; loadSigners(); };
+      if (nx) nx.onclick = () => { page++; loadSigners(); };
+    } catch (e) { console.error(e); $('#signerList').innerHTML = '<div class="signer" style="grid-template-columns:1fr;color:var(--muted)">Couldn\'t load signatures.</div>'; }
+  };
+  loadSigners();
+
+  const form = $('#signForm');
+  if (!form) return;
+  const startedAt = Date.now();
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = $('#formMsg'); msg.className = 'form-msg';
+    const fn = $('#fn').value.trim(), ln = $('#ln').value.trim(), em = $('#em').value.trim();
+    // Basic bot checks: hidden honeypot field, and forms submitted impossibly fast.
+    if ($('#website').value || Date.now() - startedAt < 2500) { msg.textContent = 'Please wait a moment and try again.'; msg.classList.add('err'); return; }
+    if (!fn || !ln) { msg.textContent = 'Please enter your first and last name.'; msg.classList.add('err'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) { msg.textContent = 'Please enter a valid email address.'; msg.classList.add('err'); return; }
+    if (!$('#terms').checked) { msg.textContent = 'Please agree to the terms and conditions.'; msg.classList.add('err'); return; }
+    const btn = $('#signBtn'); btn.disabled = true; btn.textContent = 'Signing…';
+    try {
+      await DB.sign(p.id, { first_name: fn, last_name: ln, email: em, comment: $('#cm').value.trim(), hide_name: $('#hide').checked, wants_updates: $('#news').checked });
+      const fresh = await DB.getPetition(p.slug);
+      $('#signCount').innerHTML = `${fmt(fresh.total)} <small>signatures</small>`;
+      $('#signBar').style.width = pct(fresh) + '%';
+      $('#signPct').textContent = pct(fresh) + '% of goal';
+      $('#supCount').textContent = `${fmt(fresh.total)} supporters`;
+      form.style.display = 'none'; $('#thanks').style.display = 'block';
+      const msb = $('#mobileSign'); if (msb) msb.remove();
+      page = 0; loadSigners();
+    } catch (err) {
+      msg.textContent = err.message === 'DUPLICATE' ? "You've already signed this petition with that email. Thank you!" : 'Something went wrong. Please try again.';
+      msg.classList.add('err'); btn.disabled = false; btn.textContent = 'Sign now';
+    }
+  });
+}
+
+function viewPage(key) {
+  const pg = PAGES[key];
+  if (!pg) { app.innerHTML = `<div class="wrap placeholder-page"><div class="story"><h1 style="font-size:28px;font-weight:900">Page not found</h1><p style="margin-top:10px"><a href="#/">Back to petitions →</a></p></div></div>`; return; }
+  document.title = `${pg[0]} — Animal Victory`;
+  app.innerHTML = `
+    <div class="wrap placeholder-page">
+      <div class="crumbs"><a href="#/">Home</a> / ${esc(pg[0])}</div>
+      <div class="story">
+        <h1 style="font-size:clamp(26px,4vw,38px);font-weight:900;letter-spacing:-1px;line-height:1.1">${esc(pg[0])}</h1>
+        <div class="prose" style="margin-top:16px">
+          <p>This page's content will be migrated from the current site in phase 2 and become editable in the admin panel, just like petitions.</p>
+          <p><a class="btn btn-red" href="${CONFIG.CURRENT_SITE}${pg[1]}" target="_blank" rel="noopener">View the current “${esc(pg[0])}” page →</a></p>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ---------------- Admin ---------------- */
+async function viewAdmin() {
+  document.title = 'Admin — Animal Victory';
+  const s = await DB.session();
+  if (!s.ok) return viewLogin();
+  app.innerHTML = `
+    <div class="wrap admin">
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+        <h1>Petition admin</h1>
+        <div style="display:flex;gap:8px">
+          ${s.demo ? '<button class="btn btn-ghost mini" id="resetDemo">Reset demo data</button>' : '<button class="btn btn-ghost mini" id="logout">Log out</button>'}
+          <a class="btn btn-outline mini" href="#/">View site</a>
+        </div>
+      </div>
+      <p class="admin-note">${s.demo ? 'Demo mode: no login needed and changes stay in this browser. On the live site this page requires an admin login (Supabase Auth).' : 'Signed in as ' + esc(s.user.email)}</p>
+      <div class="tabs" role="tablist">
+        <button class="active" data-tab="petitions">Petitions</button>
+        <button data-tab="signatures">Signatures &amp; export</button>
+      </div>
+      <div id="adminBody"></div>
+    </div>`;
+  const rs = $('#resetDemo'); if (rs) rs.onclick = async () => { if (confirm('Reset all demo petitions and signatures?')) { await DB.reset(); toast('Demo data reset'); adminPetitions(); } };
+  const lo = $('#logout'); if (lo) lo.onclick = async () => { await DB.logout(); route(); };
+  app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => {
+    app.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('active', x === b));
+    b.dataset.tab === 'petitions' ? adminPetitions() : adminSignatures();
+  });
+  adminPetitions();
+}
+
+function viewLogin() {
+  app.innerHTML = `
+    <div class="wrap admin" style="max-width:420px">
+      <h1>Admin login</h1>
+      <form class="panel editor" id="loginForm" style="margin-top:18px">
+        <div class="field"><label for="le">Email</label><input id="le" type="email" required autocomplete="username" /></div>
+        <div class="field"><label for="lp">Password</label><input id="lp" type="password" required autocomplete="current-password" /></div>
+        <div class="form-msg" id="lmsg"></div>
+        <button class="btn btn-red btn-block" type="submit">Log in</button>
+      </form>
+    </div>`;
+  $('#loginForm').onsubmit = async (e) => {
+    e.preventDefault();
+    try { await DB.login($('#le').value, $('#lp').value); const s = await DB.session(); if (!s.ok) throw new Error('This account is not an admin.'); viewAdmin(); }
+    catch (err) { const m = $('#lmsg'); m.textContent = err.message || 'Login failed.'; m.className = 'form-msg err'; }
+  };
+}
+
+async function adminPetitions() {
+  const body = $('#adminBody');
+  body.innerHTML = '<p style="color:var(--muted)">Loading…</p>';
+  const list = await DB.adminListPetitions();
+  body.innerHTML = `
+    <div class="panel">
+      <div class="admin-bar"><strong>${list.length} petitions</strong><button class="btn btn-red mini" id="newPet">+ New petition</button></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Title</th><th>Status</th><th>Signatures</th><th>Goal</th><th>Published</th><th></th></tr></thead>
+        <tbody>${list.map(p => `<tr>
+          <td><a href="#/petition/${esc(p.slug)}" style="font-weight:700;text-decoration:none">${esc(p.title)}</a><div style="font-size:12px;color:var(--muted)">/${esc(p.slug)}</div></td>
+          <td><span class="pill ${p.status}">${p.status}</span></td>
+          <td>${fmt(p.total)}<div style="font-size:12px;color:var(--muted)">${fmt(p.signature_count)} online</div></td>
+          <td>${fmt(p.goal)}</td>
+          <td style="white-space:nowrap">${fmtDate(p.published_at)}</td>
+          <td><div class="actions"><button class="btn btn-ghost mini" data-edit="${esc(p.id)}">Edit</button></div></td>
+        </tr>`).join('')}</tbody>
+      </table></div>
+    </div>`;
+  $('#newPet').onclick = () => petitionEditor(null);
+  body.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => petitionEditor(list.find(p => p.id === b.dataset.edit)));
+}
+
+function petitionEditor(p) {
+  const isNew = !p;
+  p = p || { title: '', slug: '', summary: '', story: '', categories: [], goal: 10000, legacy_count: 0, status: 'open', author: 'Investigative Writer', published_at: new Date().toISOString(), targets: [], donate_url: '', image_url: '' };
+  const body = $('#adminBody');
+  body.innerHTML = `
+    <form class="panel editor" id="petForm">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+        <h2 style="font-size:20px;font-weight:900">${isNew ? 'New petition' : 'Edit petition'}</h2>
+        <button type="button" class="btn btn-ghost mini" id="backList">← All petitions</button>
+      </div>
+      <div class="field"><label for="ft">Title</label><input id="ft" required value="${esc(p.title)}" /></div>
+      <div class="field"><label for="fs">URL slug</label><input id="fs" value="${esc(p.slug)}" /><div class="hint">The address: /petition/<b id="slugPrev">${esc(p.slug || 'auto-from-title')}</b>. Keep old slugs when migrating so shared links keep working.</div></div>
+      <div class="field"><label for="fsum">Card summary</label><input id="fsum" maxlength="200" value="${esc(p.summary)}" /><div class="hint">One or two sentences shown on the petition card.</div></div>
+      <div class="field"><label for="fstory">Story</label><textarea id="fstory" style="min-height:240px;font-family:var(--serif)">${esc(p.story)}</textarea><div class="hint">Blank line starts a new paragraph. Start a line with <b>###</b> for a heading, or <b>-</b> for a bullet.</div></div>
+      <div class="field"><label for="ftg">Who this petition targets</label><textarea id="ftg" placeholder="One per line">${esc((p.targets || []).join('\n'))}</textarea></div>
+      <div class="field"><label>Categories</label><div class="cat-checks">${CATEGORIES.map(([s, n]) => `<label><input type="checkbox" value="${s}" ${(p.categories || []).includes(s) ? 'checked' : ''}/> ${esc(n)}</label>`).join('')}</div></div>
+      <div class="grid3">
+        <div class="field"><label for="fst">Status</label><select id="fst">${['open', 'past', 'victory'].map(s => `<option value="${s}" ${p.status === s ? 'selected' : ''}>${s === 'open' ? 'Open' : s === 'past' ? 'Past (closed)' : 'Victory'}</option>`).join('')}</select></div>
+        <div class="field"><label for="fg">Signature goal</label><input id="fg" type="number" min="1" value="${esc(p.goal)}" /></div>
+        <div class="field"><label for="flc">Imported signatures</label><input id="flc" type="number" min="0" value="${esc(p.legacy_count || 0)}" /><div class="hint">Count carried over from the old site.</div></div>
+      </div>
+      <div class="grid3">
+        <div class="field"><label for="fa">Author</label><input id="fa" value="${esc(p.author)}" /></div>
+        <div class="field"><label for="fd">Published</label><input id="fd" type="date" value="${esc((p.published_at || '').slice(0, 10))}" /></div>
+        <div class="field"><label for="fimg">Image URL</label><input id="fimg" value="${esc(p.image_url)}" placeholder="https://…" /></div>
+      </div>
+      <div class="field"><label for="fdon">"Donate to promote" Donorbox link</label><input id="fdon" value="${esc(p.donate_url)}" placeholder="${esc(CONFIG.DEFAULT_DONATE_URL)}" /></div>
+      <div class="form-msg" id="pmsg"></div>
+      <div style="display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap">
+        <button class="btn btn-red" type="submit">${isNew ? 'Publish petition' : 'Save changes'}</button>
+        ${isNew ? '' : '<button type="button" class="btn btn-ghost" id="delPet" style="color:var(--red)">Delete petition</button>'}
+      </div>
+    </form>`;
+  const ft = $('#ft'), fs = $('#fs');
+  let slugTouched = !!p.slug;
+  fs.oninput = () => { slugTouched = true; $('#slugPrev').textContent = slugify(fs.value) || 'auto-from-title'; };
+  ft.oninput = () => { if (!slugTouched) { fs.value = slugify(ft.value); $('#slugPrev').textContent = fs.value || 'auto-from-title'; } };
+  $('#backList').onclick = adminPetitions;
+  const del = $('#delPet');
+  if (del) del.onclick = async () => { if (confirm('Delete this petition and all of its signatures? This cannot be undone.')) { await DB.deletePetition(p.id); toast('Petition deleted'); adminPetitions(); } };
+  $('#petForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const m = $('#pmsg'); m.className = 'form-msg';
+    const title = ft.value.trim();
+    if (!title) { m.textContent = 'A title is required.'; m.classList.add('err'); return; }
+    const rec = {
+      ...(p.id ? { id: p.id } : {}),
+      title, slug: slugify(fs.value || title), summary: $('#fsum').value.trim(), story: $('#fstory').value,
+      targets: $('#ftg').value.split('\n').map(s => s.trim()).filter(Boolean),
+      categories: [...document.querySelectorAll('.cat-checks input:checked')].map(i => i.value),
+      status: $('#fst').value, goal: Math.max(1, parseInt($('#fg').value, 10) || 1), legacy_count: Math.max(0, parseInt($('#flc').value, 10) || 0),
+      author: $('#fa').value.trim(), published_at: new Date(($('#fd').value || new Date().toISOString().slice(0, 10)) + 'T12:00:00').toISOString(),
+      image_url: $('#fimg').value.trim(), donate_url: $('#fdon').value.trim()
+    };
+    try { await DB.savePetition(rec); toast(isNew ? 'Petition published' : 'Changes saved'); adminPetitions(); }
+    catch (err) { m.textContent = err.message || 'Could not save.'; m.classList.add('err'); }
+  };
+}
+
+async function adminSignatures(selectedId) {
+  const body = $('#adminBody');
+  const list = await DB.adminListPetitions();
+  const pid = selectedId || (list[0] && list[0].id);
+  const pet = list.find(p => p.id === pid);
+  body.innerHTML = `
+    <div class="panel">
+      <div class="admin-bar">
+        <div class="field" style="flex:1 1 320px;max-width:560px"><label for="sp" class="sr-only">Petition</label>
+          <select id="sp">${list.map(p => `<option value="${esc(p.id)}" ${p.id === pid ? 'selected' : ''}>${esc(p.title)}</option>`).join('')}</select></div>
+        <button class="btn btn-red mini" id="exportCsv">⬇ Export CSV</button>
+      </div>
+      <div id="sigTable"><p style="padding:14px;color:var(--muted)">Loading…</p></div>
+    </div>`;
+  $('#sp').onchange = (e) => adminSignatures(e.target.value);
+  if (!pet) { $('#sigTable').innerHTML = '<p style="padding:14px">No petitions yet.</p>'; return; }
+  const sigs = await DB.adminSignatures(pid);
+  $('#sigTable').innerHTML = `
+    <p style="padding:12px 14px;font-size:13.5px;color:var(--muted);border-bottom:1px solid var(--line)">${fmt(sigs.length)} online signatures${pet.legacy_count ? ` + ${fmt(pet.legacy_count)} imported = <b>${fmt(pet.total)}</b> total` : ''}. Emails are only visible here, never on the public site.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Name</th><th>Email</th><th>Comment</th><th>Public</th><th>Updates</th><th>Signed</th><th></th></tr></thead>
+      <tbody>${sigs.length ? sigs.map(s => `<tr>
+        <td style="white-space:nowrap">${esc(s.first_name)} ${esc(s.last_name)}</td>
+        <td>${esc(s.email)}</td>
+        <td style="max-width:280px">${esc(s.comment)}</td>
+        <td>${s.hide_name ? 'Hidden' : 'Shown'}</td>
+        <td>${s.wants_updates === false ? 'No' : 'Yes'}</td>
+        <td style="white-space:nowrap">${fmtDate(s.created_at)}</td>
+        <td><button class="btn btn-ghost mini" data-delsig="${esc(s.id)}" title="Remove spam or duplicate">Remove</button></td>
+      </tr>`).join('') : '<tr><td colspan="7" style="color:var(--muted)">No online signatures yet.</td></tr>'}</tbody>
+    </table></div>`;
+  body.querySelectorAll('[data-delsig]').forEach(b => b.onclick = async () => { if (confirm('Remove this signature?')) { await DB.deleteSignature(b.dataset.delsig); toast('Signature removed'); adminSignatures(pid); } });
+  $('#exportCsv').onclick = () => {
+    const cell = (v) => { let s = String(v ?? ''); if (/^[=+\-@]/.test(s)) s = "'" + s; return '"' + s.replace(/"/g, '""') + '"'; };
+    const rows = [['First name', 'Last name', 'Email', 'Comment', 'Name hidden', 'Wants updates', 'Signed at']]
+      .concat(sigs.map(s => [s.first_name, s.last_name, s.email, s.comment, s.hide_name ? 'yes' : 'no', s.wants_updates === false ? 'no' : 'yes', s.created_at]));
+    const csv = rows.map(r => r.map(cell).join(',')).join('\r\n');
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `signatures-${pet.slug}.csv`;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    toast(`Exported ${fmt(sigs.length)} signatures`);
+  };
+}
+
+/* ---------------- Router & boot ---------------- */
+async function route() {
+  const { parts, params } = parseHash();
+  $('#mobileNav').classList.remove('open'); $('#menuToggle').setAttribute('aria-expanded', 'false');
+  document.title = 'Animal Victory — Sign a Petition. Save an Animal.';
+  const ms = $('#mobileSign'); if (ms) ms.remove(); document.body.classList.remove('has-mobile-sign');
+  if (parts[0] === 'petition' && parts[1]) await viewPetition(parts[1]);
+  else if (parts[0] === 'page' && parts[1]) viewPage(parts[1]);
+  else if (parts[0] === 'admin') await viewAdmin();
+  else await viewHome(params);
+  if (location.hash !== '#petitions') window.scrollTo(0, 0);
+}
+
+$('#menuToggle').onclick = () => { const m = $('#mobileNav'); const o = m.classList.toggle('open'); $('#menuToggle').setAttribute('aria-expanded', String(o)); };
+$('#subscribeForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  // Hands off to their existing Mailchimp signup page.
+  window.open(CONFIG.MAILCHIMP_SIGNUP_URL, '_blank', 'noopener');
+  toast('Opening the Animal Victory signup page…');
+});
+window.addEventListener('hashchange', () => { if (location.hash === '#petitions') { const el = document.getElementById('petitions'); if (el) el.scrollIntoView(); return; } route(); });
+
+(async function boot() {
+  if (LIVE) {
+    try {
+      await new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+      sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+      DB = LiveDB;
+      $('#demoBanner').remove();
+    } catch (e) { console.error('Supabase failed to load; staying in demo mode.', e); }
+  }
+  route();
+})();
+</script>
+</body>
+</html>
