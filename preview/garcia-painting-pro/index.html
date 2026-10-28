@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Garcia Painting Pro — Interior &amp; Exterior Painting | Westfield, Carmel &amp; Indianapolis</title>
+<meta name="description" content="Interior and exterior painting for homes and businesses across Westfield, Carmel, Noblesville, and Indianapolis. 7+ years, 5-star rated, certified minority-owned. Free estimates.">
+<meta name="theme-color" content="#0f2a43">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["HousePainter", "LocalBusiness"],
+  "name": "Garcia Painting Pro LLC",
+  "telephone": "+13177376277",
+  "founder": { "@type": "Person", "name": "Luis G. Alvarenga" },
+  "address": { "@type": "PostalAddress", "addressLocality": "Indianapolis", "addressRegion": "IN", "addressCountry": "US" },
+  "areaServed": ["Westfield", "Carmel", "Noblesville", "Fishers", "Zionsville", "Indianapolis", "Plainfield", "Brownsburg", "Avon", "Lawrence", "Speedway"],
+  "paymentAccepted": "Cash, Check, Credit Card, Venmo"
+}
+</script>
+<style>
+:root {
+  --navy: #0f2a43;
+  --navy-2: #163a5c;
+  --ink: #14202b;
+  --ink-2: #3c4a57;
+  --muted: #64717d;
+  --line: #e3e7eb;
+  --bg: #f6f7f5;
+  --paper: #ffffff;
+  --coral: #e8553b;
+  --coral-dark: #c8412a;
+  --teal: #2a9d8f;
+  --sun: #f2b53a;
+  --sky: #8ecae6;
+  --display: "Archivo", "Arial Black", system-ui, sans-serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --r: 16px;
+  --shadow: 0 1px 2px rgba(15,42,67,.06), 0 14px 36px rgba(15,42,67,.1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); color: var(--ink); background: var(--bg); line-height: 1.6; font-size: 17px; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; }
+img, svg { display: block; max-width: 100%; }
+:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; border-radius: 6px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 32px); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+h1, h2, h3 { font-family: var(--display); line-height: 1.05; letter-spacing: -.02em; }
+h1 { font-weight: 900; font-size: clamp(44px, 7.4vw, 86px); }
+h2 { font-weight: 800; font-size: clamp(32px, 4.6vw, 52px); }
+h3 { font-weight: 800; font-size: 21px; letter-spacing: -.01em; }
+.kicker { font-family: var(--display); font-weight: 800; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--coral); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 15px 24px; border-radius: 12px; font: 700 16px/1 var(--sans); text-decoration: none; border: 2px solid transparent; cursor: pointer; transition: background .15s, color .15s, transform .15s, border-color .15s; white-space: nowrap; }
+.btn:active { transform: translateY(1px); }
+.btn-coral { background: var(--coral); color: #fff; }
+.btn-coral:hover { background: var(--coral-dark); }
+.btn-navy { background: var(--navy); color: #fff; }
+.btn-navy:hover { background: var(--navy-2); }
+.btn-line { border-color: rgba(255,255,255,.55); color: #fff; }
+.btn-line:hover { background: #fff; color: var(--navy); }
+.btn-ghost { border-color: var(--line); background: #fff; color: var(--ink); }
+.btn-ghost:hover { border-color: var(--ink); }
+
+/* Top bar */
+.top { background: var(--navy); color: #c9d6e2; font-size: 14px; }
+.top .wrap { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding-top: 8px; padding-bottom: 8px; }
+.top b { color: #fff; }
+.top a { color: #fff; font-weight: 700; text-decoration: none; }
+.top .areas { display: flex; gap: 6px; align-items: center; }
+
+/* Header */
+header.site { position: sticky; top: 0; z-index: 30; background: rgba(255,255,255,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 12px; padding-bottom: 12px; }
+.logo { display: flex; align-items: center; gap: 11px; text-decoration: none; }
+.logo-mark { width: 44px; height: 44px; border-radius: 12px; background: var(--navy); display: grid; place-items: center; flex-shrink: 0; }
+.logo b { font-family: var(--display); font-weight: 900; font-size: 20px; line-height: 1; letter-spacing: -.02em; display: block; color: var(--navy); }
+.logo small { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--coral); }
+.menu { display: flex; align-items: center; gap: 24px; list-style: none; }
+.menu a { text-decoration: none; font-weight: 600; font-size: 15px; color: var(--ink-2); }
+.menu a:hover { color: var(--coral); }
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.lang { display: inline-flex; border: 1.5px solid var(--line); border-radius: 10px; padding: 3px; }
+.lang button { border: 0; background: none; font: 700 13px var(--sans); padding: 7px 10px; border-radius: 7px; cursor: pointer; color: var(--muted); }
+.lang button[aria-pressed="true"] { background: var(--navy); color: #fff; }
+.nav .btn { padding: 12px 18px; font-size: 15px; }
+
+/* Hero */
+.hero { background: var(--navy); color: #fff; position: relative; overflow: hidden; }
+.hero::after { content: ""; position: absolute; right: -200px; top: -200px; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle, rgba(232,85,59,.35), transparent 65%); pointer-events: none; }
+.hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: clamp(30px, 5vw, 64px); align-items: center; padding-top: clamp(52px, 7vw, 96px); padding-bottom: clamp(60px, 8vw, 104px); }
+.hero h1 { margin: 16px 0 20px; }
+.hero h1 .stroke { background: linear-gradient(transparent 70%, var(--coral) 70%, var(--coral) 90%, transparent 90%); -webkit-box-decoration-break: clone; box-decoration-break: clone; padding: 0 .04em; }
+.hero p.lede { font-size: clamp(18px, 2vw, 21px); color: #d1dde8; max-width: 31em; }
+.hero .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; list-style: none; }
+.chips li { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); border-radius: 99px; padding: 8px 14px; font-size: 14.5px; font-weight: 600; color: #eaf1f7; }
+.chips .star { color: var(--sun); letter-spacing: 1px; }
+
+.swatches { position: relative; height: 440px; }
+.swatch { position: absolute; width: 190px; height: 290px; border-radius: 16px; background: #fff; box-shadow: 0 24px 50px rgba(0,0,0,.35); padding: 12px; transform-origin: 50% 110%; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.swatch .chip { height: 196px; border-radius: 10px; }
+.swatch b { display: block; font-family: var(--display); font-weight: 800; color: var(--ink); font-size: 16px; margin-top: 12px; line-height: 1.1; }
+.swatch span { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.sw1 { left: 8%; top: 70px; transform: rotate(-16deg); } .sw1 .chip { background: var(--teal); }
+.sw2 { left: 30%; top: 40px; transform: rotate(-4deg); } .sw2 .chip { background: var(--sun); }
+.sw3 { left: 52%; top: 64px; transform: rotate(10deg); } .sw3 .chip { background: var(--coral); }
+.swatches:hover .sw1 { transform: rotate(-20deg) translateX(-10px); }
+.swatches:hover .sw3 { transform: rotate(14deg) translateX(10px); }
+.roller { position: absolute; left: 4%; bottom: 0; width: 92%; }
+
+/* Sections */
+section { padding: clamp(68px, 9vw, 112px) 0; }
+.head { max-width: 720px; margin-bottom: clamp(32px, 5vw, 52px); }
+.head h2 { margin: 12px 0 14px; color: var(--navy); }
+.head p { color: var(--ink-2); font-size: 18px; }
+.white { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+
+.services { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.svc { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 24px 22px; transition: transform .2s, box-shadow .2s, border-color .2s; position: relative; overflow: hidden; }
+.svc:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: transparent; }
+.svc::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px; background: var(--c, var(--coral)); }
+.svc .ic { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--c, var(--coral)) 14%, white); color: var(--c, var(--coral)); margin-bottom: 14px; }
+.svc h3 { color: var(--navy); margin-bottom: 6px; }
+.svc p { color: var(--ink-2); font-size: 15.5px; }
+.svc.wide { grid-column: span 2; background: var(--navy); color: #fff; border-color: var(--navy); }
+.svc.wide h3 { color: #fff; }
+.svc.wide p { color: #c9d6e2; }
+.more { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.more span { font-size: 13.5px; font-weight: 600; padding: 6px 12px; border-radius: 99px; background: rgba(255,255,255,.1); color: #fff; }
+
+.why { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 72px); align-items: center; }
+.why-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.why-item { background: var(--bg); border-radius: var(--r); padding: 22px; }
+.why-item b { font-family: var(--display); font-weight: 800; font-size: 19px; color: var(--navy); display: block; margin-bottom: 4px; }
+.why-item p { color: var(--ink-2); font-size: 15.5px; }
+.why-item .n { font-family: var(--display); font-weight: 900; font-size: 15px; color: var(--coral); margin-bottom: 10px; display: block; }
+.badge-card { background: var(--navy); color: #fff; border-radius: 22px; padding: clamp(26px, 4vw, 40px); position: relative; overflow: hidden; }
+.badge-card::before { content: ""; position: absolute; right: -70px; top: -70px; width: 220px; height: 220px; border-radius: 50%; background: var(--coral); opacity: .9; }
+.badge-card .big { font-family: var(--display); font-weight: 900; font-size: clamp(64px, 9vw, 110px); line-height: .9; position: relative; }
+.badge-card .big small { font-size: .35em; vertical-align: top; color: var(--sun); }
+.badge-card p { position: relative; color: #d1dde8; font-size: 18px; margin-top: 12px; max-width: 22em; }
+.badge-card .cert { position: relative; display: flex; gap: 12px; align-items: center; margin-top: 26px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 14px; padding: 14px 16px; font-size: 15px; }
+.badge-card .cert svg { flex-shrink: 0; color: var(--sun); }
+
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; counter-reset: s; }
+.step { position: relative; padding: 26px 22px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); }
+.step::before { counter-increment: s; content: counter(s); width: 38px; height: 38px; border-radius: 50%; background: var(--coral); color: #fff; display: grid; place-items: center; font-family: var(--display); font-weight: 900; margin-bottom: 14px; }
+.step h3 { color: var(--navy); margin-bottom: 6px; font-size: 19px; }
+.step p { color: var(--ink-2); font-size: 15.5px; }
+
+.reviews { background: linear-gradient(120deg, var(--coral), #d9452d); color: #fff; text-align: center; padding: clamp(56px, 8vw, 92px) 0; }
+.reviews .stars { font-size: 38px; letter-spacing: 6px; color: #ffe08a; }
+.reviews h2 { color: #fff; margin: 10px 0 12px; }
+.reviews p { color: #ffe5de; font-size: 18px; max-width: 34em; margin: 0 auto 26px; }
+.reviews .btn { background: #fff; color: var(--coral-dark); }
+.reviews .btn:hover { background: var(--navy); color: #fff; }
+
+.areas-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+.areas-grid span { background: var(--paper); border: 1.5px solid var(--line); border-radius: 99px; padding: 10px 18px; font-weight: 700; color: var(--navy); }
+.areas-grid span.main { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+.faq { display: grid; gap: 10px; max-width: 840px; }
+.faq details { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; }
+.faq summary { list-style: none; cursor: pointer; padding: 18px 22px; font-weight: 700; display: flex; justify-content: space-between; gap: 12px; color: var(--navy); }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font-family: var(--display); font-weight: 900; color: var(--coral); font-size: 22px; line-height: 1; transition: transform .2s; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq .a { padding: 0 22px 20px; color: var(--ink-2); }
+
+.estimate { background: var(--navy); color: #fff; }
+.est-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 60px); align-items: start; }
+.estimate h2 { color: #fff; margin: 12px 0 14px; }
+.estimate .lead { color: #c9d6e2; font-size: 18px; }
+.call-card { margin-top: 28px; display: grid; gap: 12px; }
+.call-card a { display: flex; align-items: center; gap: 14px; text-decoration: none; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: 14px; padding: 16px 18px; transition: background .15s; }
+.call-card a:hover { background: rgba(255,255,255,.12); }
+.call-card .ic { width: 44px; height: 44px; border-radius: 11px; background: var(--coral); display: grid; place-items: center; flex-shrink: 0; }
+.call-card b { display: block; font-size: 18px; }
+.call-card span { font-size: 14px; color: #c9d6e2; }
+.pay { margin-top: 18px; font-size: 14.5px; color: #c9d6e2; }
+.form { background: #fff; color: var(--ink); border-radius: 20px; padding: clamp(22px, 4vw, 34px); box-shadow: 0 30px 60px rgba(0,0,0,.3); }
+.form h3 { color: var(--navy); font-size: 24px; }
+.form > p { color: var(--ink-2); margin: 4px 0 18px; font-size: 15.5px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+.field label small { font-weight: 500; color: var(--muted); }
+.field input, .field select, .field textarea { width: 100%; padding: 12px 13px; border: 1.5px solid var(--line); border-radius: 10px; font: 16px var(--sans); color: var(--ink); background: #fff; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px rgba(232,85,59,.15); }
+.field textarea { min-height: 96px; resize: vertical; }
+.checks { display: flex; flex-wrap: wrap; gap: 8px; }
+.checks label { display: inline-flex; align-items: center; gap: 7px; border: 1.5px solid var(--line); border-radius: 99px; padding: 7px 13px; font-weight: 600; font-size: 14.5px; cursor: pointer; margin: 0; }
+.checks input { accent-color: var(--coral); width: 16px; height: 16px; }
+.checks label:has(input:checked) { border-color: var(--coral); background: #fdeeea; }
+.hp { position: absolute; left: -9999px; }
+.msg { display: none; padding: 11px 13px; border-radius: 10px; font-size: 14.5px; margin-bottom: 12px; }
+.msg.err { display: block; background: #fdeeea; color: var(--coral-dark); }
+.msg.note { display: block; background: #fff6df; color: #6b4e0b; }
+.done { text-align: center; padding: 30px 6px; }
+.done .tick { width: 64px; height: 64px; border-radius: 50%; background: #e2f4f1; color: var(--teal); display: grid; place-items: center; margin: 0 auto 14px; }
+.done p { color: var(--ink-2); margin-top: 6px; }
+
+footer.site { background: #0a1d2f; color: #a9b9c8; font-size: 15px; }
+.foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding-top: 30px; padding-bottom: 30px; }
+.foot a { color: #fff; }
+.foot .logo b { color: #fff; }
+
+.callbar { display: none; }
+
+@media (max-width: 1040px) {
+  .services { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 960px) {
+  .menu { display: none; }
+  .hero .wrap, .why, .est-grid { grid-template-columns: 1fr; }
+  .swatches { height: 360px; max-width: 520px; width: 100%; margin: 0 auto; }
+  .swatch { width: 160px; height: 246px; } .swatch .chip { height: 160px; }
+}
+@media (max-width: 640px) {
+  body { font-size: 16.5px; }
+  .top .areas { display: none; }
+  .top .wrap { justify-content: center; }
+  .nav .btn-coral { display: none; }
+  .services, .steps, .why-list, .row2 { grid-template-columns: 1fr; }
+  .svc.wide { grid-column: auto; }
+  .swatches { height: 300px; }
+  .swatch { width: 128px; height: 200px; padding: 9px; } .swatch .chip { height: 128px; }
+  .swatch b { font-size: 14px; }
+  .sw1 { left: 2%; top: 56px; } .sw2 { left: 30%; top: 30px; } .sw3 { left: 57%; top: 50px; }
+  .callbar { display: flex; gap: 8px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.97); border-top: 1px solid var(--line); box-shadow: 0 -8px 24px rgba(15,42,67,.1); }
+  .callbar .btn { flex: 1; padding: 14px 10px; }
+  footer.site { padding-bottom: 76px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+</style>
+<!-- JAPPS:PREVIEW -->
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<meta name="googlebot" content="noindex, nofollow" />
+<!-- /JAPPS:PREVIEW -->
+</head>
+<body>
+<!-- JAPPS:PREVIEW -->
+<div style="background:#c99a2e;color:#241900;font:600 13px/1.4 system-ui,sans-serif;text-align:center;padding:8px 16px;position:relative;z-index:1000">Preview built for Garcia Painting Pro by Japps.ai — not the official website yet.</div>
+<!-- /JAPPS:PREVIEW -->
+
+
+<div class="top">
+  <div class="wrap">
+    <span data-i18n="topFree"><b>Free estimates</b> · Residential &amp; commercial</span>
+    <span class="areas"><span data-i18n="topAreas">Serving Westfield, Carmel &amp; all of Indy ·</span> <a href="tel:+13177376277">(317) 737-6277</a></span>
+  </div>
+</div>
+
+<header class="site">
+  <nav class="wrap nav" aria-label="Main">
+    <a class="logo" href="#top" aria-label="Garcia Painting Pro, home">
+      <span class="logo-mark" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="15" height="6" rx="1.5" fill="#e8553b"/><path d="M18 6h2.5v5H11v3" stroke="#fff" stroke-width="2"/><rect x="9.5" y="14" width="3" height="7" rx="1" fill="#f2b53a"/></svg>
+      </span>
+      <span><b>Garcia Painting Pro</b><small>Interior &amp; exterior</small></span>
+    </a>
+    <ul class="menu">
+      <li><a href="#services" data-i18n="navServices">Services</a></li>
+      <li><a href="#why" data-i18n="navWhy">Why us</a></li>
+      <li><a href="#areas" data-i18n="navAreas">Areas</a></li>
+      <li><a href="#faq" data-i18n="navFaq">FAQ</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="es" aria-pressed="false">ES</button>
+      </div>
+      <a class="btn btn-coral" href="#estimate" data-i18n="ctaEstimate">Free estimate</a>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="heroTitle" style="padding:0">
+    <div class="wrap">
+      <div>
+        <span class="kicker" data-i18n="heroKicker">Westfield · Carmel · Indianapolis</span>
+        <h1 id="heroTitle"><span data-i18n="heroH1a">Fresh paint.</span><br><span class="stroke" data-i18n="heroH1b">Flawless finish.</span></h1>
+        <p class="lede" data-i18n="heroLede">Interior and exterior painting for homes and businesses, done on time, done clean, and done right. 7+ years of 5-star work across Central Indiana.</p>
+        <div class="actions">
+          <a class="btn btn-coral" href="#estimate" data-i18n="ctaEstimateLong">Get a free estimate</a>
+          <a class="btn btn-line" href="tel:+13177376277"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>(317) 737-6277</a>
+        </div>
+        <ul class="chips">
+          <li><span class="star" aria-hidden="true">★★★★★</span><span data-i18n="chipRated">5-star rated</span></li>
+          <li data-i18n="chipYears">7+ years in business</li>
+          <li data-i18n="chipMinority">Certified minority-owned</li>
+        </ul>
+      </div>
+      <div class="swatches" aria-hidden="true">
+        <div class="swatch sw1"><div class="chip"></div><b>Lagoon</b><span>Exterior trim</span></div>
+        <div class="swatch sw2"><div class="chip"></div><b>Golden Hour</b><span>Accent wall</span></div>
+        <div class="swatch sw3"><div class="chip"></div><b>Terracotta</b><span>Front door</span></div>
+        <svg class="roller" viewBox="0 0 500 90" fill="none"><path d="M10 64 C 90 40, 170 78, 250 56 S 410 36, 490 58" stroke="#e8553b" stroke-width="26" stroke-linecap="round" opacity=".9"/><path d="M30 76 C 120 58, 200 86, 290 70 S 420 56, 480 72" stroke="#f2b53a" stroke-width="8" stroke-linecap="round" opacity=".8"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" aria-labelledby="svcTitle">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker" data-i18n="svcKicker">What we do</span>
+        <h2 id="svcTitle" data-i18n="svcTitle">Every surface, inside and out</h2>
+        <p data-i18n="svcLede">From a single accent wall to a full exterior repaint, we prep carefully, protect your home, and leave every line crisp.</p>
+      </div>
+      <div class="services">
+        <div class="svc" style="--c:#e8553b"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg></div><h3 data-i18n="s1t">Interior painting</h3><p data-i18n="s1d">Walls, ceilings, trim, and doors, with clean lines and furniture protected.</p></div>
+        <div class="svc" style="--c:#2a9d8f"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div><h3 data-i18n="s2t">Exterior painting</h3><p data-i18n="s2d">Siding, brick, trim, and doors, prepped right to stand up to Indiana weather.</p></div>
+        <div class="svc" style="--c:#f2b53a"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18"/></svg></div><h3 data-i18n="s3t">Cabinet refinishing</h3><p data-i18n="s3d">Give your kitchen a new look without the cost of new cabinets.</p></div>
+        <div class="svc" style="--c:#0f2a43"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-8h6v8"/><path d="M3 21h18"/></svg></div><h3 data-i18n="s4t">Commercial</h3><p data-i18n="s4d">Storefronts, offices, and new construction, scheduled around your business.</p></div>
+        <div class="svc" style="--c:#2a9d8f"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M5 20V10M19 20V10M3 10h18M8 10V6M16 10V6"/></svg></div><h3 data-i18n="s5t">Decks &amp; fences</h3><p data-i18n="s5d">Staining and sealing that protects wood and brings back the color.</p></div>
+        <div class="svc" style="--c:#e8553b"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 12c3-2 5 2 8 0s5-2 8 0"/></svg></div><h3 data-i18n="s6t">Drywall &amp; texture</h3><p data-i18n="s6d">Patching, repairs, and texture matching before the first coat goes on.</p></div>
+        <div class="svc wide" style="--c:#f2b53a"><h3 data-i18n="s7t">And much more</h3><p data-i18n="s7d">Not sure if we do it? Just ask. We'll tell you straight.</p>
+          <div class="more"><span data-i18n="m1">Color consulting</span><span data-i18n="m2">Faux &amp; decorative finishes</span><span data-i18n="m3">Wallpaper removal</span><span data-i18n="m4">Pressure washing</span><span data-i18n="m5">Metal &amp; concrete</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="white" id="why" aria-labelledby="whyTitle">
+    <div class="wrap why">
+      <div class="badge-card">
+        <div class="big">7<small>+</small></div>
+        <p data-i18n="badgeP">years painting homes and businesses across Central Indiana, with 5-star reviews from the people who hired us.</p>
+        <div class="cert"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8.5 14.5-1.5 7 5-3 5 3-1.5-7"/></svg><span data-i18n="certText">Certified minority-owned business, City of Indianapolis Office of Minority &amp; Women Business Development</span></div>
+      </div>
+      <div>
+        <span class="kicker" data-i18n="whyKicker">Why Garcia Painting Pro</span>
+        <h2 id="whyTitle" style="margin:12px 0 26px;color:var(--navy)" data-i18n="whyTitle">The painter you'll call again</h2>
+        <div class="why-list">
+          <div class="why-item"><span class="n">01</span><b data-i18n="w1t">On time</b><p data-i18n="w1d">We show up when we say, and finish when we promise.</p></div>
+          <div class="why-item"><span class="n">02</span><b data-i18n="w2t">Clean job sites</b><p data-i18n="w2d">Floors covered, furniture protected, everything tidied daily.</p></div>
+          <div class="why-item"><span class="n">03</span><b data-i18n="w3t">Fair pricing</b><p data-i18n="w3d">Clear estimates based on your project's size, with no surprises.</p></div>
+          <div class="why-item"><span class="n">04</span><b data-i18n="w4t">We stand behind it</b><p data-i18n="w4d">Accountable from the first call to the final walkthrough.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="howTitle">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker" data-i18n="howKicker">How it works</span>
+        <h2 id="howTitle" data-i18n="howTitle">Simple from start to finish</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><h3 data-i18n="h1t">Free estimate</h3><p data-i18n="h1d">Call, text, or send the form. We'll look at the job and give you a clear price.</p></div>
+        <div class="step"><h3 data-i18n="h2t">Colors &amp; prep</h3><p data-i18n="h2d">We help you choose colors, then patch, sand, and protect everything.</p></div>
+        <div class="step"><h3 data-i18n="h3t">We paint</h3><p data-i18n="h3d">Quality paint, careful hands, and a clean site every day.</p></div>
+        <div class="step"><h3 data-i18n="h4t">Final walkthrough</h3><p data-i18n="h4d">We check every detail with you before we call it done.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reviews" aria-labelledby="revTitle">
+    <div class="wrap">
+      <div class="stars" aria-hidden="true">★★★★★</div>
+      <h2 id="revTitle" data-i18n="revTitle">Five stars from your neighbors</h2>
+      <p data-i18n="revP">Homeowners across Central Indiana rate us five stars for quality, punctuality, and clean, professional work.</p>
+      <a class="btn" href="https://www.google.com/search?q=Garcia+Painting+Pro+Westfield+reviews" target="_blank" rel="noopener" data-i18n="revBtn">Read our Google reviews</a>
+    </div>
+  </section>
+
+  <section class="white" id="areas" aria-labelledby="areaTitle">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker" data-i18n="areaKicker">Where we work</span>
+        <h2 id="areaTitle" data-i18n="areaTitle">Proudly serving Central Indiana</h2>
+      </div>
+      <div class="areas-grid">
+        <span class="main">Westfield</span><span class="main">Carmel</span><span class="main">Indianapolis</span><span>Noblesville</span><span>Fishers</span><span>Zionsville</span><span>Lawrence</span><span>Castleton</span><span>Plainfield</span><span>Brownsburg</span><span>Avon</span><span>Speedway</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" aria-labelledby="faqTitle">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker" data-i18n="faqKicker">Questions</span>
+        <h2 id="faqTitle" data-i18n="faqTitle">Good to know</h2>
+      </div>
+      <div class="faq" id="faqList"></div>
+    </div>
+  </section>
+
+  <section class="estimate" id="estimate" aria-labelledby="estTitle">
+    <div class="wrap est-grid">
+      <div>
+        <span class="kicker" data-i18n="estKicker">Free estimate</span>
+        <h2 id="estTitle" data-i18n="estTitle">Let's talk about your project</h2>
+        <p class="lead" data-i18n="estLead">Tell us what you'd like painted. We'll get back to you quickly with next steps and a free estimate.</p>
+        <div class="call-card">
+          <a href="tel:+13177376277"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></span><span><b>(317) 737-6277</b><span data-i18n="callSub">Call for your free estimate</span></span></a>
+          <a href="sms:+13177376277"><span class="ic" style="background:var(--teal)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span><b data-i18n="textT">Text us photos</b><span data-i18n="textSub">Send a few pictures for a faster quote</span></span></a>
+        </div>
+        <p class="pay" data-i18n="pay">We accept cash, check, credit card, and Venmo.</p>
+      </div>
+
+      <div class="form">
+        <form id="estForm" novalidate>
+          <h3 data-i18n="formT">Request a free estimate</h3>
+          <p data-i18n="formP">It only takes a minute.</p>
+          <div class="row2">
+            <div class="field"><label for="fName" data-i18n="fName">Name</label><input id="fName" name="name" autocomplete="name" required maxlength="80"></div>
+            <div class="field"><label for="fPhone" data-i18n="fPhone">Phone</label><input id="fPhone" name="phone" type="tel" autocomplete="tel" required maxlength="30"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="fEmail"><span data-i18n="fEmail">Email</span> <small data-i18n="optional">(optional)</small></label><input id="fEmail" name="email" type="email" autocomplete="email" maxlength="120"></div>
+            <div class="field"><label for="fCity" data-i18n="fCity">City</label>
+              <select id="fCity" name="city"><option>Westfield</option><option>Carmel</option><option>Indianapolis</option><option>Noblesville</option><option>Fishers</option><option>Zionsville</option><option data-i18n="other">Other</option></select></div>
+          </div>
+          <div class="field"><span style="display:block;font-size:14px;font-weight:700;margin-bottom:6px" data-i18n="fWhat">What needs painting?</span>
+            <div class="checks">
+              <label><input type="checkbox" name="type" value="Interior"> <span data-i18n="tInt">Interior</span></label>
+              <label><input type="checkbox" name="type" value="Exterior"> <span data-i18n="tExt">Exterior</span></label>
+              <label><input type="checkbox" name="type" value="Cabinets"> <span data-i18n="tCab">Cabinets</span></label>
+              <label><input type="checkbox" name="type" value="Deck / fence"> <span data-i18n="tDeck">Deck / fence</span></label>
+              <label><input type="checkbox" name="type" value="Commercial"> <span data-i18n="tCom">Commercial</span></label>
+            </div></div>
+          <div class="field"><label for="fMsg"><span data-i18n="fMsg">Tell us about the project</span> <small data-i18n="optional">(optional)</small></label><textarea id="fMsg" name="message" maxlength="1000"></textarea></div>
+          <div class="hp" aria-hidden="true"><label for="fWeb">Leave empty</label><input id="fWeb" name="_gotcha" tabindex="-1" autocomplete="off"></div>
+          <div class="msg" id="fBox" role="alert"></div>
+          <button class="btn btn-coral" type="submit" id="fSend" style="width:100%" data-i18n="fSend">Send my request</button>
+        </form>
+        <div class="done" id="done" hidden>
+          <div class="tick"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <h3 data-i18n="doneT">Thanks! We got your request.</h3>
+          <p data-i18n="doneP">We'll reach out soon to set up your free estimate.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap foot">
+    <span>© 2026 Garcia Painting Pro LLC · <a href="tel:+13177376277">(317) 737-6277</a></span>
+    <!-- JAPPS:CREDIT (you're welcome to remove this line) -->
+    <span>Website by <a href="https://japps.ai" target="_blank" rel="noopener">Japps.ai</a></span>
+    <!-- /JAPPS:CREDIT -->
+  </div>
+</footer>
+
+<div class="callbar">
+  <a class="btn btn-coral" href="#estimate" data-i18n="ctaEstimate">Free estimate</a>
+  <a class="btn btn-navy" href="tel:+13177376277" data-i18n="callShort">Call</a>
+</div>
+
+<script>
+/* SETTINGS: paste a Formspree form ID (formspree.io) to receive estimate requests by email. */
+var SETTINGS = { FORMSPREE_ID: '' };
+
+var FAQ = {
+  en: [
+    ['Are estimates really free?', 'Yes. We look at your project and give you a clear, written price at no cost and with no obligation.'],
+    ['Do you paint both interiors and exteriors?', 'Yes, plus cabinets, decks, fences, drywall repair and texture, decorative finishes, and commercial spaces.'],
+    ['How is the price decided?', 'Every project is different, so pricing depends on the size of the job, surface prep, and materials. Your estimate spells it all out.'],
+    ['Do you work on businesses?', 'Yes. We paint storefronts, offices, and new construction, and we can schedule around your hours.'],
+    ['What payment do you accept?', 'Cash, check, credit card, and Venmo.'],
+    ['Which areas do you serve?', 'Westfield, Carmel, Indianapolis, Noblesville, Fishers, Zionsville, and communities across Central Indiana.']
+  ],
+  es: [
+    ['¿Los presupuestos son realmente gratis?', 'Sí. Revisamos su proyecto y le damos un precio claro y por escrito, sin costo y sin compromiso.'],
+    ['¿Pintan interiores y exteriores?', 'Sí, además de gabinetes, decks, cercas, reparación y textura de drywall, acabados decorativos y espacios comerciales.'],
+    ['¿Cómo se calcula el precio?', 'Cada proyecto es diferente, así que el precio depende del tamaño del trabajo, la preparación y los materiales. Su presupuesto lo detalla todo.'],
+    ['¿Trabajan con negocios?', 'Sí. Pintamos locales, oficinas y construcciones nuevas, y podemos trabajar en el horario que le convenga.'],
+    ['¿Qué formas de pago aceptan?', 'Efectivo, cheque, tarjeta de crédito y Venmo.'],
+    ['¿En qué áreas trabajan?', 'Westfield, Carmel, Indianápolis, Noblesville, Fishers, Zionsville y comunidades en todo el centro de Indiana.']
+  ]
+};
+
+var ES = {
+  topFree: '<b>Presupuestos gratis</b> · Residencial y comercial',
+  topAreas: 'Servimos Westfield, Carmel y todo Indy ·',
+  navServices: 'Servicios', navWhy: 'Por qué nosotros', navAreas: 'Áreas', navFaq: 'Preguntas',
+  ctaEstimate: 'Presupuesto gratis', ctaEstimateLong: 'Pida su presupuesto gratis', callShort: 'Llamar',
+  heroKicker: 'Westfield · Carmel · Indianápolis',
+  heroH1a: 'Pintura nueva.', heroH1b: 'Acabado perfecto.',
+  heroLede: 'Pintura de interiores y exteriores para casas y negocios: a tiempo, limpio y bien hecho. Más de 7 años de trabajo de 5 estrellas en el centro de Indiana.',
+  chipRated: 'Calificación de 5 estrellas', chipYears: 'Más de 7 años en el negocio', chipMinority: 'Empresa de minoría certificada',
+  svcKicker: 'Lo que hacemos', svcTitle: 'Cada superficie, por dentro y por fuera',
+  svcLede: 'Desde una sola pared hasta pintar todo el exterior: preparamos con cuidado, protegemos su casa y dejamos cada línea perfecta.',
+  s1t: 'Pintura de interiores', s1d: 'Paredes, techos, molduras y puertas, con líneas limpias y muebles protegidos.',
+  s2t: 'Pintura de exteriores', s2d: 'Siding, ladrillo, molduras y puertas, bien preparados para el clima de Indiana.',
+  s3t: 'Gabinetes', s3d: 'Dele un nuevo look a su cocina sin el costo de gabinetes nuevos.',
+  s4t: 'Comercial', s4d: 'Locales, oficinas y construcción nueva, en el horario de su negocio.',
+  s5t: 'Decks y cercas', s5d: 'Tinte y sellador que protegen la madera y le devuelven el color.',
+  s6t: 'Drywall y textura', s6d: 'Parches, reparaciones y textura a juego antes de la primera capa.',
+  s7t: 'Y mucho más', s7d: '¿No sabe si lo hacemos? Pregúntenos. Le diremos la verdad.',
+  m1: 'Asesoría de colores', m2: 'Acabados decorativos', m3: 'Quitar papel tapiz', m4: 'Lavado a presión', m5: 'Metal y concreto',
+  badgeP: 'años pintando casas y negocios en el centro de Indiana, con reseñas de 5 estrellas de quienes nos contrataron.',
+  certText: 'Empresa de minoría certificada por la Oficina de Desarrollo de Negocios de Minorías y Mujeres de la Ciudad de Indianápolis',
+  whyKicker: 'Por qué Garcia Painting Pro', whyTitle: 'El pintor al que volverá a llamar',
+  w1t: 'Puntuales', w1d: 'Llegamos cuando decimos y terminamos cuando prometemos.',
+  w2t: 'Trabajo limpio', w2d: 'Pisos cubiertos, muebles protegidos y todo ordenado cada día.',
+  w3t: 'Precios justos', w3d: 'Presupuestos claros según el tamaño de su proyecto, sin sorpresas.',
+  w4t: 'Respondemos por nuestro trabajo', w4d: 'Responsables desde la primera llamada hasta la revisión final.',
+  howKicker: 'Cómo funciona', howTitle: 'Fácil de principio a fin',
+  h1t: 'Presupuesto gratis', h1d: 'Llame, envíe un mensaje o el formulario. Revisamos el trabajo y le damos un precio claro.',
+  h2t: 'Colores y preparación', h2d: 'Le ayudamos a elegir colores y luego reparamos, lijamos y protegemos todo.',
+  h3t: 'Pintamos', h3d: 'Pintura de calidad, manos cuidadosas y un lugar limpio cada día.',
+  h4t: 'Revisión final', h4d: 'Revisamos cada detalle con usted antes de terminar.',
+  revTitle: 'Cinco estrellas de sus vecinos', revP: 'Propietarios en todo el centro de Indiana nos califican con cinco estrellas por calidad, puntualidad y trabajo limpio y profesional.', revBtn: 'Lea nuestras reseñas en Google',
+  areaKicker: 'Dónde trabajamos', areaTitle: 'Orgullosos de servir al centro de Indiana',
+  faqKicker: 'Preguntas', faqTitle: 'Bueno saber',
+  estKicker: 'Presupuesto gratis', estTitle: 'Hablemos de su proyecto', estLead: 'Cuéntenos qué quiere pintar. Le responderemos pronto con los siguientes pasos y un presupuesto gratis.',
+  callSub: 'Llame para su presupuesto gratis', textT: 'Envíenos fotos', textSub: 'Mande unas fotos para un presupuesto más rápido',
+  pay: 'Aceptamos efectivo, cheque, tarjeta de crédito y Venmo.',
+  formT: 'Pida un presupuesto gratis', formP: 'Solo toma un minuto.',
+  fName: 'Nombre', fPhone: 'Teléfono', fEmail: 'Correo', optional: '(opcional)', fCity: 'Ciudad', other: 'Otra',
+  fWhat: '¿Qué necesita pintar?', tInt: 'Interior', tExt: 'Exterior', tCab: 'Gabinetes', tDeck: 'Deck / cerca', tCom: 'Comercial',
+  fMsg: 'Cuéntenos sobre el proyecto', fSend: 'Enviar solicitud',
+  doneT: '¡Gracias! Recibimos su solicitud.', doneP: 'Nos comunicaremos pronto para programar su presupuesto gratis.'
+};
+var MSG = {
+  en: { preview: 'Preview: this form isn’t connected yet, so nothing is sent. Please call (317) 737-6277.', name: 'Please enter your name.', phone: 'Please enter a phone number we can reach you at.', wait: 'Please wait a moment and try again.', fail: 'Sorry, that didn’t go through. Please call (317) 737-6277.', sending: 'Sending…' },
+  es: { preview: 'Vista previa: este formulario aún no está conectado, así que no se envía nada. Llame al (317) 737-6277.', name: 'Por favor escriba su nombre.', phone: 'Por favor escriba un teléfono donde podamos llamarle.', wait: 'Espere un momento e intente de nuevo.', fail: 'Lo sentimos, no se pudo enviar. Llame al (317) 737-6277.', sending: 'Enviando…' }
+};
+
+(function () {
+  var lang = 'en';
+  var EN = {};
+  document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+  function renderFaq() {
+    var list = document.getElementById('faqList'); list.innerHTML = '';
+    FAQ[lang].forEach(function (qa, i) {
+      var d = document.createElement('details'); if (i === 0) d.open = true;
+      var s = document.createElement('summary'); s.textContent = qa[0];
+      var a = document.createElement('div'); a.className = 'a'; a.textContent = qa[1];
+      d.appendChild(s); d.appendChild(a); list.appendChild(d);
+    });
+  }
+  function setLang(l) {
+    lang = l; document.documentElement.lang = l;
+    var dict = l === 'es' ? ES : EN;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) { var v = dict[el.dataset.i18n]; if (v != null) el.innerHTML = v; });
+    document.querySelectorAll('.lang button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.lang === l); });
+    renderFaq();
+    var box = document.getElementById('fBox');
+    if (!SETTINGS.FORMSPREE_ID) { box.className = 'msg note'; box.textContent = MSG[lang].preview; }
+    try { localStorage.setItem('gpp-lang', l); } catch (e) {}
+  }
+  document.querySelectorAll('.lang button').forEach(function (b) { b.addEventListener('click', function () { setLang(b.dataset.lang); }); });
+  var saved = null; try { saved = localStorage.getItem('gpp-lang'); } catch (e) {}
+  setLang(saved === 'es' || (!saved && (navigator.language || '').toLowerCase().indexOf('es') === 0) ? 'es' : 'en');
+
+  var form = document.getElementById('estForm'), box = document.getElementById('fBox'), send = document.getElementById('fSend');
+  var started = Date.now();
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var m = MSG[lang];
+    box.className = 'msg';
+    if (form._gotcha.value || Date.now() - started < 2500) { box.className = 'msg err'; box.textContent = m.wait; return; }
+    if (!form.name.value.trim()) { box.className = 'msg err'; box.textContent = m.name; form.name.focus(); return; }
+    if (form.phone.value.replace(/\D/g, '').length < 10) { box.className = 'msg err'; box.textContent = m.phone; form.phone.focus(); return; }
+    if (!SETTINGS.FORMSPREE_ID) { box.className = 'msg note'; box.textContent = m.preview; return; }
+    var label = send.textContent; send.disabled = true; send.textContent = m.sending;
+    fetch('https://formspree.io/f/' + encodeURIComponent(SETTINGS.FORMSPREE_ID), { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
+      .then(function (r) { if (!r.ok) throw 0; form.hidden = true; document.getElementById('done').hidden = false; })
+      .catch(function () { box.className = 'msg err'; box.textContent = m.fail; send.disabled = false; send.textContent = label; });
+  });
+})();
+</script>
+</body>
+</html>
