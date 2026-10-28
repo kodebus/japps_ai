@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f6f1ea">
+<meta name="theme-color" content="#120d14">
 <title>Drama Not Drugs — Trauma &amp; Addiction Therapy in Noblesville, IN | Kim E Davenport, LCAC, LMHC</title>
 <meta name="description" content="Discreet, confidential trauma and addiction therapy in Noblesville, Indiana. Kim E Davenport, MA, LCAC, LMHC offers EMDR and evidence-based individual and group therapy for women, men, first responders, and veterans. Free 15-minute consultation.">
 <link rel="canonical" href="https://dramanotdrugs.com/">
@@ -164,7 +164,7 @@ section { padding: clamp(72px, 9vw, 116px) 0; }
 .step p { color: var(--ink-2); font-size: 16px; }
 
 /* Testimonials */
-.tgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.tgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 .t { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 30px; display: flex; flex-direction: column; gap: 20px; }
 .t blockquote { font-family: var(--serif); font-size: 19px; line-height: 1.55; color: var(--ink); }
 .t figcaption { margin-top: auto; display: flex; align-items: center; gap: 12px; font-size: 15px; }
@@ -287,6 +287,98 @@ footer.site { background: #15111a; color: #b9b0bd; font-size: 15px; }
   *, *::before, *::after { transition: none !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* ===== Dramatic v2 ===== */
+header.site { background: rgba(18,13,20,.9); }
+header.site.scrolled { border-bottom-color: rgba(255,255,255,.08); }
+.brand { color: #fff; }
+.brand i { color: #f08a9c; }
+.menu a:not(.btn) { color: #d8cfdb; }
+.menu a:not(.btn):hover { color: #fff; }
+.toggle { color: #fff; border-color: rgba(255,255,255,.2); }
+
+.hero2 { background: radial-gradient(1000px 520px at 85% 10%, rgba(158,31,58,.38), transparent 60%), radial-gradient(800px 500px at 5% 100%, rgba(93,122,105,.16), transparent 60%), #120d14; color: #fff; padding: clamp(56px, 8vw, 110px) 0 clamp(56px, 7vw, 96px); overflow: hidden; position: relative; }
+.hero2 .kicker { color: #f08a9c; }
+.hero2 h1 { color: #fff; font-size: clamp(54px, 10vw, 132px); line-height: .92; letter-spacing: -.035em; margin: 24px 0 26px; }
+.hero2 h1 em { font-style: italic; color: #f08a9c; display: block; }
+.hero2 .lede { color: #d6cdda; max-width: 34em; font-size: clamp(18px, 2.1vw, 22px); }
+.hero2-top { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 40px; align-items: end; }
+.hero2-side { border-left: 1px solid rgba(255,255,255,.14); padding-left: 28px; padding-bottom: 8px; }
+.hero2-side p { color: #d6cdda; font-size: 17px; }
+.hero2-side .who { margin-top: 18px; font-size: 14.5px; color: #a99fae; }
+.hero2-side .who b { color: #fff; font-family: var(--serif); font-weight: 500; font-size: 19px; display: block; }
+.hero2 .hero-actions { margin-top: 26px; }
+.hero2 .btn-outline { border-color: rgba(255,255,255,.45); color: #fff; }
+.hero2 .btn-outline:hover { background: #fff; color: var(--ink); }
+
+.journey { margin-top: clamp(48px, 6vw, 80px); border-radius: 26px; overflow: hidden; position: relative; background: linear-gradient(90deg, #1a141d 0%, #231a26 24%, #3a1a29 50%, #8c2a3d 74%, #e0794f 92%, #f6b77a 100%); box-shadow: 0 40px 80px rgba(0,0,0,.45); }
+.journey::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(180deg, transparent, rgba(0,0,0,.35)); pointer-events: none; }
+.stages { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); position: relative; z-index: 1; }
+.stage { position: relative; }
+.stage + .stage::before { content: ""; position: absolute; left: 0; top: 14%; bottom: 26%; width: 1px; background: linear-gradient(180deg, transparent, rgba(255,255,255,.14), transparent); }
+.stage svg { width: 100%; height: auto; display: block; }
+.stage figcaption { padding: 0 22px 26px; }
+.stage figcaption b { display: block; font-family: var(--serif); font-weight: 500; font-size: clamp(20px, 2vw, 26px); color: #fff; line-height: 1.15; }
+.stage figcaption span { display: block; font-size: 14.5px; color: rgba(255,255,255,.72); margin-top: 4px; line-height: 1.45; }
+.stage .n { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.55); font-weight: 700; margin-bottom: 6px; display: block; }
+.fig { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.s1 .fig { stroke: #6b6372; } .s1 .head { fill: #6b6372; }
+.s2 .fig { stroke: #a08d9e; } .s2 .head { fill: #a08d9e; }
+.s3 .fig { stroke: #f1d3d6; } .s3 .head { fill: #f1d3d6; }
+.s3 .helper .fig { stroke: #ff6b84; } .s3 .helper .head { fill: #ff6b84; }
+.s4 .fig { stroke: #fff6e8; } .s4 .head { fill: #fff6e8; }
+.ground { stroke: rgba(255,255,255,.22); stroke-width: 2; }
+.rain line { stroke: rgba(170,175,200,.45); stroke-width: 2; stroke-linecap: round; }
+.cloud { fill: #2c2532; }
+.beam { fill: url(#beamGrad); }
+.rays line { stroke: rgba(255,240,215,.55); stroke-width: 3; stroke-linecap: round; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes fall { from { transform: translate(0, -14px); opacity: 0; } 20% { opacity: 1; } to { transform: translate(-10px, 40px); opacity: 0; } }
+@keyframes glow { 0%, 100% { opacity: .75; } 50% { opacity: 1; } }
+.stage { opacity: 0; animation: rise .9s cubic-bezier(.2,.7,.2,1) forwards; }
+.stage:nth-child(1) { animation-delay: .2s; } .stage:nth-child(2) { animation-delay: .65s; } .stage:nth-child(3) { animation-delay: 1.1s; } .stage:nth-child(4) { animation-delay: 1.55s; }
+.rain line { animation: fall 1.6s linear infinite; }
+.rain line:nth-child(2n) { animation-delay: .5s; } .rain line:nth-child(3n) { animation-delay: 1s; }
+.sun { animation: glow 4s ease-in-out infinite; }
+
+.quote-band { background: var(--crimson); color: #fff; padding: clamp(64px, 9vw, 120px) 0; text-align: center; position: relative; overflow: hidden; }
+.quote-band::before { content: "\201C"; position: absolute; left: 50%; top: -40px; transform: translateX(-50%); font-family: var(--serif); font-size: 340px; line-height: 1; color: rgba(255,255,255,.08); }
+.quote-band blockquote { position: relative; font-family: var(--serif); font-size: clamp(32px, 5.2vw, 64px); line-height: 1.08; letter-spacing: -.02em; max-width: 16em; margin: 0 auto; }
+.quote-band cite { position: relative; display: block; margin-top: 26px; font-style: normal; font-size: 15px; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.75); font-weight: 700; }
+
+.about2 { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(36px, 6vw, 80px); align-items: center; }
+.about-photo2 { position: relative; aspect-ratio: 4 / 5; border-radius: 24px; overflow: hidden; background: linear-gradient(160deg, #3a2a36, #1e1922); }
+.about-photo2 img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(.25) contrast(1.05); }
+.about-photo2::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(18,13,20,.75)); }
+.about-photo2 .cap { position: absolute; left: 22px; right: 22px; bottom: 20px; z-index: 1; color: #fff; }
+.about-photo2 .cap b { font-family: var(--serif); font-weight: 500; font-size: 24px; display: block; }
+.about-photo2 .cap span { font-size: 14px; color: #d6cdda; }
+.about2 .big-quote { margin: 16px 0 22px; }
+
+@media (max-width: 980px) {
+  .hero2-top, .about2 { grid-template-columns: 1fr; }
+  .hero2-side { border-left: 0; padding-left: 0; border-top: 1px solid rgba(255,255,255,.14); padding-top: 22px; }
+  .stages { grid-template-columns: 1fr 1fr; }
+  .stage:nth-child(3)::before { display: none; }
+  .journey { background: linear-gradient(160deg, #1a141d 0%, #2a1c29 35%, #6e2236 65%, #d26a4c 88%, #f6b77a 100%); }
+  .about-photo2 { max-width: 440px; }
+}
+@media (max-width: 860px) {
+  .menu a:not(.btn) { color: var(--ink-2); }
+}
+@media (max-width: 640px) {
+  .bookbar { background: rgba(18,13,20,.96); border-top-color: rgba(255,255,255,.1); box-shadow: 0 -8px 24px rgba(0,0,0,.3); }
+  .bookbar .btn-outline { border-color: rgba(255,255,255,.5); color: #fff; }
+}
+@media (max-width: 520px) {
+  .stage figcaption { padding: 0 14px 18px; }
+  .stage figcaption span { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage { opacity: 1; animation: none; }
+  .rain line, .sun { animation: none; }
+}
 </style>
 <!-- JAPPS:PREVIEW -->
 <meta name="robots" content="noindex, nofollow, noarchive" />
@@ -325,34 +417,110 @@ footer.site { background: #15111a; color: #b9b0bd; font-size: 15px; }
 
 <main id="main">
 
-  <section class="hero" aria-labelledby="heroTitle">
-    <div class="wrap hero-grid">
-      <div>
-        <span class="kicker">Trauma &amp; addiction therapy · Noblesville, IN</span>
-        <h1 id="heroTitle">Real support.<br><em>Real healing.</em></h1>
-        <p class="lede">A private practice offering discreet, confidential care and personalized programs to meet your unique needs, for women, men, first responders, and veterans.</p>
-        <div class="hero-actions">
-          <a class="btn btn-crimson" href="#contact">Book a free 15-minute consult</a>
-          <a class="btn btn-outline" href="tel:+13177630796">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
-            (317) 763-0796
-          </a>
+  <section class="hero2" aria-labelledby="heroTitle">
+    <div class="wrap">
+      <div class="hero2-top">
+        <div>
+          <span class="kicker">Trauma &amp; addiction therapy · Noblesville, IN</span>
+          <h1 id="heroTitle">Real support.<em>Real healing.</em></h1>
+          <p class="lede">You don't have to carry it alone anymore. Discreet, confidential therapy for women, men, first responders, and veterans.</p>
+          <div class="hero-actions">
+            <a class="btn btn-crimson" href="#contact">Book a free 15-minute consult</a>
+            <a class="btn btn-outline" href="tel:+13177630796">Call (317) 763-0796</a>
+          </div>
         </div>
-        <ul class="reassure">
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Discreet &amp; confidential</li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Now accepting new clients</li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Most commercial insurance</li>
-        </ul>
-      </div>
-      <div class="portrait">
-        <div class="portrait-frame">
-          <img src="https://dramanotdrugs.com/assets/img/profile-img.jpg" alt="Kim E Davenport, trauma and addiction therapist" fetchpriority="high" onerror="this.remove()">
-        </div>
-        <div class="portrait-card">
-          <b>Kim E Davenport</b>
-          <span>MA, LCAC, LMHC · EMDR trained · 25+ years in the addiction field</span>
+        <div class="hero2-side">
+          <p>Trauma and addiction feed each other. With the right support, the cycle breaks, and people change in ways they never thought possible.</p>
+          <div class="who"><b>Kim E Davenport</b>MA, LCAC, LMHC · EMDR trained · 25+ years</div>
         </div>
       </div>
+      <figure class="journey" aria-labelledby="journeyCap">
+        <figcaption class="sr-only" id="journeyCap">An illustration in four stages: a person sitting alone in the rain, then kneeling and reaching toward light, then walking with someone's arm around their shoulders, and finally standing tall with arms raised in the sunlight.</figcaption>
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+          <linearGradient id="beamGrad" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe2b8" stop-opacity=".55"/><stop offset="1" stop-color="#ffe2b8" stop-opacity="0"/></linearGradient>
+          <radialGradient id="sunGrad" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff3d6" stop-opacity=".95"/><stop offset=".45" stop-color="#ffd59a" stop-opacity=".45"/><stop offset="1" stop-color="#ffb070" stop-opacity="0"/></radialGradient>
+        </defs></svg>
+        <div class="stages">
+          <figure class="stage s1">
+            <svg viewBox="0 0 300 300" aria-hidden="true">
+              <g class="cloud"><ellipse cx="150" cy="58" rx="62" ry="22"/><ellipse cx="118" cy="50" rx="34" ry="24"/><ellipse cx="176" cy="44" rx="38" ry="28"/></g>
+              <g class="rain"><line x1="104" y1="92" x2="98" y2="110"/><line x1="128" y1="100" x2="122" y2="118"/><line x1="152" y1="90" x2="146" y2="108"/><line x1="176" y1="102" x2="170" y2="120"/><line x1="198" y1="92" x2="192" y2="110"/><line x1="116" y1="130" x2="110" y2="148"/><line x1="164" y1="134" x2="158" y2="152"/><line x1="188" y1="128" x2="182" y2="146"/></g>
+              <line class="ground" x1="20" y1="270" x2="280" y2="270"/>
+              <g>
+                <line class="fig" x1="128" y1="258" x2="150" y2="200" stroke-width="30"/>
+                <line class="fig" x1="128" y1="258" x2="180" y2="218" stroke-width="22"/>
+                <line class="fig" x1="180" y1="218" x2="190" y2="262" stroke-width="20"/>
+                <polyline class="fig" points="150,206 172,226 186,228" stroke-width="15"/>
+                <circle class="head" cx="171" cy="190" r="18"/>
+              </g>
+            </svg>
+            <figcaption><span class="n">01</span><b>Alone</b><span>Carrying it by yourself, in the dark.</span></figcaption>
+          </figure>
+          <figure class="stage s2">
+            <svg viewBox="0 0 300 300" aria-hidden="true">
+              <polygon class="beam" points="300,-20 300,90 230,108 206,90"/>
+              <line class="ground" x1="20" y1="270" x2="280" y2="270"/>
+              <g>
+                <line class="fig" x1="130" y1="214" x2="140" y2="142" stroke-width="30"/>
+                <line class="fig" x1="130" y1="214" x2="108" y2="262" stroke-width="22"/>
+                <line class="fig" x1="108" y1="262" x2="66" y2="266" stroke-width="20"/>
+                <line class="fig" x1="130" y1="214" x2="178" y2="216" stroke-width="22"/>
+                <line class="fig" x1="178" y1="216" x2="182" y2="264" stroke-width="20"/>
+                <polyline class="fig" points="142,150 182,126 220,100" stroke-width="15"/>
+                <line class="fig" x1="138" y1="152" x2="124" y2="194" stroke-width="15"/>
+                <circle class="head" cx="147" cy="112" r="18"/>
+              </g>
+            </svg>
+            <figcaption><span class="n">02</span><b>Reaching out</b><span>One call. The bravest step there is.</span></figcaption>
+          </figure>
+          <figure class="stage s3">
+            <svg viewBox="0 0 300 300" aria-hidden="true">
+              <line class="ground" x1="20" y1="270" x2="280" y2="270"/>
+              <g class="helper">
+                <line class="fig" x1="180" y1="186" x2="178" y2="118" stroke-width="30"/>
+                <line class="fig" x1="180" y1="186" x2="166" y2="264" stroke-width="22"/>
+                <line class="fig" x1="180" y1="186" x2="198" y2="264" stroke-width="22"/>
+                <line class="fig" x1="182" y1="126" x2="194" y2="182" stroke-width="15"/>
+                <circle class="head" cx="177" cy="88" r="18"/>
+              </g>
+              <g>
+                <line class="fig" x1="124" y1="188" x2="130" y2="122" stroke-width="30"/>
+                <line class="fig" x1="124" y1="188" x2="106" y2="264" stroke-width="22"/>
+                <line class="fig" x1="124" y1="188" x2="142" y2="264" stroke-width="22"/>
+                <line class="fig" x1="126" y1="130" x2="112" y2="182" stroke-width="15"/>
+                <circle class="head" cx="135" cy="93" r="18"/>
+              </g>
+              <g class="helper">
+                <path class="fig" d="M172 124 C 156 108, 128 106, 110 120" stroke-width="15"/>
+              </g>
+            </svg>
+            <figcaption><span class="n">03</span><b>Supported</b><span>Someone walking beside you, every step.</span></figcaption>
+          </figure>
+          <figure class="stage s4">
+            <svg viewBox="0 0 300 300" aria-hidden="true">
+              <circle class="sun" cx="150" cy="96" r="120" fill="url(#sunGrad)"/>
+              <g class="rays"><line x1="150" y1="6" x2="150" y2="24"/><line x1="76" y1="30" x2="88" y2="44"/><line x1="224" y1="30" x2="212" y2="44"/><line x1="40" y1="96" x2="58" y2="96"/><line x1="260" y1="96" x2="242" y2="96"/></g>
+              <line class="ground" x1="20" y1="270" x2="280" y2="270"/>
+              <g>
+                <line class="fig" x1="150" y1="182" x2="150" y2="110" stroke-width="30"/>
+                <line class="fig" x1="150" y1="182" x2="130" y2="264" stroke-width="22"/>
+                <line class="fig" x1="150" y1="182" x2="170" y2="264" stroke-width="22"/>
+                <polyline class="fig" points="150,118 124,84 104,50" stroke-width="15"/>
+                <polyline class="fig" points="150,118 176,84 196,50" stroke-width="15"/>
+                <circle class="head" cx="150" cy="80" r="19"/>
+              </g>
+            </svg>
+            <figcaption><span class="n">04</span><b>Living again</b><span>Free of what used to hold you down.</span></figcaption>
+          </figure>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="quote-band" aria-label="Client testimonial">
+    <div class="wrap">
+      <blockquote>She is the reason I started liking the woman in the mirror again.</blockquote>
+      <cite>Kiley · Former client</cite>
     </div>
   </section>
 
@@ -405,12 +573,14 @@ footer.site { background: #15111a; color: #b9b0bd; font-size: 15px; }
   </section>
 
   <section class="dark" id="about" aria-labelledby="aboutTitle">
-    <div class="wrap about-grid">
-      <div class="reveal">
-        <span class="kicker">About Kim</span>
-        <p class="big-quote" id="aboutTitle" style="margin-top:18px">Transparent. Fearless. <em>The real deal.</em></p>
+    <div class="wrap about2">
+      <div class="about-photo2 reveal">
+        <img src="https://dramanotdrugs.com/assets/img/profile-img.jpg" alt="Kim E Davenport, trauma and addiction therapist" loading="lazy" onerror="this.remove()">
+        <div class="cap"><b>Kim E Davenport</b><span>MA, LCAC, LMHC</span></div>
       </div>
       <div class="about-body reveal">
+        <span class="kicker">About Kim</span>
+        <p class="big-quote" id="aboutTitle">Transparent. Fearless. <em>The real deal.</em></p>
         <p>Kim is transparent and fearless in addressing the issues that haunt you and keep you awake at night.</p>
         <p>With 25 years in the addiction field and a decade focused on trauma and PTSD, she creates a safe space for you and your peers to unburden yourselves, a reminder that you are not alone and no longer have to suffer.</p>
         <p>Trained in EMDR, Kim uses it alongside other evidence-based therapies to challenge the negative core beliefs formed in childhood and reinforced by trauma and substance use, building a healthier belief system through acceptance, self-care, and compassion for yourself and others.</p>
@@ -443,7 +613,6 @@ footer.site { background: #15111a; color: #b9b0bd; font-size: 15px; }
         <figure class="t reveal"><blockquote>Kim is a great therapist that I felt connected to immediately upon meeting her. She is extremely welcoming, nonjudgmental, and honest about what she thinks. She has a gift for uplifting and affirming women. I would recommend Kim to anyone seeking a therapist.</blockquote><figcaption><span class="av" aria-hidden="true">K</span><span><b>Kenedy</b><small>Client</small></span></figcaption></figure>
         <figure class="t reveal"><blockquote>I cannot say enough good things about Kim. She became my therapist during the early stages of my recovery from severe alcoholism. She was the only therapist I encountered who truly understood me on a deeper level—helping me confront my disease of addiction while also guiding me in healing other wounds, such as abandonment, anxiety, and codependency. Kim has given me a new perspective on life and consistently reminds me that I do in fact have a purpose.</blockquote><figcaption><span class="av" aria-hidden="true">E</span><span><b>Emily</b><small>Former client</small></span></figcaption></figure>
         <figure class="t reveal"><blockquote>I have seen many therapists in my lifetime, and Kim stands out as one of the most genuine souls I have ever worked with. She is real, involved, and easy to connect with. The moment I step into her office, I feel heard and appreciated. She is a light in my life. I could not have found a better match.</blockquote><figcaption><span class="av" aria-hidden="true">B</span><span><b>Bailee</b><small>Current client</small></span></figcaption></figure>
-        <figure class="t reveal"><blockquote>Kim was my trauma and addiction therapist and she also did EMDR therapy with me. To say she changed my life for the better would be an understatement. She helped me find my authentic self and gave me the courage to be honest with myself and with others. She is the reason I started liking the woman in the mirror again. She also calls me on my crap, which I desperately need sometimes. Highly recommend.</blockquote><figcaption><span class="av" aria-hidden="true">K</span><span><b>Kiley</b><small>Former client</small></span></figcaption></figure>
       </div>
     </div>
   </section>
