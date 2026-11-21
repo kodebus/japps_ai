@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Japps.ai — Build Anything with AI</title>
+<title>Japps.ai — Salesforce Developer & AI-Powered Builder</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
   :root {
@@ -20,7 +20,6 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -32,7 +31,7 @@
     overflow-x: hidden;
   }
 
-  h1, h2, h3, h4, .nav-logo { font-family: 'Nunito', sans-serif; }
+  h1, h2, h3, h4 { font-family: 'Nunito', sans-serif; }
 
   body::before {
     content: '';
@@ -55,16 +54,6 @@
     background: rgba(8,11,16,0.85);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
-  }
-
-  .nav-logo {
-    font-size: 1.6rem;
-    font-weight: 800;
-    background: var(--grad);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: -0.5px;
   }
 
   .nav-links {
@@ -179,9 +168,10 @@
   #hero p {
     font-size: 1.15rem;
     color: var(--muted);
-    max-width: 540px;
+    max-width: 580px;
     margin: 0 auto 2.5rem;
     font-weight: 300;
+    line-height: 1.8;
     animation: fadeUp 0.6s 0.2s ease both;
   }
 
@@ -206,10 +196,7 @@
     box-shadow: 0 0 30px rgba(201,168,76,0.2);
   }
 
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 40px rgba(201,168,76,0.35);
-  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(201,168,76,0.35); }
 
   .btn-secondary {
     background: transparent;
@@ -225,30 +212,6 @@
   }
 
   .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-
-  .hero-stats {
-    display: flex;
-    gap: 3rem;
-    justify-content: center;
-    margin-top: 4rem;
-    padding-top: 3rem;
-    border-top: 1px solid var(--border);
-    width: 100%;
-    max-width: 600px;
-    animation: fadeUp 0.6s 0.4s ease both;
-  }
-
-  .stat-item { text-align: center; }
-  .stat-num {
-    font-family: 'Nunito', sans-serif;
-    font-size: 2rem;
-    font-weight: 800;
-    background: var(--grad);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
@@ -284,20 +247,21 @@
 
   .section-sub {
     color: var(--muted);
-    max-width: 500px;
+    max-width: 540px;
     font-size: 1rem;
     margin-bottom: 3.5rem;
+    line-height: 1.8;
   }
 
-  #services { background: var(--bg2); }
+  #what { background: var(--bg2); }
 
-  .services-grid {
+  .what-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
   }
 
-  .service-card {
+  .what-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -307,7 +271,7 @@
     overflow: hidden;
   }
 
-  .service-card::before {
+  .what-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
@@ -317,10 +281,10 @@
     transition: opacity 0.3s;
   }
 
-  .service-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-4px); }
-  .service-card:hover::before { opacity: 1; }
+  .what-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-4px); }
+  .what-card:hover::before { opacity: 1; }
 
-  .service-icon {
+  .what-icon {
     width: 48px; height: 48px;
     border-radius: 12px;
     background: rgba(201,168,76,0.08);
@@ -332,195 +296,57 @@
     border: 1px solid rgba(201,168,76,0.15);
   }
 
-  .service-card h3 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 0.6rem;
-    letter-spacing: -0.3px;
-  }
+  .what-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; letter-spacing: -0.3px; }
+  .what-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
 
-  .service-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+  #stack { background: var(--bg); }
 
-  #how { background: var(--bg); }
-
-  .steps {
+  .stack-wrap {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 0;
-    position: relative;
-  }
-
-  .steps::before {
-    content: '';
-    position: absolute;
-    top: 2rem;
-    left: 4rem;
-    right: 4rem;
-    height: 1px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    opacity: 0.3;
-  }
-
-  .step {
-    padding: 2rem 1.5rem;
-    text-align: center;
-    position: relative;
-  }
-
-  .step-num {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background: var(--card);
-    border: 2px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-    font-size: 1.1rem;
-    margin: 0 auto 1.2rem;
-    position: relative;
-    z-index: 1;
-    background: var(--bg2);
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-
-  .step:hover .step-num {
-    border-color: var(--accent);
-    box-shadow: 0 0 20px rgba(201,168,76,0.25);
-    color: var(--accent);
-  }
-
-  .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
-  .step p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
-
-  #pricing { background: var(--bg2); }
-
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
     align-items: start;
   }
 
-  .pricing-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 2.5rem;
-    transition: transform 0.3s;
+  .stack-intro p {
+    color: var(--muted);
+    line-height: 1.8;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
   }
 
-  .pricing-card:hover { transform: translateY(-4px); }
+  .stack-groups { display: flex; flex-direction: column; gap: 2rem; }
 
-  .pricing-card.featured {
-    border-color: rgba(201,168,76,0.4);
-    background: linear-gradient(160deg, rgba(201,168,76,0.05), rgba(201,168,76,0.03));
-    position: relative;
-  }
-
-  .popular-badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--grad);
-    color: #000;
+  .stack-group-label {
     font-size: 0.72rem;
-    font-weight: 700;
-    font-family: 'Nunito', sans-serif;
-    padding: 0.3rem 1rem;
-    border-radius: 100px;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-  }
-
-  .plan-name {
-    font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--accent);
     margin-bottom: 0.8rem;
     font-family: 'Nunito', sans-serif;
   }
 
-  .plan-price {
-    font-family: 'Nunito', sans-serif;
-    font-size: 3rem;
-    font-weight: 800;
-    letter-spacing: -2px;
-    line-height: 1;
-    margin-bottom: 0.3rem;
-  }
+  .stack-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 
-  .plan-price span {
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--muted);
-    letter-spacing: 0;
-  }
-
-  .plan-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.8rem; }
-
-  .plan-features { list-style: none; margin-bottom: 2rem; }
-  .plan-features li {
-    font-size: 0.9rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    color: var(--text);
-  }
-
-  .plan-features li::before {
-    content: '✓';
-    color: var(--accent);
-    font-weight: 700;
-    font-size: 0.85rem;
-    flex-shrink: 0;
-  }
-
-  .btn-plan {
-    display: block;
-    text-align: center;
-    padding: 0.85rem;
-    border-radius: 10px;
-    font-weight: 700;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-
-  .btn-plan-outline {
+  .stack-tag {
+    background: var(--card);
     border: 1px solid var(--border);
     color: var(--text);
-  }
-  .btn-plan-outline:hover { border-color: var(--accent); color: var(--accent); }
-
-  .btn-plan-filled {
-    background: var(--grad);
-    color: #000;
-    border: none;
-  }
-  .btn-plan-filled:hover { opacity: 0.88; transform: translateY(-1px); }
-
-  #maintenance { background: var(--bg); }
-
-  .maintenance-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.5rem;
-    align-items: start;
-  }
-
-  .maintenance-note {
-    text-align: center;
     font-size: 0.82rem;
-    color: var(--muted);
-    margin-top: 1.5rem;
+    font-weight: 600;
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .stack-tag:hover { border-color: rgba(201,168,76,0.4); color: var(--accent); }
+
+  .stack-tag.highlight {
+    background: rgba(201,168,76,0.08);
+    border-color: rgba(201,168,76,0.25);
+    color: var(--accent2);
   }
 
   #portfolio { background: var(--bg2); }
@@ -539,10 +365,7 @@
     transition: transform 0.3s, border-color 0.3s;
   }
 
-  .portfolio-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(201,168,76,0.35);
-  }
+  .portfolio-card:hover { transform: translateY(-4px); border-color: rgba(201,168,76,0.35); }
 
   .portfolio-preview {
     height: 180px;
@@ -577,10 +400,7 @@
     flex-shrink: 0;
   }
 
-  .preview-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-  }
+  .preview-dot { width: 7px; height: 7px; border-radius: 50%; }
 
   .preview-body {
     flex: 1;
@@ -590,26 +410,9 @@
     gap: 6px;
   }
 
-  .preview-stat {
-    background: var(--bg);
-    border-radius: 6px;
-    padding: 6px;
-    border: 1px solid var(--border);
-  }
-
-  .preview-stat-label {
-    font-size: 7px;
-    color: var(--muted);
-    font-family: 'Nunito', sans-serif;
-    margin-bottom: 3px;
-  }
-
-  .preview-stat-val {
-    font-size: 11px;
-    font-weight: 800;
-    font-family: 'Nunito', sans-serif;
-    color: var(--accent);
-  }
+  .preview-stat { background: var(--bg); border-radius: 6px; padding: 6px; border: 1px solid var(--border); }
+  .preview-stat-label { font-size: 7px; color: var(--muted); font-family: 'Nunito', sans-serif; margin-bottom: 3px; }
+  .preview-stat-val { font-size: 11px; font-weight: 800; font-family: 'Nunito', sans-serif; color: var(--accent); }
 
   .preview-bar-wrap {
     grid-column: 1 / -1;
@@ -622,42 +425,20 @@
     gap: 4px;
   }
 
-  .preview-bar-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+  .preview-bar-row { display: flex; align-items: center; gap: 6px; }
+  .preview-bar-label { font-size: 7px; color: var(--muted); width: 40px; flex-shrink: 0; font-family: 'Nunito', sans-serif; }
+  .preview-bar-track { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .preview-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #c9a84c, #e8c96e); }
 
-  .preview-bar-label {
-    font-size: 7px;
-    color: var(--muted);
-    width: 40px;
-    flex-shrink: 0;
-    font-family: 'Nunito', sans-serif;
-  }
-
-  .preview-bar-track {
-    flex: 1;
-    height: 5px;
-    background: var(--border);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .preview-bar-fill {
-    height: 100%;
-    border-radius: 3px;
-    background: linear-gradient(90deg, #c9a84c, #e8c96e);
+  .portfolio-screenshot {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: top;
+    display: block;
   }
 
   .portfolio-body { padding: 1.5rem; }
-
-  .portfolio-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
+  .portfolio-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
 
   .portfolio-tag {
     background: rgba(201,168,76,0.08);
@@ -671,25 +452,9 @@
     letter-spacing: 0.3px;
   }
 
-  .portfolio-card h3 {
-    font-size: 1.2rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.3px;
-  }
-
-  .portfolio-card p {
-    font-size: 0.88rem;
-    color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 1.2rem;
-  }
-
-  .portfolio-links {
-    display: flex;
-    gap: 0.8rem;
-    flex-wrap: wrap;
-  }
+  .portfolio-card h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.3px; }
+  .portfolio-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.2rem; }
+  .portfolio-links { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 
   .portfolio-link {
     display: inline-flex;
@@ -704,12 +469,7 @@
     transition: all 0.2s;
   }
 
-  .portfolio-link-gh {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-  }
-
+  .portfolio-link-gh { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
   .portfolio-link-gh:hover { border-color: var(--accent); color: var(--accent); }
 
   #testimonials { background: var(--bg); }
@@ -741,14 +501,7 @@
     line-height: 1;
   }
 
-  .testi-text {
-    font-size: 0.95rem;
-    line-height: 1.8;
-    color: var(--text);
-    margin-bottom: 1.5rem;
-    padding-top: 1rem;
-  }
-
+  .testi-text { font-size: 0.95rem; line-height: 1.8; color: var(--text); margin-bottom: 1.5rem; padding-top: 1rem; }
   .testi-author { display: flex; align-items: center; gap: 0.8rem; }
 
   .testi-avatar {
@@ -768,9 +521,7 @@
   .testi-name { font-weight: 700; font-size: 0.9rem; }
   .testi-role { font-size: 0.78rem; color: var(--muted); }
 
-  #contact {
-    background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
-  }
+  #contact { background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%); }
 
   .contact-wrap {
     display: grid;
@@ -783,13 +534,7 @@
   .contact-info p { color: var(--muted); line-height: 1.8; margin-bottom: 2rem; }
 
   .contact-perks { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
-  .contact-perks li {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
+  .contact-perks li { display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; color: var(--muted); }
   .contact-perks li span {
     width: 28px; height: 28px;
     border-radius: 8px;
@@ -803,7 +548,6 @@
   }
 
   .contact-form { display: flex; flex-direction: column; gap: 1rem; }
-
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
   .field label {
@@ -835,7 +579,6 @@
   }
 
   .field textarea { min-height: 130px; resize: vertical; }
-
   .field select option { background: var(--card); }
 
   .form-submit {
@@ -854,6 +597,15 @@
 
   .form-submit:hover { opacity: 0.88; transform: translateY(-2px); }
 
+  #leave-review { background: var(--bg); }
+
+  .review-form-wrap { max-width: 720px; margin: 0 auto; }
+  .review-form { display: flex; flex-direction: column; gap: 1rem; }
+  .review-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .review-note { font-size: 0.8rem; color: var(--muted); margin-top: 1.5rem; text-align: center; }
+  .review-note a { color: var(--accent); text-decoration: none; }
+
   footer {
     background: var(--bg);
     border-top: 1px solid var(--border);
@@ -867,38 +619,10 @@
     z-index: 1;
   }
 
-  .footer-logo {
-    font-family: 'Nunito', sans-serif;
-    font-size: 1.4rem;
-    font-weight: 800;
-    background: var(--grad);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
   footer p { color: var(--muted); font-size: 0.85rem; }
-
   .footer-links { display: flex; gap: 1.5rem; }
   .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
   .footer-links a:hover { color: var(--accent); }
-
-  @media (max-width: 768px) {
-    .nav-links { display: none; }
-    .contact-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
-    .form-row { grid-template-columns: 1fr; }
-    .steps::before { display: none; }
-    footer { flex-direction: column; text-align: center; }
-    .hero-stats { gap: 1.5rem; }
-  }
-
-  /* ─── LEAVE A REVIEW ─── */
-  #leave-review { background: var(--bg); }
-  .review-form-wrap { max-width: 720px; margin: 0 auto; }
-  .review-form { display: flex; flex-direction: column; gap: 1rem; }
-  .review-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .review-note { font-size: 0.8rem; color: var(--muted); margin-top: 1.5rem; text-align: center; }
-  .review-note a { color: var(--accent); text-decoration: none; }
 
   .reveal {
     opacity: 0;
@@ -906,373 +630,239 @@
     transition: opacity 0.6s ease, transform 0.6s ease;
   }
   .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .contact-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .stack-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
+    footer { flex-direction: column; text-align: center; }
+  }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <a href="#hero" style="text-decoration:none;display:flex;align-items:center;"><svg width="160" height="40" viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="gnav" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#e8c96e"/></linearGradient></defs><rect x="0" y="0" width="80" height="80" rx="22" fill="url(#gnav)"/><line x1="20" y1="22" x2="60" y2="22" stroke="#0a1428" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/><line x1="20" y1="58" x2="60" y2="58" stroke="#0a1428" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/><line x1="40" y1="22" x2="40" y2="58" stroke="#0a1428" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/><circle cx="20" cy="22" r="4.5" fill="#0a1428" opacity="0.45"/><circle cx="60" cy="22" r="4.5" fill="#0a1428" opacity="0.45"/><circle cx="20" cy="58" r="4.5" fill="#0a1428" opacity="0.45"/><circle cx="60" cy="58" r="4.5" fill="#0a1428" opacity="0.45"/><text x="40" y="42" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="34" font-weight="900" fill="#0a1428">J</text><text x="96" y="38" font-family="system-ui,sans-serif" font-size="38" font-weight="800" fill="#e8eaf0" letter-spacing="-1">Japps</text><text x="96" y="62" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#c9a84c" letter-spacing="4">.AI</text></svg></a>
+  <a href="#hero" style="text-decoration:none;display:flex;align-items:center;">
+    <svg width="160" height="40" viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="gnav" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#e8c96e"/></linearGradient></defs>
+      <rect x="0" y="0" width="80" height="80" rx="22" fill="url(#gnav)"/>
+      <line x1="20" y1="22" x2="60" y2="22" stroke="#0a1428" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
+      <line x1="20" y1="58" x2="60" y2="58" stroke="#0a1428" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
+      <line x1="40" y1="22" x2="40" y2="58" stroke="#0a1428" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
+      <circle cx="20" cy="22" r="4.5" fill="#0a1428" opacity="0.45"/>
+      <circle cx="60" cy="22" r="4.5" fill="#0a1428" opacity="0.45"/>
+      <circle cx="20" cy="58" r="4.5" fill="#0a1428" opacity="0.45"/>
+      <circle cx="60" cy="58" r="4.5" fill="#0a1428" opacity="0.45"/>
+      <text x="40" y="42" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="34" font-weight="900" fill="#0a1428">J</text>
+      <text x="96" y="38" font-family="system-ui,sans-serif" font-size="38" font-weight="800" fill="#e8eaf0" letter-spacing="-1">Japps</text>
+      <text x="96" y="62" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#c9a84c" letter-spacing="4">.AI</text>
+    </svg>
+  </a>
   <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
-    <li><a href="#how">How It Works</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#maintenance">Maintenance</a></li>
+    <li><a href="#what">What I Build</a></li>
+    <li><a href="#stack">Stack</a></li>
     <li><a href="#portfolio">Portfolio</a></li>
     <li><a href="#testimonials">Reviews</a></li>
-    <li><a href="#leave-review">Leave a Review</a></li>
-    <li><a href="#contact" class="nav-cta">Get Started</a></li>
+    <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
   </ul>
 </nav>
 
-<!-- HERO -->
 <section id="hero">
   <div class="hero-glow"></div>
   <div class="hero-glow2"></div>
-  <div class="hero-badge">⚡ AI-Powered Development</div>
-  <h1>Build Anything.<br><span class="grad-text">Powered by AI.</span></h1>
-  <p>From custom apps to full CRMs — Japps.ai turns your ideas into production-ready software, faster and smarter than traditional development.</p>
+  <div class="hero-badge">Salesforce OmniStudio Developer & Builder</div>
+  <h1>I build things<br>with <span class="grad-text">code and AI.</span></h1>
+  <p>Salesforce OmniStudio developer by day. Builder of web apps, Chrome extensions, and tools on the side. This is where I put the things I make.</p>
   <div class="hero-btns">
-    <a href="#contact" class="btn-primary">Start Your Project →</a>
-    <a href="#services" class="btn-secondary">See What We Build</a>
-  </div>
-  <div class="hero-stats">
-    <div class="stat-item">
-      <div class="stat-num">10×</div>
-      <div class="stat-label">Faster Delivery</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">Any</div>
-      <div class="stat-label">Project Size</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">100%</div>
-      <div class="stat-label">Custom Built</div>
-    </div>
+    <a href="#portfolio" class="btn-primary">See My Work &rarr;</a>
+    <a href="#contact" class="btn-secondary">Get in Touch</a>
   </div>
 </section>
 
-<!-- SERVICES -->
-<section id="services">
+<section id="what">
   <div class="section-inner">
     <div class="reveal">
-      <div class="section-tag">What We Do</div>
-      <h2 class="section-title">No job is too small.<br>No idea is too big.</h2>
-      <p class="section-sub">We leverage cutting-edge AI to build whatever your business needs — fast, affordable, and built to last.</p>
+      <div class="section-tag">What I Build</div>
+      <h2 class="section-title">Full-stack skills,<br>real-world results.</h2>
+      <p class="section-sub">I take on occasional side projects — websites, tools, and custom software for people who need something that actually works.</p>
     </div>
-    <div class="services-grid">
-      <div class="service-card reveal">
-        <div class="service-icon">🌐</div>
-        <h3>Websites & Landing Pages</h3>
-        <p>Stunning, conversion-focused websites for any type of business. From simple landing pages to complex multi-page sites.</p>
+    <div class="what-grid">
+      <div class="what-card reveal">
+        <div class="what-icon">&#x1F310;</div>
+        <h3>Websites &amp; Web Apps</h3>
+        <p>Custom sites and web applications built clean, responsive, and fast — from simple landing pages to full multi-page experiences.</p>
       </div>
-      <div class="service-card reveal">
-        <div class="service-icon">⚙️</div>
-        <h3>Custom Web Applications</h3>
-        <p>Full-stack apps tailored to your workflow. Dashboards, portals, SaaS platforms — built the way you need them.</p>
+      <div class="what-card reveal">
+        <div class="what-icon">&#x1F9E9;</div>
+        <h3>Chrome Extensions</h3>
+        <p>Productivity tools that live right in your browser. I've shipped extensions to the Chrome Web Store with real users and reviews.</p>
       </div>
-      <div class="service-card reveal">
-        <div class="service-icon">🗃️</div>
-        <h3>CRM & Business Tools</h3>
-        <p>Custom CRMs, inventory systems, scheduling tools, and internal apps that fit your exact business process.</p>
+      <div class="what-card reveal">
+        <div class="what-icon">&#x26A1;</div>
+        <h3>Salesforce &amp; OmniStudio</h3>
+        <p>OmniScripts, FlexCards, DataRaptors, Integration Procedures — certified OmniStudio developer with public sector experience.</p>
       </div>
-      <div class="service-card reveal">
-        <div class="service-icon">🤖</div>
-        <h3>AI Integrations</h3>
-        <p>Add AI superpowers to your existing software. Chatbots, automation pipelines, smart document processing, and more.</p>
+      <div class="what-card reveal">
+        <div class="what-icon">&#x1F517;</div>
+        <h3>APIs &amp; Integrations</h3>
+        <p>REST APIs, webhooks, third-party connections. I wire things together so systems talk to each other without manual workarounds.</p>
       </div>
-      <div class="service-card reveal">
-        <div class="service-icon">📱</div>
-        <h3>Mobile-Ready Solutions</h3>
-        <p>Responsive web apps and mobile-first experiences that work flawlessly across every device your customers use.</p>
+      <div class="what-card reveal">
+        <div class="what-icon">&#x1F916;</div>
+        <h3>AI-Powered Features</h3>
+        <p>Integrating LLMs and AI APIs into real products — not demos. Things that go live and get used by actual people.</p>
       </div>
-      <div class="service-card reveal">
-        <div class="service-icon">🔗</div>
-        <h3>Automations & Integrations</h3>
-        <p>Connect your tools, automate repetitive tasks, and integrate APIs so your business runs on autopilot.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section id="how">
-  <div class="section-inner">
-    <div class="reveal" style="text-align:center">
-      <div class="section-tag">The Process</div>
-      <h2 class="section-title">Simple. Fast. Done right.</h2>
-      <p class="section-sub" style="margin:0 auto 3.5rem">From first conversation to live product in days, not months.</p>
-    </div>
-    <div class="steps">
-      <div class="step reveal">
-        <div class="step-num">01</div>
-        <h3>Tell Us Your Idea</h3>
-        <p>Describe what you need — no technical jargon required. We listen and ask the right questions.</p>
-      </div>
-      <div class="step reveal">
-        <div class="step-num">02</div>
-        <h3>We Plan It Together</h3>
-        <p>We scope the project, agree on a timeline, and show you exactly what we'll build before we start.</p>
-      </div>
-      <div class="step reveal">
-        <div class="step-num">03</div>
-        <h3>We Build with AI</h3>
-        <p>Using the latest AI tools, we build at lightning speed without cutting corners on quality.</p>
-      </div>
-      <div class="step reveal">
-        <div class="step-num">04</div>
-        <h3>Launch & Support</h3>
-        <p>We deploy your product and stay by your side for revisions, updates, and ongoing support.</p>
+      <div class="what-card reveal">
+        <div class="what-icon">&#x1F3A8;</div>
+        <h3>Client Sites</h3>
+        <p>Portfolio sites, artist pages, small business sites — built to look great and represent people the way they deserve to be shown.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRICING -->
-<section id="pricing">
+<section id="stack">
   <div class="section-inner">
-    <div class="reveal">
-      <div class="section-tag">Pricing</div>
-      <h2 class="section-title">Transparent. Affordable.<br>No surprises.</h2>
-      <p class="section-sub">Flexible options whether you need a quick fix or a complete custom build.</p>
-    </div>
-    <div class="pricing-grid">
-
-      <div class="pricing-card reveal">
-        <div class="plan-name">Starter</div>
-        <div class="plan-price">$299<span>/project</span></div>
-        <div class="plan-desc">Perfect for small businesses needing a quick, professional web presence.</div>
-        <ul class="plan-features">
-          <li>Landing page or simple website</li>
-          <li>Mobile responsive design</li>
-          <li>Contact form integration</li>
-          <li>Up to 3 revisions</li>
-          <li>Delivered in 3–5 days</li>
-        </ul>
-        <a href="#contact" class="btn-plan btn-plan-outline">Get Started</a>
+    <div class="stack-wrap">
+      <div class="stack-intro reveal">
+        <div class="section-tag">My Stack</div>
+        <h2 class="section-title">The tools<br>I actually use.</h2>
+        <p>I work across the full development lifecycle — writing code, versioning it with Git, deploying it, and connecting it to external services via APIs. Everything here is something I've shipped, not just studied.</p>
+        <p>On the Salesforce side I hold certifications in Administrator, OmniStudio Developer, and Platform Developer I, with ongoing work in government/public sector orgs.</p>
       </div>
-
-      <div class="pricing-card featured reveal">
-        <div class="popular-badge">⭐ MOST POPULAR</div>
-        <div class="plan-name">Business</div>
-        <div class="plan-price">$999<span>/project</span></div>
-        <div class="plan-desc">Custom apps, CRMs, and tools for growing businesses that need real software.</div>
-        <ul class="plan-features">
-          <li>Full custom web application</li>
-          <li>Database & backend included</li>
-          <li>AI features & integrations</li>
-          <li>Admin dashboard</li>
-          <li>Unlimited revisions</li>
-          <li>Delivered in 1–2 weeks</li>
-        </ul>
-        <a href="#contact" class="btn-plan btn-plan-filled">Get Started</a>
-      </div>
-
-      <div class="pricing-card reveal">
-        <div class="plan-name">Enterprise</div>
-        <div class="plan-price">Custom<span></span></div>
-        <div class="plan-desc">Complex platforms, ongoing development, and dedicated AI engineering support.</div>
-        <ul class="plan-features">
-          <li>Everything in Business</li>
-          <li>Custom scope & timeline</li>
-          <li>Dedicated project management</li>
-          <li>Priority support & SLA</li>
-          <li>Long-term retainer options</li>
-        </ul>
-        <a href="#contact" class="btn-plan btn-plan-outline">Let's Talk</a>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- MAINTENANCE -->
-<section id="maintenance">
-  <div class="section-inner">
-    <div class="reveal" style="text-align:center">
-      <div class="section-tag">Maintenance Plans</div>
-      <h2 class="section-title">Keep Your Site Running<br><span class="grad-text">Smooth & Updated</span></h2>
-      <p class="section-sub" style="margin:0 auto 3.5rem">After launch, we've got you covered with flexible monthly plans so your site never falls behind.</p>
-    </div>
-    <div class="maintenance-grid">
-
-      <div class="pricing-card reveal">
-        <div class="plan-name">Basic</div>
-        <div class="plan-price">$49<span>/mo</span></div>
-        <div class="plan-desc">Perfect for small sites that rarely need changes.</div>
-        <ul class="plan-features">
-          <li>1 content update per month</li>
-          <li>Bug fixes</li>
-          <li>Email support</li>
-        </ul>
-        <a href="#contact" class="btn-plan btn-plan-outline">Get Started</a>
-      </div>
-
-      <div class="pricing-card featured reveal">
-        <div class="popular-badge">⭐ MOST POPULAR</div>
-        <div class="plan-name">Standard</div>
-        <div class="plan-price">$99<span>/mo</span></div>
-        <div class="plan-desc">For growing businesses that need regular updates and fast support.</div>
-        <ul class="plan-features">
-          <li>3 content updates per month</li>
-          <li>Bug fixes</li>
-          <li>Priority email support</li>
-          <li>24hr response time</li>
-        </ul>
-        <a href="#contact" class="btn-plan btn-plan-filled">Get Started</a>
-      </div>
-
-      <div class="pricing-card reveal">
-        <div class="plan-name">Pro</div>
-        <div class="plan-price">$199<span>/mo</span></div>
-        <div class="plan-desc">Full ongoing development and same-day support for active businesses.</div>
-        <ul class="plan-features">
-          <li>Unlimited updates</li>
-          <li>Bug fixes</li>
-          <li>Priority phone & email</li>
-          <li>Same-day response</li>
-          <li>New features included</li>
-        </ul>
-        <a href="#contact" class="btn-plan btn-plan-outline">Get Started</a>
-      </div>
-
-    </div>
-    <p class="maintenance-note reveal">All plans billed monthly · Cancel anytime with 30 days written notice</p>
-
-    <!-- ON DEMAND -->
-    <div style="margin-top:3rem;" class="reveal">
-      <div style="text-align:center;margin-bottom:2rem;">
-        <div class="section-tag">On-Demand Support</div>
-        <h3 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.5px;">No commitment? No problem.</h3>
-        <p style="color:var(--muted);font-size:0.9rem;margin-top:0.5rem;">Pay only when you need help. No contracts, no subscriptions.</p>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;">
-        <div class="pricing-card" style="text-align:center;">
-          <div class="plan-name">Hourly</div>
-          <div class="plan-price">$75<span>/hr</span></div>
-          <div class="plan-desc">Pay as you go. Minimum 1 hour. Perfect for quick fixes and small updates.</div>
-          <a href="#contact" class="btn-plan btn-plan-outline">Book an Hour</a>
+      <div class="stack-groups reveal">
+        <div>
+          <div class="stack-group-label">Salesforce Platform</div>
+          <div class="stack-tags">
+            <span class="stack-tag highlight">OmniStudio</span>
+            <span class="stack-tag highlight">OmniScripts</span>
+            <span class="stack-tag highlight">FlexCards</span>
+            <span class="stack-tag highlight">DataRaptors</span>
+            <span class="stack-tag highlight">Integration Procedures</span>
+            <span class="stack-tag">LWC</span>
+            <span class="stack-tag">Apex</span>
+            <span class="stack-tag">SOQL</span>
+            <span class="stack-tag">Flow</span>
+          </div>
         </div>
-        <div class="pricing-card" style="text-align:center;">
-          <div class="plan-name">5-Hour Bundle</div>
-          <div class="plan-price">$350<span style="font-size:0.85rem;"> (save $25)</span></div>
-          <div class="plan-desc">Buy 5 hours upfront at a discount. Hours never expire — use them anytime.</div>
-          <a href="#contact" class="btn-plan btn-plan-outline">Get Bundle</a>
+        <div>
+          <div class="stack-group-label">Web &amp; Frontend</div>
+          <div class="stack-tags">
+            <span class="stack-tag">HTML / CSS</span>
+            <span class="stack-tag">JavaScript</span>
+            <span class="stack-tag">Node.js</span>
+            <span class="stack-tag">React</span>
+            <span class="stack-tag">Chrome Extensions (MV3)</span>
+            <span class="stack-tag">Responsive Design</span>
+          </div>
         </div>
-        <div class="pricing-card featured" style="text-align:center;">
-          <div class="popular-badge">💰 BEST VALUE</div>
-          <div class="plan-name">10-Hour Bundle</div>
-          <div class="plan-price">$650<span style="font-size:0.85rem;"> (save $100)</span></div>
-          <div class="plan-desc">Our best hourly rate. Buy 10 hours upfront and use them whenever you need.</div>
-          <a href="#contact" class="btn-plan btn-plan-filled">Get Bundle</a>
+        <div>
+          <div class="stack-group-label">APIs, DevOps &amp; Deployment</div>
+          <div class="stack-tags">
+            <span class="stack-tag highlight">Git / GitHub</span>
+            <span class="stack-tag highlight">REST APIs</span>
+            <span class="stack-tag highlight">Vercel</span>
+            <span class="stack-tag highlight">GitHub Pages</span>
+            <span class="stack-tag">Serverless Functions</span>
+            <span class="stack-tag">Webhooks</span>
+            <span class="stack-tag">GitHub Actions</span>
+            <span class="stack-tag">Supabase</span>
+          </div>
+        </div>
+        <div>
+          <div class="stack-group-label">AI &amp; Integrations</div>
+          <div class="stack-tags">
+            <span class="stack-tag highlight">Anthropic / Claude API</span>
+            <span class="stack-tag highlight">Lovable</span>
+            <span class="stack-tag">Formspree</span>
+            <span class="stack-tag">Google Workspace APIs</span>
+            <span class="stack-tag">Chrome Web Store</span>
+          </div>
+        </div>
+        <div>
+          <div class="stack-group-label">Dev Tools</div>
+          <div class="stack-tags">
+            <span class="stack-tag highlight">VS Code</span>
+            <span class="stack-tag highlight">GitHub Copilot</span>
+            <span class="stack-tag highlight">Postman</span>
+            <span class="stack-tag">Chrome DevTools</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PORTFOLIO -->
 <section id="portfolio">
   <div class="section-inner">
     <div class="reveal">
       <div class="section-tag">Portfolio</div>
-      <h2 class="section-title">Built with AI.<br>Ready for the real world.</h2>
-      <p class="section-sub">A sample of what we've shipped for clients using AI-powered development.</p>
+      <h2 class="section-title">Things I've built.<br><span class="grad-text">All live. All real.</span></h2>
+      <p class="section-sub">From Chrome extensions on the Web Store to client sites and Salesforce tools — here's what I've shipped.</p>
     </div>
     <div class="portfolio-grid">
 
-
-      <!-- Java Challenge Trainer -->
       <div class="portfolio-card reveal">
-        <div class="portfolio-preview" style="height:200px;">
-          <img src="/assets/java-trainer-preview.jpg" alt="Java Challenge Trainer stepping through a Java program line by line" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" />
-        </div>
-        <div class="portfolio-body">
-          <div class="portfolio-tags">
-            <span class="portfolio-tag">Web App</span>
-            <span class="portfolio-tag">Java</span>
-            <span class="portfolio-tag">Interview Prep</span>
-            <span class="portfolio-tag">Learning</span>
+        <div class="portfolio-preview">
+          <div class="portfolio-preview-inner">
+            <div class="preview-topbar">
+              <div class="preview-dot" style="background:#e05555"></div>
+              <div class="preview-dot" style="background:#e0a855"></div>
+              <div class="preview-dot" style="background:#55e07a"></div>
+            </div>
+            <div class="preview-body">
+              <div class="preview-stat"><div class="preview-stat-label">Today</div><div class="preview-stat-val">6h 24m</div></div>
+              <div class="preview-stat"><div class="preview-stat-label">This Week</div><div class="preview-stat-val">32h 10m</div></div>
+              <div class="preview-stat"><div class="preview-stat-label">Projects</div><div class="preview-stat-val">8</div></div>
+              <div class="preview-bar-wrap">
+                <div class="preview-bar-row"><div class="preview-bar-label">Dev Work</div><div class="preview-bar-track"><div class="preview-bar-fill" style="width:78%"></div></div></div>
+                <div class="preview-bar-row"><div class="preview-bar-label">Meetings</div><div class="preview-bar-track"><div class="preview-bar-fill" style="width:45%"></div></div></div>
+                <div class="preview-bar-row"><div class="preview-bar-label">Admin</div><div class="preview-bar-track"><div class="preview-bar-fill" style="width:25%"></div></div></div>
+              </div>
+            </div>
           </div>
-          <h3>Java Challenge Trainer</h3>
-          <p>Free practice for coding-challenge interviews. Step through real Java programs one line at a time and watch each variable change, then work through six short lessons with 27 questions: predict the output, fill the blank, put the lines in order, and find the bug. Every answer is checked instantly and explained, and your progress is saved in your browser.</p>
-          <div class="portfolio-links">
-            <a href="https://www.japps.ai/java-trainer/" target="_blank" class="portfolio-link portfolio-link-gh">🌐 Visit Website</a>
-            <a href="https://github.com/kodebus/japps_ai/tree/main/java-trainer" target="_blank" class="portfolio-link portfolio-link-gh">⌥ GitHub</a>
-          </div>
-        </div>
-      </div>
-      
-
-      <!-- Lamp -->
-      <div class="portfolio-card reveal">
-        <div class="portfolio-preview" style="height:200px;">
-          <img src="/assets/lamp-preview.jpg" alt="Lamp app showing today's Bible story with a Listen now button" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" />
-        </div>
-        <div class="portfolio-body">
-          <div class="portfolio-tags">
-            <span class="portfolio-tag">Web App</span>
-            <span class="portfolio-tag">Faith</span>
-            <span class="portfolio-tag">Bilingual</span>
-            <span class="portfolio-tag">Read-Aloud</span>
-          </div>
-          <h3>Lamp</h3>
-          <p>Short Bible stories, read aloud in English or Spanish. Each of the 26 stories pairs the actual passage (King James Version or Reina-Valera 1909) with a plain explanation, a reason to choose kindness, and a short prayer. Browse by themes like Trust, Hope, and Forgiveness, save favorites, and add it to your home screen to use offline.</p>
-          <div class="portfolio-links">
-            <a href="https://www.japps.ai/lamp/" target="_blank" class="portfolio-link portfolio-link-gh">🌐 Visit Website</a>
-            <a href="https://github.com/kodebus/japps_ai/tree/main/lamp" target="_blank" class="portfolio-link portfolio-link-gh">⌥ GitHub</a>
-          </div>
-        </div>
-      </div>
-      
-
-<!-- Spend Radar -->
-<div class="portfolio-card reveal">
-  <div class="portfolio-preview" style="height:200px;">
-    <img src="/assets/spendradar-preview.jpg" alt="Spend Radar app with transaction search and current cycle total" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" />
-  </div>
-  <div class="portfolio-body">
-    <div class="portfolio-tags">
-      <span class="portfolio-tag">Web App</span>
-      <span class="portfolio-tag">Finance</span>
-      <span class="portfolio-tag">Plaid API</span>
-      <span class="portfolio-tag">Vercel</span>
-    </div>
-    <h3>Spend Radar</h3>
-    <p>Tracks spending against a monthly limit across one or more linked bank accounts via Plaid — search and filter by date, category, or which bank a charge came from, then export a branded PDF or CSV. Also supports manual entry through CSV upload or pasted bank statements for anyone who'd rather not link an account.</p>
-    <div class="portfolio-links">
-      <a href="https://spendradar.vercel.app" target="_blank" class="portfolio-link portfolio-link-gh">🌐 Visit Website</a>
-      <a href="https://github.com/kodebus/spendradar" target="_blank" class="portfolio-link portfolio-link-gh">⌥ GitHub</a>
-    </div>
-  </div>
-</div>
-      
-      <!-- Smart Time Tracker -->
-      <div class="portfolio-card reveal">
-        <div class="portfolio-preview" style="height:200px;">
-          <img src="/assets/clockwork-preview.jpg" alt="Smart Time Tracker Chrome extension landing page" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" />
         </div>
         <div class="portfolio-body">
           <div class="portfolio-tags">
             <span class="portfolio-tag">Salesforce</span>
-            <span class="portfolio-tag">Time Tracking</span>
             <span class="portfolio-tag">Chrome Extension</span>
+            <span class="portfolio-tag">Time Tracking</span>
             <span class="portfolio-tag">AI-Powered</span>
           </div>
           <h3>Smart Time Tracker</h3>
-          <p>A Salesforce-integrated time tracking Chrome extension that helps teams log, manage, and analyze time spent across projects. Built with AI to streamline reporting and boost productivity.</p>
+          <p>A Salesforce-integrated Chrome extension that helps teams log, manage, and analyze time across projects. Built with AI to streamline reporting and boost productivity.</p>
           <div class="portfolio-links">
-            <a href="https://japps.ai/clockwork" target="_blank" class="portfolio-link portfolio-link-gh">🌐 Visit Website</a>
-            <a href="https://chromewebstore.google.com/detail/cjneefooapnhaeicmbfekjcdknldlckj?utm_source=item-share-cb" target="_blank" class="portfolio-link portfolio-link-gh">🧩 Chrome Store</a>
-            <a href="https://github.com/kodebus/salesforce-time-tracker" target="_blank" class="portfolio-link portfolio-link-gh">⌥ GitHub</a>
+            <a href="https://japps.ai/clockwork" target="_blank" class="portfolio-link portfolio-link-gh">&#x1F310; Website</a>
+            <a href="https://chromewebstore.google.com/detail/cjneefooapnhaeicmbfekjcdknldlckj?utm_source=item-share-cb" target="_blank" class="portfolio-link portfolio-link-gh">&#x1F9E9; Chrome Store</a>
+            <a href="https://github.com/kodebus/salesforce-time-tracker" target="_blank" class="portfolio-link portfolio-link-gh">&#x2325; GitHub</a>
           </div>
         </div>
       </div>
 
-      <!-- Grab It -->
       <div class="portfolio-card reveal">
-        <div class="portfolio-preview" style="height:200px;">
-          <img src="/assets/grabit-preview.jpg" alt="Grab It Chrome extension for Salesforce work logs" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" />
+        <div class="portfolio-preview">
+          <div class="portfolio-preview-inner">
+            <div class="preview-topbar">
+              <div class="preview-dot" style="background:#e05555"></div>
+              <div class="preview-dot" style="background:#e0a855"></div>
+              <div class="preview-dot" style="background:#55e07a"></div>
+              <div style="flex:1;margin-left:6px;background:rgba(255,255,255,0.06);border-radius:3px;padding:2px 8px;font-size:8px;color:rgba(255,255,255,0.35);font-family:'Nunito',sans-serif;">dev.sandbox.lightning.force.com</div>
+            </div>
+            <div class="preview-body" style="grid-template-columns:1fr 1fr;gap:6px;">
+              <div class="preview-stat" style="grid-column:1/-1;display:flex;align-items:center;gap:8px;background:rgba(46,117,182,0.12);border-color:rgba(46,117,182,0.3);">
+                <div style="width:8px;height:8px;border-radius:50%;background:#00D4FF;flex-shrink:0;"></div>
+                <div style="font-size:8px;color:#00D4FF;font-family:'Nunito',sans-serif;font-weight:700;">&#x1F4CB; Grab It — Auto-detected</div>
+              </div>
+              <div class="preview-stat"><div class="preview-stat-label">Component</div><div class="preview-stat-val" style="font-size:9px;">FetchAppStatus</div></div>
+              <div class="preview-stat"><div class="preview-stat-label">Story</div><div class="preview-stat-val" style="font-size:9px;">STORY-1234</div></div>
+              <div class="preview-bar-wrap" style="grid-column:1/-1;">
+                <div class="preview-bar-row"><div class="preview-bar-label">Mon</div><div class="preview-bar-track"><div class="preview-bar-fill" style="width:90%"></div></div></div>
+                <div class="preview-bar-row"><div class="preview-bar-label">Tue</div><div class="preview-bar-track"><div class="preview-bar-fill" style="width:65%"></div></div></div>
+                <div class="preview-bar-row"><div class="preview-bar-label">Wed</div><div class="preview-bar-track"><div class="preview-bar-fill" style="width:80%"></div></div></div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="portfolio-body">
           <div class="portfolio-tags">
@@ -1282,19 +872,36 @@
             <span class="portfolio-tag">Productivity</span>
           </div>
           <h3>Grab It</h3>
-          <p>A Chrome extension built for Salesforce OmniStudio developers. Automatically detects your active component, captures story numbers and descriptions, and generates daily, weekly, or monthly work reports in one click — all stored locally in your browser.</p>
+          <p>A Chrome extension for Salesforce OmniStudio developers. Auto-detects the active component, captures story numbers and descriptions, and generates daily/weekly/monthly work reports in one click.</p>
           <div class="portfolio-links">
-            <a href="https://www.japps.ai/grabit/" target="_blank" class="portfolio-link portfolio-link-gh">🌐 Visit Website</a>
-            <a href="https://chromewebstore.google.com/detail/grab-it/lnjcjhobpggdembdgajicfjigaifpncl" target="_blank" class="portfolio-link portfolio-link-gh">🧩 Chrome Store</a>
-            <a href="https://github.com/kodebus" target="_blank" class="portfolio-link portfolio-link-gh">⌥ GitHub</a>
+            <a href="https://kodebus.github.io/GrabIt/" target="_blank" class="portfolio-link portfolio-link-gh">&#x1F310; Website</a>
+            <a href="https://chromewebstore.google.com/detail/grab-it/lnjcjhobpggdembdgajicfjigaifpncl" target="_blank" class="portfolio-link portfolio-link-gh">&#x1F9E9; Chrome Store</a>
+            <a href="https://github.com/kodebus" target="_blank" class="portfolio-link portfolio-link-gh">&#x2325; GitHub</a>
           </div>
         </div>
       </div>
 
-      <!-- OmniScript Debug Panel -->
       <div class="portfolio-card reveal">
-        <div class="portfolio-preview" style="height:200px;">
-          <img src="/assets/omnidebug-preview.jpg" alt="OmniScript Debug Panel showing live field values" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" />
+        <div class="portfolio-preview">
+          <div class="portfolio-preview-inner">
+            <div class="preview-topbar">
+              <div class="preview-dot" style="background:#e05555"></div>
+              <div class="preview-dot" style="background:#e0a855"></div>
+              <div class="preview-dot" style="background:#55e07a"></div>
+            </div>
+            <div class="preview-body">
+              <div class="preview-stat" style="grid-column:1/-1;display:flex;align-items:center;gap:8px;">
+                <div style="width:10px;height:10px;border-radius:50%;background:#55e07a;flex-shrink:0;"></div>
+                <div class="preview-stat-label" style="margin:0;font-size:8px;">OmniScript Debug Panel — Step: AccountLookup</div>
+              </div>
+              <div class="preview-bar-wrap" style="grid-column:1/-1;">
+                <div class="preview-bar-row"><div class="preview-bar-label">AccountId</div><div style="flex:1;font-size:7px;color:#c9a84c;font-family:'Nunito',sans-serif;">0015g000003xABCDEF</div></div>
+                <div class="preview-bar-row"><div class="preview-bar-label">IsActive</div><div style="flex:1;font-size:7px;color:#55e07a;font-family:'Nunito',sans-serif;">true</div></div>
+                <div class="preview-bar-row"><div class="preview-bar-label">Status</div><div style="flex:1;font-size:7px;color:#e8c96e;font-family:'Nunito',sans-serif;">"Pending Review"</div></div>
+                <div class="preview-bar-row"><div class="preview-bar-label">HasError</div><div style="flex:1;font-size:7px;color:#e05555;font-family:'Nunito',sans-serif;">false</div></div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="portfolio-body">
           <div class="portfolio-tags">
@@ -1304,138 +911,150 @@
             <span class="portfolio-tag">Debugging</span>
           </div>
           <h3>OmniScript Debug Panel</h3>
-          <p>A Lightning Web Component that gives developers a real-time debug view of every field in an active OmniScript step — showing API names, expression paths, and live values from omniJsonData. No more manual text blocks or cleanup before go-live.</p>
+          <p>A Lightning Web Component that gives developers a real-time debug view of every field in an active OmniScript step — API names, expression paths, and live values from omniJsonData.</p>
           <div class="portfolio-links">
-            <a href="https://japps.ai/omnidebug/" target="_blank" class="portfolio-link portfolio-link-gh">🌐 Visit Website</a>
-            <a href="https://github.com/kodebus/omniDebugPanel" target="_blank" class="portfolio-link portfolio-link-gh">⌥ View on GitHub</a>
+            <a href="https://japps.ai/omnidebug/" target="_blank" class="portfolio-link portfolio-link-gh">&#x1F310; Website</a>
+            <a href="https://github.com/kodebus/omniDebugPanel" target="_blank" class="portfolio-link portfolio-link-gh">&#x2325; GitHub</a>
           </div>
         </div>
       </div>
 
-     <!-- Deed Map -->
       <div class="portfolio-card reveal">
-        <div class="portfolio-preview" style="height:200px;">
-          <img src="/assets/realestate-preview.jpg" alt="Real Estate ABCs lesson levels and the Deed Map game" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" />
+        <div class="portfolio-preview" style="background:linear-gradient(135deg,#0a1a2e,#0d2240);">
+          <div class="portfolio-preview-inner" style="background:linear-gradient(135deg,#0f2a45,#0a1a2e);">
+            <div class="preview-topbar">
+              <div class="preview-dot" style="background:#e05555"></div>
+              <div class="preview-dot" style="background:#e0a855"></div>
+              <div class="preview-dot" style="background:#55e07a"></div>
+            </div>
+            <div class="preview-body" style="display:flex;flex-direction:column;gap:6px;grid-template-columns:1fr;">
+              <div style="font-size:9px;font-weight:800;color:#c9a84c;font-family:'Nunito',sans-serif;text-align:center;padding-top:4px;">&#x1F3E0; Real Estate ABCs</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;flex:1;">
+                <div class="preview-stat" style="text-align:center;"><div class="preview-stat-label">Deed Types</div><div class="preview-stat-val" style="font-size:10px;">&#x2713;</div></div>
+                <div class="preview-stat" style="text-align:center;"><div class="preview-stat-label">Deed Map</div><div class="preview-stat-val" style="font-size:10px;color:#55e07a;">&#x25B6;</div></div>
+                <div class="preview-stat" style="grid-column:1/-1;"><div class="preview-stat-label">Progress</div><div class="preview-bar-track" style="margin-top:4px;"><div class="preview-bar-fill" style="width:62%"></div></div></div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="portfolio-body">
           <div class="portfolio-tags">
-            <span class="portfolio-tag">Board Game</span>
+            <span class="portfolio-tag">Education</span>
             <span class="portfolio-tag">Real Estate</span>
-            <span class="portfolio-tag">Exam Prep</span>
+            <span class="portfolio-tag">Game</span>
+            <span class="portfolio-tag">Single-File App</span>
           </div>
-          <h3>Learning Real Estate</h3>
-          <p>A Monopoly/Candy Land-style board game built to make real estate licensing exam prep actually fun. Roll the dice, land on lesson cards covering contracts, finance, and ethics, and quiz your way around the board — solo or 2-player.</p>
+          <h3>Real Estate Learning Path</h3>
+          <p>A bilingual, single-file web app for learning real estate concepts — with "Real Estate ABCs" explainer cards and "Deed Map," an interactive exam-prep board game.</p>
           <div class="portfolio-links">
-            <a href="https://japps.ai/realestate/" target="_blank" class="portfolio-link portfolio-link-gh">🌐 Visit Website</a>
+            <a href="https://japps.ai/realestate/" target="_blank" class="portfolio-link portfolio-link-gh">&#x1F310; Try It</a>
           </div>
         </div>
       </div>
 
-
-      <!-- Kaystyle -->
       <div class="portfolio-card reveal">
-        <div class="portfolio-preview" style="height:200px;">
-          <img src="/assets/kaystyle-preview.png" alt="Kaystyle — Karla Martinez art portfolio website" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" />
+        <div class="portfolio-preview" style="overflow:hidden;">
+          <img src="https://raw.githubusercontent.com/kodebus/japps_ai/gh-branch/kaystyle-preview.jpg"
+               alt="Kaystyle bilingual portfolio"
+               class="portfolio-screenshot"
+               onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1a0a2e,#2d1050)';this.parentElement.innerHTML+='<div style=\'display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;\'><div style=\'font-size:2rem;\'>&#x1F3A8;</div><div style=\'font-size:9px;color:#c9a84c;font-family:Nunito,sans-serif;font-weight:700;\'>Kaystyle</div></div>'"/>
         </div>
         <div class="portfolio-body">
           <div class="portfolio-tags">
             <span class="portfolio-tag">Client Site</span>
+            <span class="portfolio-tag">Bilingual</span>
             <span class="portfolio-tag">Artist Portfolio</span>
-            <span class="portfolio-tag">Oil Painting</span>
-            <span class="portfolio-tag">Ecuador</span>
           </div>
-          <h3>Kaystyle — Karla Martinez</h3>
-          <p>A bilingual artist portfolio for Ecuadorian oil painter Karla Martinez, who signs her work as "Kay." Features 30+ years of original paintings, an exhibition history page, and an international shipping inquiry form.</p>
+          <h3>Kaystyle</h3>
+          <p>A bilingual (EN/ES) portfolio site for Karla Martinez, an independent artist. Built to showcase her work beautifully with full Spanish and English support.</p>
           <div class="portfolio-links">
-            <a href="https://kaystyle.com" target="_blank" class="portfolio-link portfolio-link-gh">🌐 Visit Website</a>
+            <a href="https://japps.ai/kaystyle/" target="_blank" class="portfolio-link portfolio-link-gh">&#x1F310; Visit Site</a>
           </div>
         </div>
       </div>
 
-
-      <!-- Drama Not Drugs -->
       <div class="portfolio-card reveal">
-        <div class="portfolio-preview" style="height:200px;">
-          <img src="/assets/dramanotdrugs-preview.png" alt="Drama Not Drugs — Therapy Practice website" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" />
+        <div class="portfolio-preview" style="overflow:hidden;">
+          <img src="https://raw.githubusercontent.com/kodebus/japps_ai/gh-branch/dnd-preview.jpg"
+               alt="Drama Not Drugs therapy practice site"
+               class="portfolio-screenshot"
+               onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0a1a1a,#0d2a2a)';this.parentElement.innerHTML+='<div style=\'display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;\'><div style=\'font-size:2rem;\'>&#x1F3AD;</div><div style=\'font-size:9px;color:#c9a84c;font-family:Nunito,sans-serif;font-weight:700;\'>Drama Not Drugs</div></div>'"/>
         </div>
         <div class="portfolio-body">
           <div class="portfolio-tags">
-            <span class="portfolio-tag">Website</span>
+            <span class="portfolio-tag">Client Site</span>
             <span class="portfolio-tag">Therapy Practice</span>
-            <span class="portfolio-tag">Landing Page</span>
+            <span class="portfolio-tag">Small Business</span>
           </div>
           <h3>Drama Not Drugs</h3>
-          <p>A website for Kim's therapy and creative arts practice. Built to connect clients with her unique approach to healing through drama, movement, and expressive arts.</p>
+          <p>A professional website for Kim Davenport's therapy practice — warm, welcoming, and built to build trust with potential clients.</p>
           <div class="portfolio-links">
-            <a href="https://www.dramanotdrugs.com" target="_blank" class="portfolio-link portfolio-link-gh">🌐 Visit Website</a>
+            <a href="https://dramanotdrugs.com" target="_blank" class="portfolio-link portfolio-link-gh">&#x1F310; Visit Site</a>
           </div>
         </div>
       </div>
 
-      <!-- Placeholder card -->
       <div class="portfolio-card reveal" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:340px;text-align:center;padding:2rem;gap:0.8rem;">
         <div style="width:56px;height:56px;border-radius:50%;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;">+</div>
-        <h3 style="font-size:1rem;">Your Next Project</h3>
-        <p style="font-size:0.85rem;">Have an idea? Let's build it together and add it here.</p>
-        <a href="#contact" class="portfolio-link portfolio-link-gh">Start a Project</a>
+        <h3 style="font-size:1rem;">Something I'm Building</h3>
+        <p style="font-size:0.85rem;">Always working on something new. Check back or reach out if you have an idea.</p>
+        <a href="#contact" class="portfolio-link portfolio-link-gh">Let's Talk</a>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
 <section id="testimonials">
   <div class="section-inner">
     <div class="reveal" style="text-align:center">
-      <div class="section-tag">What Clients Say</div>
-      <h2 class="section-title">Real reviews.<br><span class="grad-text">From real clients.</span></h2>
-      <p class="section-sub" style="margin:0 auto 3.5rem">Businesses trust Japps.ai to bring their ideas to life.</p>
+      <div class="section-tag">What People Say</div>
+      <h2 class="section-title">Real feedback.<br><span class="grad-text">From real people.</span></h2>
+      <p class="section-sub" style="margin:0 auto 3rem">From clients who've seen the work up close.</p>
     </div>
     <div class="testi-grid">
       <div class="testi-card reveal">
-        <div class="testi-text">Love my website! It was ready in just a few days, and Japps helped me get my images looking great throughout the site. They are incredibly helpful, and I will definitely be coming back.</div>
+        <div class="testi-text">Working with Guisselle was the easiest thing I've ever done. She just got it — my vibe, my style, my clients. The site looks incredible and I actually understand how to use it. I would recommend her to anyone who wants someone who listens and delivers.</div>
         <div class="testi-author">
-          <div class="testi-avatar">KM</div>
+          <div class="testi-avatar">K</div>
           <div>
-            <div class="testi-name">Karla M.</div>
-            <div class="testi-role">KayStyle Art · Website / Landing Page</div>
+            <div class="testi-name">Karla Martinez</div>
+            <div class="testi-role">Independent Artist — Kaystyle</div>
           </div>
         </div>
       </div>
       <div class="testi-card reveal">
-        <div class="testi-text">Excellent work! Guisselle is simply a joy to work with and is incredibly accommodating. Loved the finished product! Highly recommend!</div>
+        <div class="testi-text">Guisselle built my therapy practice website and it felt personal from day one. She understood what I needed even when I couldn't fully put it into words. The final result was something I was proud to share with clients — professional, warm, and completely me.</div>
         <div class="testi-author">
-          <div class="testi-avatar">KD</div>
+          <div class="testi-avatar">K</div>
           <div>
-            <div class="testi-name">Kim Davenport</div>
-            <div class="testi-role">Dramanotdrugs LLC · Website / Landing Page</div>
+            <div class="testi-name">Kim Davenport, LPC</div>
+            <div class="testi-role">Therapist — Drama Not Drugs</div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="reveal" style="text-align:center;margin-top:2.5rem;">
-      <a href="#leave-review" class="btn-secondary" style="font-size:0.88rem;">Leave your own review →</a>
+      <div class="testi-card reveal" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1rem;min-height:200px;">
+        <div style="font-size:2rem;opacity:0.3;">&#x2726;</div>
+        <p style="color:var(--muted);font-size:0.9rem;line-height:1.7;max-width:300px;">Worked with me? I'd love to hear about your experience.</p>
+        <a href="#leave-review" class="btn-primary" style="font-size:0.85rem;padding:0.65rem 1.5rem;">Leave a Review &rarr;</a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
 <section id="contact">
   <div class="section-inner">
     <div class="contact-wrap">
       <div class="contact-info reveal">
-        <div class="section-tag">Contact</div>
-        <h2 class="section-title">Let's build something great together.</h2>
-        <p>Tell us about your project — big or small, we want to hear it. We'll get back to you within 24 hours with a plan.</p>
+        <div class="section-tag">Get in Touch</div>
+        <h2 class="section-title">Have an idea?<br>Let's talk about it.</h2>
+        <p>I take on a limited number of side projects when the fit is right. If you need something built — a site, a tool, an integration — feel free to reach out. No commitment, just a conversation.</p>
         <ul class="contact-perks">
-          <li><span>✉️</span> <a href="mailto:info@japps.ai" style="color:var(--accent);text-decoration:none;">info@japps.ai</a></li>
-          <li><span>📞</span> <a href="tel:+18007152777" style="color:var(--accent);text-decoration:none;">(800) 71-JAPPS &nbsp;·&nbsp; (800) 715-2777</a></li>
-          <li><span>⚡</span> Response within 24 hours</li>
-          <li><span>💬</span> Free consultation call</li>
-          <li><span>🛡️</span> No commitment required</li>
-          <li><span>🎯</span> Tailored quote for your project</li>
-          <li><span>👩‍💻</span> <a href="aboutguisselle.html" style="color:var(--accent);text-decoration:none;font-weight:600;">Meet the Founder →</a></li>
+          <li><span>&#x2709;&#xFE0F;</span> <a href="mailto:gsselle@japps.ai" style="color:var(--accent);text-decoration:none;">gsselle@japps.ai</a></li>
+          <li><span>&#x1F517;</span> <a href="https://github.com/kodebus" target="_blank" style="color:var(--accent);text-decoration:none;">github.com/kodebus</a></li>
+          <li><span>&#x26A1;</span> I'll respond within a day or two</li>
+          <li><span>&#x1F4AC;</span> Happy to hop on a quick call</li>
+          <li><span>&#x1F6E0;&#xFE0F;</span> Side projects only — no agencies, no bulk work</li>
         </ul>
       </div>
       <div class="contact-form reveal" id="contactForm">
@@ -1450,35 +1069,34 @@
           </div>
         </div>
         <div class="field">
-          <label>Project Type</label>
+          <label>What do you need?</label>
           <select>
-            <option value="">Select a service...</option>
-            <option>Website / Landing Page</option>
-            <option>Custom Web Application</option>
-            <option>CRM / Business Tool</option>
-            <option>AI Integration</option>
-            <option>Automation / API</option>
-            <option>Other / Not Sure</option>
+            <option value="">Select a type...</option>
+            <option>Website or landing page</option>
+            <option>Web app or tool</option>
+            <option>Chrome extension</option>
+            <option>API or integration</option>
+            <option>Salesforce / OmniStudio help</option>
+            <option>Something else</option>
           </select>
         </div>
         <div class="field">
-          <label>Tell Us About Your Project</label>
-          <textarea placeholder="Describe your idea, goals, and any details you have. Don't worry about being too technical — we'll figure it out together."></textarea>
+          <label>Tell me about your project</label>
+          <textarea placeholder="What are you trying to build or fix? The more context the better — I'll be honest about whether I'm the right fit."></textarea>
         </div>
-        <button class="form-submit" type="button" onclick="handleSubmit(this)">Send Message →</button>
-        <p style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem;text-align:center">Or email us directly at <a href="mailto:info@japps.ai" style="color:var(--accent);text-decoration:none;">info@japps.ai</a></p>
+        <button class="form-submit" type="button" onclick="handleSubmit(this)">Send Message &rarr;</button>
+        <p style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem;text-align:center">Or email directly: <a href="mailto:gsselle@japps.ai" style="color:var(--accent);text-decoration:none;">gsselle@japps.ai</a></p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- LEAVE A REVIEW -->
 <section id="leave-review">
   <div class="section-inner">
     <div class="reveal" style="text-align:center">
       <div class="section-tag">Leave a Review</div>
-      <h2 class="section-title">Worked with us?<br><span class="grad-text">We'd love to hear from you.</span></h2>
-      <p class="section-sub" style="margin:0 auto 3rem">Your feedback helps other businesses trust us with their projects — and helps us keep improving. Takes less than 2 minutes.</p>
+      <h2 class="section-title">Worked with me?<br><span class="grad-text">I'd love to hear from you.</span></h2>
+      <p class="section-sub" style="margin:0 auto 3rem">Your honest feedback means a lot — and helps others decide if working together is right for them. Takes less than 2 minutes.</p>
     </div>
     <div class="review-form-wrap reveal">
       <div class="review-form" id="reviewForm">
@@ -1493,42 +1111,54 @@
           </div>
         </div>
         <div class="field">
-          <label>Project Type</label>
+          <label>What did we work on?</label>
           <select id="reviewProject">
-            <option value="">What did we build for you?</option>
-            <option>Website / Landing Page</option>
-            <option>Custom Web Application</option>
-            <option>CRM / Business Tool</option>
-            <option>AI Integration</option>
-            <option>Automation / API</option>
+            <option value="">Select a project type...</option>
+            <option>Website or landing page</option>
+            <option>Chrome extension</option>
             <option>Salesforce / OmniStudio</option>
+            <option>Web app or tool</option>
+            <option>API or integration</option>
             <option>Other</option>
           </select>
         </div>
         <div class="field">
           <label>Your Review</label>
-          <textarea id="reviewText" placeholder="Tell us about your experience working with Japps.ai — what we built, how it went, and what you'd tell someone considering working with us." style="min-height:130px;resize:vertical;"></textarea>
+          <textarea id="reviewText" placeholder="Tell me about your experience — what we built, how it went, and what you'd tell someone considering working together." style="min-height:130px;resize:vertical;"></textarea>
           <div style="display:flex;align-items:center;gap:0.8rem;margin-top:0.5rem;flex-wrap:wrap;">
-            <button type="button" onclick="polishReview(this)" style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.3);color:var(--accent);padding:0.45rem 1rem;border-radius:6px;font-size:0.82rem;font-weight:600;font-family:'Nunito',sans-serif;cursor:pointer;transition:all 0.2s;">✨ Polish with AI</button>
+            <button type="button" onclick="polishReview(this)" style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.3);color:var(--accent);padding:0.45rem 1rem;border-radius:6px;font-size:0.82rem;font-weight:600;font-family:'Nunito',sans-serif;cursor:pointer;transition:all 0.2s;">&#x2728; Polish with AI</button>
             <span id="polishStatus" style="font-size:0.78rem;color:var(--muted);display:none;"></span>
-            <button type="button" id="revertBtn" onclick="revertReview()" style="display:none;font-size:0.78rem;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;font-family:'Plus Jakarta Sans',sans-serif;">↩ Revert to original</button>
+            <button type="button" id="revertBtn" onclick="revertReview()" style="display:none;font-size:0.78rem;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;font-family:'Plus Jakarta Sans',sans-serif;">&#x21A9; Revert to original</button>
           </div>
         </div>
-        <button class="form-submit" type="button" onclick="handleReviewSubmit(this)">Submit Review →</button>
-        <p class="review-note">Reviews are submitted privately to our team. We'll reach out before publishing anything publicly. Questions? <a href="mailto:info@japps.ai">info@japps.ai</a></p>
+        <button class="form-submit" type="button" onclick="handleReviewSubmit(this)">Submit Review &rarr;</button>
+        <p class="review-note">Reviews are submitted privately to me. I'll reach out before publishing anything publicly. Questions? <a href="mailto:gsselle@japps.ai">gsselle@japps.ai</a></p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  <svg width="140" height="35" viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="gfoot" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#e8c96e"/></linearGradient></defs><rect x="0" y="0" width="80" height="80" rx="22" fill="url(#gfoot)"/><line x1="20" y1="22" x2="60" y2="22" stroke="#0a1428" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/><line x1="20" y1="58" x2="60" y2="58" stroke="#0a1428" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/><line x1="40" y1="22" x2="40" y2="58" stroke="#0a1428" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/><circle cx="20" cy="22" r="4.5" fill="#0a1428" opacity="0.45"/><circle cx="60" cy="22" r="4.5" fill="#0a1428" opacity="0.45"/><circle cx="20" cy="58" r="4.5" fill="#0a1428" opacity="0.45"/><circle cx="60" cy="58" r="4.5" fill="#0a1428" opacity="0.45"/><text x="40" y="42" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="34" font-weight="900" fill="#0a1428">J</text><text x="96" y="38" font-family="system-ui,sans-serif" font-size="38" font-weight="800" fill="#e8eaf0" letter-spacing="-1">Japps</text><text x="96" y="62" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#c9a84c" letter-spacing="4">.AI</text></svg>
-  <p>© 2025 Japps.ai. All rights reserved.</p>
+  <svg width="140" height="35" viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="gfoot" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#e8c96e"/></linearGradient></defs>
+    <rect x="0" y="0" width="80" height="80" rx="22" fill="url(#gfoot)"/>
+    <line x1="20" y1="22" x2="60" y2="22" stroke="#0a1428" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
+    <line x1="20" y1="58" x2="60" y2="58" stroke="#0a1428" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
+    <line x1="40" y1="22" x2="40" y2="58" stroke="#0a1428" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
+    <circle cx="20" cy="22" r="4.5" fill="#0a1428" opacity="0.45"/>
+    <circle cx="60" cy="22" r="4.5" fill="#0a1428" opacity="0.45"/>
+    <circle cx="20" cy="58" r="4.5" fill="#0a1428" opacity="0.45"/>
+    <circle cx="60" cy="58" r="4.5" fill="#0a1428" opacity="0.45"/>
+    <text x="40" y="42" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="34" font-weight="900" fill="#0a1428">J</text>
+    <text x="96" y="38" font-family="system-ui,sans-serif" font-size="38" font-weight="800" fill="#e8eaf0" letter-spacing="-1">Japps</text>
+    <text x="96" y="62" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#c9a84c" letter-spacing="4">.AI</text>
+  </svg>
+  <p>&copy; 2026 Japps.ai &middot; Built by Guisselle Selle</p>
   <div class="footer-links">
-    <a href="#services">Services</a>
-    <a href="#pricing">Pricing</a>
+    <a href="#what">What I Build</a>
+    <a href="#portfolio">Portfolio</a>
     <a href="#contact">Contact</a>
+    <a href="https://github.com/kodebus" target="_blank">GitHub</a>
   </div>
 </footer>
 
@@ -1561,7 +1191,7 @@
         body: JSON.stringify({ name, email, projectType: type, message })
       });
       if (res.ok) {
-        btn.textContent = '✓ Message Sent!';
+        btn.textContent = '&#x2713; Message Sent!';
         btn.style.background = 'linear-gradient(135deg, #b8972a, #e8c96e)';
         form.querySelector('input[type="text"]').value = '';
         form.querySelector('input[type="email"]').value = '';
