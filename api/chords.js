@@ -24,7 +24,7 @@ module.exports = async function handler(req, res) {
   const isFingerstyle = style === 'fingerstyle';
 
   const prompt = isFingerstyle
-    ? `You are an expert guitarist and music transcriber. Generate a fingerstyle guitar arrangement for:
+    ? `You are an expert guitarist and music transcriber with deep knowledge of song lyrics. Generate a fingerstyle guitar arrangement for the REAL, WELL-KNOWN song listed below. You must use the actual published lyrics — never invent or approximate them.
 Song: "${song.trim()}"${artist ? `\nArtist: "${artist.trim()}"` : ''}
 
 Return ONLY valid JSON (no markdown, no explanation) in this exact shape:
@@ -60,14 +60,14 @@ Return ONLY valid JSON (no markdown, no explanation) in this exact shape:
 }
 
 Rules:
-- "chords" field: full lyrics with inline chords using [Chord] before each word, separated by \\n for new lines. Use actual song lyrics.
+- "chords" field: REAL, ACCURATE lyrics to this specific song with inline chords using [Chord] before each word, separated by \n for new lines. CRITICAL: Use the actual published lyrics verbatim — do NOT invent, approximate, or paraphrase any lyrics. If you are not confident in the exact lyrics, write what you know accurately and use "..." for sections you are unsure of.
 - Include 2-3 verses and chorus at minimum.
 - chord_shapes: list every chord that appears in the song. fingers array is [e,B,G,D,A,E] from high to low string, 0=open, -1=muted, number=fret.
 - bpm: realistic tempo for this song.
 - capo: 0 if no capo needed, otherwise fret number.
 - tab_example: 6-line ASCII tab showing one measure of the fingerpicking pattern applied to the first chord.
 - pattern fingers legend: p=thumb, i=index, m=middle, a=ring.`
-    : `You are an expert guitarist and music transcriber. Generate a strumming chord chart for:
+    : `You are an expert guitarist and music transcriber with deep knowledge of song lyrics. Generate a strumming chord chart for the REAL, WELL-KNOWN song listed below. You must use the actual published lyrics — never invent or approximate them.
 Song: "${song.trim()}"${artist ? `\nArtist: "${artist.trim()}"` : ''}
 
 Return ONLY valid JSON (no markdown, no explanation) in this exact shape:
@@ -87,7 +87,7 @@ Return ONLY valid JSON (no markdown, no explanation) in this exact shape:
 }
 
 Rules:
-- "chords" field: full lyrics with inline chords using [Chord] before each word, separated by \\n for new lines. Use actual song lyrics.
+- "chords" field: REAL, ACCURATE lyrics to this specific song with inline chords using [Chord] before each word, separated by \n for new lines. CRITICAL: Use the actual published lyrics verbatim — do NOT invent, approximate, or paraphrase any lyrics. If you are not confident in the exact lyrics, write what you know accurately and use "..." for sections you are unsure of.
 - Include 2-3 verses and chorus at minimum.
 - chord_shapes: list every chord that appears. fingers array is [e,B,G,D,A,E] from high to low string, 0=open, -1=muted.
 - bpm: realistic tempo.
