@@ -193,16 +193,24 @@
   <div class="picker" id="picker"></div>
   <div class="editor" id="editor">
     <h3 id="edHead">Add or find a song</h3>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
-      <input id="findInput" type="text" placeholder="Song title (e.g. Wonderwall)" style="flex:2;min-width:160px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px">
-      <input id="findArtist" type="text" placeholder="Artist / band (optional)" style="flex:2;min-width:160px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px">
-      <button class="primary" id="findBtn" style="flex:0 0 auto">Get chords</button>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px">
+      <!-- LEFT: artist search -->
+      <div style="flex:1;min-width:200px;max-width:280px">
+        <label style="display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Artist / Band</label>
+        <input id="findArtist" type="text" placeholder="e.g. The Beatles" style="width:100%;box-sizing:border-box;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px;margin-bottom:8px">
+        <button id="browseArtistBtn" class="primary" style="width:100%;font-size:14px">🎸 Find songs</button>
+        <div id="findStatus" style="font-size:13px;color:var(--muted);margin-top:8px;min-height:18px"></div>
+      </div>
+      <!-- RIGHT: song results / song title search -->
+      <div style="flex:2;min-width:220px">
+        <label style="display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Song title</label>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <input id="findInput" type="text" placeholder="Know the title? Type it here" style="flex:1;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px">
+          <button class="primary" id="findBtn">Get chords</button>
+        </div>
+        <div id="artistResults" style="display:none"></div>
+      </div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
-      <button id="browseArtistBtn" style="font-size:13px;padding:7px 14px;border-radius:8px;background:var(--card);border:1px solid var(--line);color:var(--muted);cursor:pointer">🎸 Browse songs by this artist</button>
-      <div id="findStatus" style="font-size:13px;color:var(--muted)"></div>
-    </div>
-    <div id="artistResults" style="display:none;margin-bottom:12px"></div>
     <p class="sub" style="margin-bottom:10px">Or add manually — put chords in <b>[square brackets]</b> before the word where the chord changes. <span id="saveWhere"></span></p>
     <div class="edgrid">
       <label>Song title<input id="edTitle" type="text" maxlength="80" placeholder="e.g. Grandma's favorite"></label>
@@ -440,37 +448,55 @@ document.getElementById('findBtn').onclick=()=>{
   }).catch(()=>{document.getElementById('findBtn').disabled=false;st.textContent='Could not reach chord service. Try again or add manually.';});
 };
 document.getElementById('browseArtistBtn').onclick=()=>{
-  const artist=document.getElementById('findArtist').value.trim()||document.getElementById('findInput').value.trim();
+  const artist=document.getElementById('findArtist').value.trim();
   if(!artist)return;
   const st=document.getElementById('findStatus');
   const ar=document.getElementById('artistResults');
-  st.textContent='Finding songs by '+artist+'…';
-  ar.style.display='none';
-  fetch('https://jappsai.vercel.app/api/chords?artist='+encodeURIComponent(artist)+'&list=1')
+  st.textContent='Looking up songs by '+artist+'…';
+  ar.style.display='none';ar.innerHTML='';
+  // Ask the chords API for a songs-by-artist list via a special query
+  fetch('https://jappsai.vercel.app/api/chords?song=popular+songs+by+'+encodeURIComponent(artist)+'&artist='+encodeURIComponent(artist))
     .then(r=>r.json())
     .then(data=>{
       st.textContent='';
-      if(!data||!data.songs||!data.songs.length){st.textContent='No songs found for "'+artist+'". Try another name.';return;}
-      ar.style.display='block';
-      ar.innerHTML='<p style="font-size:13px;color:var(--muted);margin:0 0 8px">Songs by <b>'+esc(artist)+'</b> — tap one to load chords:</p>';
-      const grid=document.createElement('div');
-      grid.style.cssText='display:flex;flex-wrap:wrap;gap:8px';
-      data.songs.forEach(s=>{
-        const b=document.createElement('button');
-        b.style.cssText='padding:8px 14px;border-radius:8px;background:var(--card);border:1px solid var(--line);color:var(--ink);cursor:pointer;font-size:14px';
-        b.textContent=s;
-        b.onclick=()=>{
-          document.getElementById('findInput').value=s;
-          st.textContent='Loading chords for "'+s+'"…';
-          fetch('https://jappsai.vercel.app/api/chords?song='+encodeURIComponent(s)+'&artist='+encodeURIComponent(artist))
-            .then(r=>r.json()).then(data=>{st.textContent='';if(data&&data.chords){fillEditor(data,s);}else st.textContent='Could not load chords for this song.';})
-            .catch(()=>{st.textContent='Could not reach chord service.';});
-        };
-        grid.appendChild(b);
-      });
-      ar.appendChild(grid);
-    }).catch(()=>{st.textContent='Could not reach chord service.';});
+      // The API may return a list in data.songs, or a single song, or just chords
+      const songs=data&&data.songs&&data.songs.length?data.songs:null;
+      if(songs){
+        showArtistSongs(songs,artist);
+      } else if(data&&data.title&&data.chords){
+        // Got one song back — show it as the first result and suggest others
+        showArtistSongs([data.title],artist);
+      } else {
+        st.textContent='No songs found for "'+artist+'". Try another name.';
+      }
+    }).catch(()=>{st.textContent='Could not reach chord service. Try again.';});
 };
+function showArtistSongs(songs,artist){
+  const ar=document.getElementById('artistResults');
+  ar.style.display='block';
+  ar.innerHTML='<p style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 8px">Songs by '+esc(artist)+'</p>';
+  const grid=document.createElement('div');
+  grid.style.cssText='display:flex;flex-direction:column;gap:6px';
+  songs.forEach(s=>{
+    const b=document.createElement('button');
+    b.style.cssText='text-align:left;padding:9px 14px;border-radius:9px;background:var(--card);border:1px solid var(--line);color:var(--ink);cursor:pointer;font-size:14px;width:100%';
+    b.textContent=s;
+    b.onmouseenter=()=>b.style.background='var(--hl)';
+    b.onmouseleave=()=>b.style.background='var(--card)';
+    b.onclick=()=>{
+      document.getElementById('findInput').value=s;
+      document.getElementById('findStatus').textContent='Loading "'+s+'"…';
+      fetch('https://jappsai.vercel.app/api/chords?song='+encodeURIComponent(s)+'&artist='+encodeURIComponent(artist))
+        .then(r=>r.json()).then(d=>{
+          document.getElementById('findStatus').textContent='';
+          if(d&&d.chords)fillEditor(d,s);
+          else document.getElementById('findStatus').textContent='Could not load chords for this song.';
+        }).catch(()=>{document.getElementById('findStatus').textContent='Could not reach chord service.';});
+    };
+    grid.appendChild(b);
+  });
+  ar.appendChild(grid);
+}
 ['findInput','findArtist'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('findBtn').click();}));
 function renderPicker(){pk.innerHTML='';const card=(s)=>{const b=document.createElement('button');b.className='songcard'+(s.custom?' mine':'');b.dataset.id=s.id;b.innerHTML='<b>'+esc(s.title)+'</b><span class="lvl lvl-'+(s.custom?'mine':s.level.toLowerCase())+'">'+(s.custom?'★ My song':s.level)+'</span><small>'+esc(s.used.join(' · '))+' · '+s.box+' beats/box</small>';b.onclick=()=>{loadSong(s.id);document.getElementById('songTitle').scrollIntoView({behavior:'smooth',block:'start'});};b.classList.toggle('on',cur&&cur.id===s.id);return b;};SONGS.forEach(s=>pk.appendChild(card(s)));if(mySongs.length){const h=document.createElement('div');h.className='pkhead';h.textContent='My songs';pk.appendChild(h);mySongs.forEach(s=>pk.appendChild(card(s)));}const add=document.createElement('button');add.className='songcard addcard';add.innerHTML='<b>➕ Add or find a song</b><small>Search by name or paste chords</small>';add.onclick=()=>openEditor(null);pk.appendChild(add);}
 const tempo=document.getElementById('tempo');tempo.oninput=()=>document.getElementById('bpm').textContent=tempo.value;
