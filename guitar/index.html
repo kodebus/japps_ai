@@ -93,15 +93,27 @@
   .day.done{background:var(--hl);border-color:#67c7d6}
   .sndbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:#1a1a1a;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:18px;font-size:14px}
   #sndStatus{color:var(--muted);flex:1;min-width:200px}
-  .picker{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:18px}
-  .songcard{text-align:left;padding:12px 14px;border-radius:12px;display:flex;flex-direction:column;gap:4px}
-  .songcard b{font-family:Poppins,sans-serif;font-size:17px;line-height:1.2}
-  .songcard small{color:var(--muted);font-size:12px}
+  .picker{display:flex;flex-direction:column;gap:0;margin-bottom:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .pkfilter{display:flex;gap:8px;align-items:center;padding:8px 12px;background:var(--hl);border-bottom:1px solid var(--line)}
+  .pkfilter input{flex:1;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:14px}
+  .pkfilter input::placeholder{color:var(--muted)}
+  .pklist{display:flex;flex-direction:column}
+  .songrow{display:grid;grid-template-columns:1fr auto;align-items:center;padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--line);gap:4px 12px;background:var(--card);transition:background .12s}
+  .songrow:last-child{border-bottom:none}
+  .songrow:hover,.songrow.on{background:var(--hl)}
+  .songrow.on .sr-title{color:var(--accent);font-weight:700}
+  .sr-title{font-size:15px;font-weight:600;font-family:Poppins,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sr-meta{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px;grid-column:1/-1}
+  .sr-badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;padding:1px 7px;border-radius:20px;background:var(--hl);border:1px solid var(--line);white-space:nowrap}
+  .sr-badge.mine{background:#fff0e6;border-color:#f9c9a0;color:#b05000}
+  .pkhead-row{padding:6px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);background:var(--hl);border-bottom:1px solid var(--line);font-family:Poppins,sans-serif}
+  .addrow{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;color:var(--muted);font-size:14px;background:var(--card);transition:background .12s}
+  .addrow:hover{background:var(--hl);color:var(--ink)}
   .songcard.on{border-color:var(--accent);background:#fff5f6;box-shadow:0 0 0 2px #f9c9cd}
   .lvl{align-self:flex-start;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#e7f3ef;color:#2f7d6b}
   .lvl-easy{background:#fff1d6;color:#9a6312}.lvl-medium{background:#fde3d8;color:#b0451c}
   .songhead h3{font-family:Poppins,sans-serif;font-size:22px;margin:4px 0 2px}
-  .pkhead{grid-column:1/-1;font-family:Poppins,sans-serif;font-weight:700;font-size:17px;margin-top:6px}
+  .pkhead{font-family:Poppins,sans-serif;font-weight:700;font-size:17px;margin-top:6px}
   .addcard{border-style:dashed;border-width:2px;justify-content:center;background:#141414}
   .lvl-mine{background:#efe6fb;color:#6a3fb0}
   .linkbtn{border:none;background:none;color:var(--accent);font-weight:600;padding:0 4px;text-decoration:underline}
@@ -191,7 +203,10 @@
 <section id="song">
   <h2><span class="step">4</span>Pick a song</h2>
   <p class="sub">Tap a song to load it, then strum along. Use <b>Add or find a song</b> below to add any song from your library.</p>
-  <div class="picker" id="picker"></div>
+  <div class="picker" id="picker">
+    <div class="pkfilter"><input id="pkSearch" type="text" placeholder="🔍 Filter songs…" oninput="filterPicker(this.value)"></div>
+    <div class="pklist" id="pkList"></div>
+  </div>
   <div class="editor" id="editor">
     <h3 id="edHead">Add or find a song</h3>
     <!-- STEP 1: Artist search -->
@@ -520,11 +535,49 @@ document.getElementById('findArtist').addEventListener('input',function(){
       }).catch(()=>{});
   },400);
 });
-function renderPicker(){pk.innerHTML='';const card=(s)=>{const b=document.createElement('button');b.className='songcard'+(s.custom?' mine':'');b.dataset.id=s.id;b.innerHTML='<b>'+esc(s.title)+'</b><span class="lvl lvl-'+(s.custom?'mine':s.level.toLowerCase())+'">'+(s.custom?'★ My song':s.level)+'</span><small>'+esc(s.used.join(' · '))+' · '+s.box+' beats/box</small>'+(s.custom?'<span class="card-del" title="Delete">🗑</span>':'');b.onclick=()=>{loadSong(s.id);document.getElementById('songTitle').scrollIntoView({behavior:'smooth',block:'start'});};if(s.custom){const del=b.querySelector('.card-del');del.onclick=e=>{e.stopPropagation();if(!confirm('Delete "'+s.title+'"?'))return;mySongs=mySongs.filter(x=>x.id!==s.id);try{localStorage.setItem('gtrMySongs',JSON.stringify(mySongs));}catch(e2){}renderPicker();if(cur&&cur.id===s.id)loadSong(SONGS[0].id);};};b.classList.toggle('on',cur&&cur.id===s.id);return b;};SONGS.forEach(s=>pk.appendChild(card(s)));if(mySongs.length){const h=document.createElement('div');h.className='pkhead';h.textContent='My songs';pk.appendChild(h);mySongs.forEach(s=>pk.appendChild(card(s)));}const add=document.createElement('button');add.className='songcard addcard';add.innerHTML='<b>➕ Add or find a song</b><small>Search by name or paste chords</small>';add.onclick=()=>openEditor(null);pk.appendChild(add);}
+function artistFrom(s){if(s.custom)return'My song';const m=s.credit&&s.credit.match(/^([^(,]+)/);return m?m[1].trim():'';}
+function rhythmFrom(s){const sig=s.meter===3?'3/4 waltz':s.meter===6?'6/8':'4/4';return sig+' · '+s.tempo+' bpm';}
+function renderRow(s){
+  const row=document.createElement('div');
+  row.className='songrow'+(cur&&cur.id===s.id?' on':'');
+  row.dataset.id=s.id;
+  const artist=artistFrom(s);
+  const rhythm=rhythmFrom(s);
+  const chords=s.used.slice(0,5).join(' ');
+  row.innerHTML='<div class="sr-title">'+esc(s.title)+(s.custom?'':'')+'</div>'
+    +'<div style="display:flex;gap:6px;align-items:center;justify-content:flex-end">'
+    +(s.custom?'<span class="sr-badge mine">★ Mine</span>':'<span class="sr-badge">'+esc(s.level)+'</span>')
+    +(s.custom?'<button class="card-del" title="Delete" style="position:static;opacity:0.45;font-size:13px;padding:1px 5px">🗑</button>':'')
+    +'</div>'
+    +'<div class="sr-meta">'
+    +(artist?'<span>🎤 '+esc(artist)+'</span>':'')
+    +'<span>🎵 '+esc(rhythm)+'</span>'
+    +(chords?'<span>🎸 '+esc(chords)+'</span>':'')
+    +'</div>';
+  row.onclick=()=>{loadSong(s.id);document.getElementById('songTitle').scrollIntoView({behavior:'smooth',block:'start'});};
+  if(s.custom){row.querySelector('.card-del').onclick=e=>{e.stopPropagation();if(!confirm('Delete "'+s.title+'"?'))return;mySongs=mySongs.filter(x=>x.id!==s.id);try{localStorage.setItem('gtrMySongs',JSON.stringify(mySongs));}catch(e2){}renderPicker();if(cur&&cur.id===s.id)loadSong(SONGS[0].id);};}
+  return row;
+}
+function renderPicker(filter){
+  const list=document.getElementById('pkList');
+  if(!list)return;
+  list.innerHTML='';
+  const q=(filter||'').toLowerCase();
+  const all=[...SONGS,...mySongs].filter(s=>!q||s.title.toLowerCase().includes(q)||(s.credit||'').toLowerCase().includes(q)||(s.used||[]).join(' ').toLowerCase().includes(q));
+  all.sort((a,b)=>a.title.localeCompare(b.title));
+  if(!all.length){list.innerHTML='<div style="padding:14px;color:var(--muted);font-size:14px">No songs match.</div>';} 
+  else{all.forEach(s=>list.appendChild(renderRow(s)));}
+  const add=document.createElement('div');
+  add.className='addrow';
+  add.innerHTML='<span style="font-size:18px">➕</span><span>Add or find a song</span>';
+  add.onclick=()=>openEditor(null);
+  list.appendChild(add);
+}
+function filterPicker(v){renderPicker(v);}
 const tempo=document.getElementById('tempo');tempo.oninput=()=>document.getElementById('bpm').textContent=tempo.value;
 const mt=document.getElementById('mtempo');mt.oninput=()=>document.getElementById('mbpm').textContent=mt.value;
 function chordStrip(names){return names.map(n=>{const ch=chordInfo(n);return '<div class="mini" data-c="'+esc(n)+'"><b style="color:'+chordCol(n)+'">'+esc(n)+'</b>'+(ch?chordSVG(ch,chordCol(n)):'<p class="nodiag">No diagram yet.<br>Tap to hear it.</p>')+'</div>';}).join('');}
-function loadSong(id){stopSong();stopMel();cur=allSongs().find(s=>s.id===id)||SONGS[0];try{localStorage.setItem('gtrSong',cur.id)}catch(e){}[...pk.querySelectorAll('.songcard')].forEach(b=>b.classList.toggle('on',b.dataset.id===cur.id));document.getElementById('songTitle').textContent=cur.title;document.getElementById('songHow').innerHTML=cur.custom?'Your song. Each box gets <b>'+cur.box+'</b> strums. <button class="linkbtn" id="editCur">✏️ Edit</button>':cur.how;if(cur.custom)document.getElementById('editCur').onclick=()=>openEditor(cur);document.getElementById('songCredit').textContent=cur.credit||'';document.getElementById('melTitle').textContent=cur.title;tempo.value=cur.tempo;document.getElementById('bpm').textContent=cur.tempo;mt.value=Math.min(140,Math.round(cur.tempo*0.9));document.getElementById('mbpm').textContent=mt.value;document.getElementById('beat').innerHTML='<i></i>'.repeat(cur.box);mEl.innerHTML='';cur.boxes.forEach(([c,l],i)=>{const d=document.createElement('div');d.className='m';d.style.setProperty('--cc',chordCol(c));const same=i>0&&cur.boxes[i-1][0]===c;d.innerHTML='<div class="c '+(same?'same':'')+'">'+esc(c)+'</div><div class="l">'+esc(l)+'</div>';d.onclick=()=>strum(c,0,0.4);mEl.appendChild(d);});const sc=document.getElementById('songChords');sc.innerHTML=chordStrip(cur.used);sc.querySelectorAll('.mini').forEach(m=>m.onclick=()=>strum(m.dataset.c,0,0.4));buildTab();}
+function loadSong(id){stopSong();stopMel();cur=allSongs().find(s=>s.id===id)||SONGS[0];try{localStorage.setItem('gtrSong',cur.id)}catch(e){}[...document.querySelectorAll('.songrow')].forEach(b=>b.classList.toggle('on',b.dataset.id===cur.id));document.getElementById('songTitle').textContent=cur.title;document.getElementById('songHow').innerHTML=cur.custom?'Your song. Each box gets <b>'+cur.box+'</b> strums. <button class="linkbtn" id="editCur">✏️ Edit</button>':cur.how;if(cur.custom)document.getElementById('editCur').onclick=()=>openEditor(cur);document.getElementById('songCredit').textContent=cur.credit||'';document.getElementById('melTitle').textContent=cur.title;tempo.value=cur.tempo;document.getElementById('bpm').textContent=cur.tempo;mt.value=Math.min(140,Math.round(cur.tempo*0.9));document.getElementById('mbpm').textContent=mt.value;document.getElementById('beat').innerHTML='<i></i>'.repeat(cur.box);mEl.innerHTML='';cur.boxes.forEach(([c,l],i)=>{const d=document.createElement('div');d.className='m';d.style.setProperty('--cc',chordCol(c));const same=i>0&&cur.boxes[i-1][0]===c;d.innerHTML='<div class="c '+(same?'same':'')+'">'+esc(c)+'</div><div class="l">'+esc(l)+'</div>';d.onclick=()=>strum(c,0,0.4);mEl.appendChild(d);});const sc=document.getElementById('songChords');sc.innerHTML=chordStrip(cur.used);sc.querySelectorAll('.mini').forEach(m=>m.onclick=()=>strum(m.dataset.c,0,0.4));buildTab();}
 
 let songTimer=null,songIdx=0,songBeat=0;
 function stopSong(){clearInterval(songTimer);songTimer=null;document.getElementById('playSong').textContent='▶ Play along';[...mEl.querySelectorAll('.m')].forEach(m=>m.classList.remove('now'));[...document.getElementById('beat').children].forEach(b=>b.classList.remove('on'));}
