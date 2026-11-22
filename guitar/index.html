@@ -194,22 +194,23 @@
   <div class="picker" id="picker"></div>
   <div class="editor" id="editor">
     <h3 id="edHead">Add or find a song</h3>
-    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px">
-      <!-- LEFT: artist search -->
-      <div style="flex:1;min-width:200px;max-width:280px">
-        <label style="display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Artist / Band</label>
-        <input id="findArtist" type="text" placeholder="e.g. The Beatles" style="width:100%;box-sizing:border-box;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px;margin-bottom:8px">
-        <button id="browseArtistBtn" class="primary" style="width:100%;font-size:14px">🎸 Find songs</button>
-        <div id="findStatus" style="font-size:13px;color:var(--muted);margin-top:8px;min-height:18px"></div>
+    <!-- STEP 1: Artist search -->
+    <div style="margin-bottom:10px">
+      <label style="display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Step 1 — Search by artist or band</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input id="findArtist" type="text" placeholder="e.g. The Beatles, Taylor Swift, Oasis…" style="flex:1;min-width:180px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px">
+        <button id="browseArtistBtn" class="primary">🎸 Find songs</button>
       </div>
-      <!-- RIGHT: song results / song title search -->
-      <div style="flex:2;min-width:220px">
-        <label style="display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Song title</label>
-        <div style="display:flex;gap:8px;margin-bottom:8px">
-          <input id="findInput" type="text" placeholder="Know the title? Type it here" style="flex:1;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px">
-          <button class="primary" id="findBtn">Get chords</button>
-        </div>
-        <div id="artistResults" style="display:none"></div>
+      <div id="findStatus" style="font-size:13px;color:var(--muted);margin-top:8px;min-height:18px"></div>
+    </div>
+    <!-- STEP 2: Song list from artist (shown after search) -->
+    <div id="artistResults" style="display:none;margin-bottom:12px"></div>
+    <!-- STEP 3: Song title + Get Chords -->
+    <div style="margin-bottom:10px">
+      <label style="display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Step 2 — Confirm song &amp; get chords</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input id="findInput" type="text" placeholder="Song title auto-fills when you pick one above, or type it directly" style="flex:1;min-width:180px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px">
+        <button class="primary" id="findBtn">Get chords</button>
       </div>
     </div>
     <p class="sub" style="margin-bottom:10px">Or add manually — put chords in <b>[square brackets]</b> before the word where the chord changes. <span id="saveWhere"></span></p>
@@ -453,24 +454,27 @@ document.getElementById('browseArtistBtn').onclick=()=>{
   if(!artist)return;
   const st=document.getElementById('findStatus');
   const ar=document.getElementById('artistResults');
-  st.textContent='Looking up songs by '+artist+'…';
+  st.textContent='Finding songs by '+artist+'…';
   ar.style.display='none';ar.innerHTML='';
-  // Ask the chords API for a songs-by-artist list via a special query
-  fetch('https://jappsai.vercel.app/api/chords?song=popular+songs+by+'+encodeURIComponent(artist)+'&artist='+encodeURIComponent(artist))
-    .then(r=>r.json())
-    .then(data=>{
-      st.textContent='';
-      // The API may return a list in data.songs, or a single song, or just chords
-      const songs=data&&data.songs&&data.songs.length?data.songs:null;
-      if(songs){
-        showArtistSongs(songs,artist);
-      } else if(data&&data.title&&data.chords){
-        // Got one song back — show it as the first result and suggest others
-        showArtistSongs([data.title],artist);
-      } else {
-        st.textContent='No songs found for "'+artist+'". Try another name.';
+  // Fetch 8 songs in parallel using different slot queries
+  const slots=['hit 1','hit 2','hit 3','hit 4','hit 5','hit 6','hit 7','hit 8'];
+  const seen=new Set();
+  const fetches=slots.map((slot,i)=>
+    fetch('https://jappsai.vercel.app/api/chords?song='+encodeURIComponent(artist+' '+slot)+'&artist='+encodeURIComponent(artist))
+      .then(r=>r.json()).catch(()=>null)
+  );
+  Promise.all(fetches).then(results=>{
+    st.textContent='';
+    const songs=[];
+    results.forEach(d=>{
+      if(d&&d.title){
+        const key=d.title.toLowerCase().trim();
+        if(!seen.has(key)){seen.add(key);songs.push(d.title);}
       }
-    }).catch(()=>{st.textContent='Could not reach chord service. Try again.';});
+    });
+    if(!songs.length){st.textContent='No songs found for "'+artist+'". Try another name.';return;}
+    showArtistSongs(songs,artist);
+  }).catch(()=>{st.textContent='Could not reach chord service. Try again.';});
 };
 function showArtistSongs(songs,artist){
   const ar=document.getElementById('artistResults');
