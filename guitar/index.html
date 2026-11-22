@@ -478,7 +478,7 @@ renderPicker();const savedSong=localStorage.getItem('gtrSong');loadSong(savedSon
     try {
       const params = new URLSearchParams({ song, style });
       if (artist) params.set('artist', artist);
-      const res = await fetch('/api/chords?' + params.toString());
+      const res = await fetch('https://jappsai.vercel.app/api/chords?' + params.toString());
       const data = await res.json();
       if (!res.ok || data.error) { setStatus(data.error || 'Something went wrong.', true); return; }
       setStatus('');
