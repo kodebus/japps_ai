@@ -189,19 +189,16 @@
 </section>
 <section id="song">
   <h2><span class="step">4</span>Pick a song</h2>
-  <p class="sub">These songs use only your four chords. Tap a song to load it, press play, and strum along with the highlighted boxes. Tap <b>&#10133; Add your own song</b> to add any song.</p>
+  <p class="sub">Tap a song to load it, then strum along. Use <b>Add or find a song</b> below to add any song from your library.</p>
   <div class="picker" id="picker"></div>
-  <div class="finder" id="finder">
-    <h3 style="margin:18px 0 8px;font-size:16px;color:var(--muted)">🔍 Find any song</h3>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <input id="findInput" type="text" placeholder="e.g. Wonderwall, Hotel California…" style="flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px">
-      <button class="primary" id="findBtn" style="min-width:100px">Get chords</button>
-    </div>
-    <div id="findStatus" style="margin-top:8px;font-size:13px;color:var(--muted)"></div>
-  </div>
   <div class="editor" id="editor">
-    <h3 id="edHead">Add your own song</h3>
-    <p class="sub" style="margin-bottom:10px">Put chords in <b>[square brackets]</b> before the word where the chord changes. You can also paste a chord sheet with chords on the line above words. <span id="saveWhere"></span></p>
+    <h3 id="edHead">Add or find a song</h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+      <input id="findInput" type="text" placeholder="🔍 Search for a song to get chords automatically…" style="flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px">
+      <button class="primary" id="findBtn">Get chords</button>
+    </div>
+    <div id="findStatus" style="margin-bottom:8px;font-size:13px;color:var(--muted)"></div>
+    <p class="sub" style="margin-bottom:10px">Or add manually — put chords in <b>[square brackets]</b> before the word where the chord changes. <span id="saveWhere"></span></p>
     <div class="edgrid">
       <label>Song title<input id="edTitle" type="text" maxlength="80" placeholder="e.g. Grandma's favorite"></label>
       <label>Strums per box<select id="edBox"><option value="2">2</option><option value="3">3 (waltz)</option><option value="4" selected>4</option></select></label>
@@ -431,14 +428,14 @@ document.getElementById('findBtn').onclick=()=>{
       document.getElementById('edText').value=data.chords;
       document.getElementById('edBox').value=data.meter||4;
       document.getElementById('editor').classList.add('on');
-      document.getElementById('edHead').textContent='Add song: '+( data.title||q);
+      document.getElementById('edHead').textContent='Add or find a song';
       updatePreview&&updatePreview();
       document.getElementById('editor').scrollIntoView({behavior:'smooth',block:'start'});
     })
     .catch(e=>{document.getElementById('findBtn').disabled=false;st.textContent='Could not reach the chord service. Try again or add manually.';});
 };
 document.getElementById('findInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('findBtn').click();});
-function renderPicker(){pk.innerHTML='';const card=(s)=>{const b=document.createElement('button');b.className='songcard'+(s.custom?' mine':'');b.dataset.id=s.id;b.innerHTML='<b>'+esc(s.title)+'</b><span class="lvl lvl-'+(s.custom?'mine':s.level.toLowerCase())+'">'+(s.custom?'★ My song':s.level)+'</span><small>'+esc(s.used.join(' · '))+' · '+s.box+' beats/box</small>';b.onclick=()=>{loadSong(s.id);document.getElementById('songTitle').scrollIntoView({behavior:'smooth',block:'start'});};b.classList.toggle('on',cur&&cur.id===s.id);return b;};SONGS.forEach(s=>pk.appendChild(card(s)));if(mySongs.length){const h=document.createElement('div');h.className='pkhead';h.textContent='My songs';pk.appendChild(h);mySongs.forEach(s=>pk.appendChild(card(s)));}const add=document.createElement('button');add.className='songcard addcard';add.innerHTML='<b>➕ Add your own song</b><small>Paste or type lyrics with chords</small>';add.onclick=()=>openEditor(null);pk.appendChild(add);}
+function renderPicker(){pk.innerHTML='';const card=(s)=>{const b=document.createElement('button');b.className='songcard'+(s.custom?' mine':'');b.dataset.id=s.id;b.innerHTML='<b>'+esc(s.title)+'</b><span class="lvl lvl-'+(s.custom?'mine':s.level.toLowerCase())+'">'+(s.custom?'★ My song':s.level)+'</span><small>'+esc(s.used.join(' · '))+' · '+s.box+' beats/box</small>';b.onclick=()=>{loadSong(s.id);document.getElementById('songTitle').scrollIntoView({behavior:'smooth',block:'start'});};b.classList.toggle('on',cur&&cur.id===s.id);return b;};SONGS.forEach(s=>pk.appendChild(card(s)));if(mySongs.length){const h=document.createElement('div');h.className='pkhead';h.textContent='My songs';pk.appendChild(h);mySongs.forEach(s=>pk.appendChild(card(s)));}const add=document.createElement('button');add.className='songcard addcard';add.innerHTML='<b>➕ Add or find a song</b><small>Search by name or paste chords</small>';add.onclick=()=>openEditor(null);pk.appendChild(add);}
 const tempo=document.getElementById('tempo');tempo.oninput=()=>document.getElementById('bpm').textContent=tempo.value;
 const mt=document.getElementById('mtempo');mt.oninput=()=>document.getElementById('mbpm').textContent=mt.value;
 function chordStrip(names){return names.map(n=>{const ch=chordInfo(n);return '<div class="mini" data-c="'+esc(n)+'"><b style="color:'+chordCol(n)+'">'+esc(n)+'</b>'+(ch?chordSVG(ch,chordCol(n)):'<p class="nodiag">No diagram yet.<br>Tap to hear it.</p>')+'</div>';}).join('');}
