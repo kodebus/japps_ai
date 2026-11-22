@@ -461,6 +461,24 @@ renderPicker();const savedSong=localStorage.getItem('gtrSong');loadSong(savedSon
   const status = document.getElementById('findStatus');
   const preview = document.getElementById('findPreview');
 
+  // Restore last-used values
+  try {
+    const ls = JSON.parse(localStorage.getItem('gtrFindLast') || '{}');
+    if (ls.song) document.getElementById('findSong').value = ls.song;
+    if (ls.artist) document.getElementById('findArtist').value = ls.artist;
+    if (ls.style) document.getElementById('findStyle').value = ls.style;
+  } catch(e) {}
+
+  function saveInputs() {
+    try {
+      localStorage.setItem('gtrFindLast', JSON.stringify({
+        song: document.getElementById('findSong').value,
+        artist: document.getElementById('findArtist').value,
+        style: document.getElementById('findStyle').value
+      }));
+    } catch(e) {}
+  }
+
   function setStatus(msg, isErr) {
     status.textContent = msg;
     status.className = 'find-status' + (isErr ? ' err' : '');
@@ -473,6 +491,7 @@ renderPicker();const savedSong=localStorage.getItem('gtrSong');loadSong(savedSon
     const style = document.getElementById('findStyle').value;
     if (!song) { setStatus('Please enter a song name.', true); return; }
     btn.disabled = true;
+    saveInputs();
     setStatus('Searching for chords… ⏳');
     preview.hidden = true;
     try {
