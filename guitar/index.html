@@ -254,26 +254,7 @@
 </footer>
 <script>
 const SR=44100;let ctx=null,mode='auto',unlocked=false;
-let wafPlayer=null,wafFont=null,wafReady=false;
-const WAF_SCRIPT='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js';
-const WAF_FONT='https://surikov.github.io/webaudiofontdata/sound/0270_Stratocaster_sf2_file.js';
-function loadWAF(){
-  if(wafReady||document.querySelector('[data-waf]'))return;
-  const s1=document.createElement('script');s1.src=WAF_SCRIPT;s1.setAttribute('data-waf','1');
-  s1.onload=()=>{
-    const s2=document.createElement('script');s2.src=WAF_FONT;s2.setAttribute('data-waf','2');
-    s2.onload=()=>{
-      try{
-        wafPlayer=new WebAudioFontPlayer();
-        wafFont=window._tone_0270_Stratocaster_sf2_file;
-        if(wafFont&&ctx){wafPlayer.adjustPreset(ctx,wafFont);wafReady=true;setStatus('Electric guitar ready! 🎸',true);}
-      }catch(e){wafReady=false;setStatus('Guitar samples failed to load, using synth.',false);}
-    };
-    document.head.appendChild(s2);
-  };
-  s1.onerror=()=>setStatus('Could not load guitar samples (offline?), using synth.',false);
-  document.head.appendChild(s1);
-}
+/* no external samples — pure Web Audio synth */
 try{if(localStorage.getItem('gtrSoundMode')==='alt')mode='alt';}catch(e){}
 function setStatus(msg,ok){const s=document.getElementById('sndStatus');if(s){s.textContent=msg;s.style.color=ok?'#2f7d6b':'#b0451c';}}
 function ac(){
@@ -283,13 +264,22 @@ function ac(){
   return ctx;
 }
 const synthCache={};
-function synth(freq,dur=2.2){
+function synth(freq,dur=3.0){
   const key=freq.toFixed(2);if(synthCache[key])return synthCache[key];
   const len=Math.floor(SR*dur),d=new Float32Array(len),N=Math.round(SR/freq);
-  for(let i=0;i<N;i++)d[i]=Math.random()*2-1;
-  for(let i=1;i<N;i++)d[i]=0.5*(d[i]+d[i-1]);
-  const decay=freq<120?0.997:0.995;
-  for(let i=N;i<len;i++)d[i]=decay*0.5*(d[i-N]+d[i-N+1]);
+  // Karplus-Strong: pluck noise with pick brightness
+  const brightness=Math.min(1,freq/800);
+  for(let i=0;i<N;i++)d[i]=(Math.random()*2-1)*(1+brightness*0.5);
+  // Initial low-pass to shape pick tone (brighter for high strings)
+  const lp=0.3+brightness*0.4;
+  for(let i=1;i<N;i++)d[i]=d[i]*(1-lp)+d[i-1]*lp;
+  // Extended decay - guitar sustain varies by string
+  const decay=freq<100?0.9995:freq<200?0.9992:freq<400?0.9988:0.9982;
+  // Body resonance blend (adds warmth)
+  const body=freq<300?0.502:0.499;
+  for(let i=N;i<len;i++)d[i]=decay*(body*d[i-N]+(1-body)*d[i-N+1]);
+  // Soft clip for warmth
+  for(let i=0;i<len;i++)d[i]=Math.tanh(d[i]*1.2)*0.85;
   return synthCache[key]=d;
 }
 function silent(){return new Float32Array(2205);}
@@ -303,16 +293,8 @@ function wavURL(d){
   for(let i=0;i<n;i++){const s=Math.max(-1,Math.min(1,d[i]*0.9));v.setInt16(44+i*2,s*32767,true);}
   return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));
 }
-const freqToMidi=freq=>Math.round(69+12*Math.log2(freq/440));
 function pluck(freq,when=0,vol=0.5){
-  ac();loadWAF();
-  if(wafReady&&wafPlayer&&wafFont&&ctx&&mode!=='alt'){
-    try{
-      const midi=freqToMidi(freq);
-      wafPlayer.queueWaveTable(ctx,ctx.destination,wafFont,ctx.currentTime+when,midi,3.0,vol);
-      return;
-    }catch(e){/* fall through */}
-  }
+  ac();
   if(mode==='alt'){
     const key=freq.toFixed(2);const url=urlCache[key]||(urlCache[key]=wavURL(synth(freq)));
     const go=()=>{const a=new Audio(url);a.volume=Math.min(1,vol*1.6);a.play().catch(e=>setStatus('Browser blocked sound: '+e.name,false));};
