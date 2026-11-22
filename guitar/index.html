@@ -456,25 +456,14 @@ document.getElementById('browseArtistBtn').onclick=()=>{
   const ar=document.getElementById('artistResults');
   st.textContent='Finding songs by '+artist+'…';
   ar.style.display='none';ar.innerHTML='';
-  // Fetch 8 songs in parallel using different slot queries
-  const slots=['hit 1','hit 2','hit 3','hit 4','hit 5','hit 6','hit 7','hit 8'];
-  const seen=new Set();
-  const fetches=slots.map((slot,i)=>
-    fetch('https://jappsai.vercel.app/api/chords?song='+encodeURIComponent(artist+' '+slot)+'&artist='+encodeURIComponent(artist))
-      .then(r=>r.json()).catch(()=>null)
-  );
-  Promise.all(fetches).then(results=>{
-    st.textContent='';
-    const songs=[];
-    results.forEach(d=>{
-      if(d&&d.title){
-        const key=d.title.toLowerCase().trim();
-        if(!seen.has(key)){seen.add(key);songs.push(d.title);}
-      }
-    });
-    if(!songs.length){st.textContent='No songs found for "'+artist+'". Try another name.';return;}
-    showArtistSongs(songs,artist);
-  }).catch(()=>{st.textContent='Could not reach chord service. Try again.';});
+  // Call the dedicated songs-by-artist endpoint
+  fetch('https://jappsai.vercel.app/api/songs?artist='+encodeURIComponent(artist))
+    .then(r=>r.json())
+    .then(data=>{
+      st.textContent='';
+      if(!data||!data.songs||!data.songs.length){st.textContent='No songs found for "'+artist+'". Try another name.';return;}
+      showArtistSongs(data.songs,artist);
+    }).catch(()=>{st.textContent='Could not reach chord service. Try again.';});
 };
 function showArtistSongs(songs,artist){
   const ar=document.getElementById('artistResults');
