@@ -24,7 +24,7 @@ module.exports = async function handler(req, res) {
   const isFingerstyle = style === 'fingerstyle';
 
   const prompt = isFingerstyle
-    ? `You are an expert guitarist and music transcriber with deep knowledge of song lyrics. Generate a fingerstyle guitar arrangement for the REAL, WELL-KNOWN song listed below. You must use the actual published lyrics — never invent or approximate them.
+    ? `You are an expert guitarist. Generate a fingerstyle guitar arrangement for:
 Song: "${song.trim()}"${artist ? `\nArtist: "${artist.trim()}"` : ''}
 
 Return ONLY valid JSON (no markdown, no explanation) in this exact shape:
@@ -35,7 +35,7 @@ Return ONLY valid JSON (no markdown, no explanation) in this exact shape:
   "bpm": 120,
   "capo": 0,
   "time_signature": "4/4",
-  "chords": "[Am]Word [F]word [C]word [G]word\\n[Am]Next line [F]word [C]more [G]words",
+  "chords": "[Am]Verse 1 — paste your lyrics here\\n[F]— [C]— [G]—\\n[Am]Chorus — paste your lyrics here\\n[F]— [C]— [G]—",
   "fingerpicking_pattern": {
     "description": "p-i-m-a pattern — thumb plays bass, fingers arpeggiate treble strings",
     "pattern_name": "Travis Pick",
@@ -60,14 +60,13 @@ Return ONLY valid JSON (no markdown, no explanation) in this exact shape:
 }
 
 Rules:
-- "chords" field: REAL, ACCURATE lyrics to this specific song with inline chords using [Chord] before each word, separated by \n for new lines. CRITICAL: Use the actual published lyrics verbatim — do NOT invent, approximate, or paraphrase any lyrics. If you are not confident in the exact lyrics, write what you know accurately and use "..." for sections you are unsure of.
-- Include 2-3 verses and chorus at minimum.
-- chord_shapes: list every chord that appears in the song. fingers array is [e,B,G,D,A,E] from high to low string, 0=open, -1=muted, number=fret.
+- "chords" field: Show the chord progression section by section (Verse, Pre-Chorus, Chorus, Bridge, etc.) using [Chord] labels. Use placeholder text like "Verse 1 — paste your lyrics here" and "Chorus — paste your lyrics here" as the lyric text. The chord changes must reflect the REAL structure and chord changes of this actual song.
+- chord_shapes: list every chord that appears. fingers array is [e,B,G,D,A,E] from high to low string, 0=open, -1=muted, number=fret.
 - bpm: realistic tempo for this song.
 - capo: 0 if no capo needed, otherwise fret number.
 - tab_example: 6-line ASCII tab showing one measure of the fingerpicking pattern applied to the first chord.
 - pattern fingers legend: p=thumb, i=index, m=middle, a=ring.`
-    : `You are an expert guitarist and music transcriber with deep knowledge of song lyrics. Generate a strumming chord chart for the REAL, WELL-KNOWN song listed below. You must use the actual published lyrics — never invent or approximate them.
+    : `You are an expert guitarist. Generate a strumming chord chart for:
 Song: "${song.trim()}"${artist ? `\nArtist: "${artist.trim()}"` : ''}
 
 Return ONLY valid JSON (no markdown, no explanation) in this exact shape:
@@ -78,7 +77,7 @@ Return ONLY valid JSON (no markdown, no explanation) in this exact shape:
   "bpm": 120,
   "capo": 0,
   "time_signature": "4/4",
-  "chords": "[G]Word [D]word [Em]word [C]word\\n[G]Next line [D]word",
+  "chords": "[G]Verse 1 — paste your lyrics here\\n[D]— [Em]— [C]—\\n[G]Chorus — paste your lyrics here\\n[D]— [Em]— [C]—",
   "strumming_pattern": "D DU UDU",
   "chord_shapes": {
     "G": {"fret": 0, "fingers": [3,0,0,0,2,3], "barre": false},
@@ -87,8 +86,7 @@ Return ONLY valid JSON (no markdown, no explanation) in this exact shape:
 }
 
 Rules:
-- "chords" field: REAL, ACCURATE lyrics to this specific song with inline chords using [Chord] before each word, separated by \n for new lines. CRITICAL: Use the actual published lyrics verbatim — do NOT invent, approximate, or paraphrase any lyrics. If you are not confident in the exact lyrics, write what you know accurately and use "..." for sections you are unsure of.
-- Include 2-3 verses and chorus at minimum.
+- "chords" field: Show the chord progression section by section (Verse, Pre-Chorus, Chorus, Bridge, etc.) using [Chord] labels. Use placeholder text like "Verse 1 — paste your lyrics here" and "Chorus — paste your lyrics here" as the lyric text. The chord changes must reflect the REAL structure and chord changes of this actual song.
 - chord_shapes: list every chord that appears. fingers array is [e,B,G,D,A,E] from high to low string, 0=open, -1=muted.
 - bpm: realistic tempo.
 - capo: 0 if none, otherwise fret number.
