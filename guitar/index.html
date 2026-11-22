@@ -307,16 +307,17 @@ function ac(){
   return ctx;
 }
 const synthCache={};
-function synth(freq,dur=2.8){
+function synth(freq,dur=3.2){
   const key=freq.toFixed(2);if(synthCache[key])return synthCache[key];
   const len=Math.floor(SR*dur),d=new Float32Array(len),N=Math.round(SR/freq);
-  // Sharp electric-style excitation — bright noise burst, minimal smoothing
+  // Telecaster-style: bright excitation with a little pick attack
   for(let i=0;i<N;i++)d[i]=Math.random()*2-1;
-  // Single light smooth pass (keep brightness for electric tone)
-  for(let i=1;i<N;i++)d[i]=0.6*d[i]+0.4*d[i-1];
-  // Karplus-Strong — electric strings sustain well
-  const decay=freq<100?0.9994:freq<200?0.9991:freq<400?0.9986:0.9980;
-  for(let i=N;i<len;i++)d[i]=decay*0.502*(d[i-N]+d[i-N+1]);
+  // Very light averaging — Tele stays bright/twangy
+  for(let i=1;i<N;i++)d[i]=0.7*d[i]+0.3*d[i-1];
+  // Karplus-Strong — electric strings sustain longer than acoustic
+  // Higher decay = longer sustain (Tele characteristic)
+  const decay=freq<100?0.9997:freq<200?0.9995:freq<400?0.9992:0.9988;
+  for(let i=N;i<len;i++)d[i]=decay*0.5*(d[i-N]+d[i-N+1]);
   // Normalize
   let peak=0;for(let i=0;i<len;i++)if(Math.abs(d[i])>peak)peak=Math.abs(d[i]);
   if(peak>0)for(let i=0;i<len;i++)d[i]/=peak;
@@ -333,11 +334,6 @@ function wavURL(d){
   for(let i=0;i<n;i++){const s=Math.max(-1,Math.min(1,d[i]*0.9));v.setInt16(44+i*2,s*32767,true);}
   return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));
 }
-function makeDistortionCurve(amount=80){
-  const n=256,curve=new Float32Array(n);
-  for(let i=0;i<n;i++){const x=i*2/n-1;curve[i]=x*(Math.abs(x)*amount+1)/(x*x*(amount-1)+1);}
-  return curve;
-}
 function pluck(freq,when=0,vol=0.5){
   ac();
   if(mode==='alt'){
@@ -350,26 +346,16 @@ function pluck(freq,when=0,vol=0.5){
     const src=c.createBufferSource();
     src.buffer=pluckBuffer(freq);
 
-    // Pre-gain (drive into distortion)
-    const drive=c.createGain();
-    drive.gain.value=3.5;
+    // Clean Telecaster tone: cut mud below 100Hz, gentle high-end rolloff
+    const hp=c.createBiquadFilter();hp.type='highpass';hp.frequency.value=100;
+    // Tele brightness boost around 3kHz — the "twang" presence
+    const pres=c.createBiquadFilter();pres.type='peaking';pres.frequency.value=3000;pres.gain.value=4;pres.Q.value=0.8;
+    // Gentle lowpass to keep it musical, not harsh
+    const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=6000;
 
-    // Waveshaper distortion (overdrive)
-    const dist=c.createWaveShaper();
-    dist.curve=makeDistortionCurve(90);
-    dist.oversample='4x';
+    const out=c.createGain();out.gain.value=vol*0.7;
 
-    // Tone: highpass to cut mud, lowpass to tame harshness
-    const hp=c.createBiquadFilter();hp.type='highpass';hp.frequency.value=120;
-    const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=4800;
-    // Slight presence boost around 2.5kHz (electric guitar bite)
-    const mid=c.createBiquadFilter();mid.type='peaking';mid.frequency.value=2500;mid.gain.value=6;mid.Q.value=1.2;
-
-    // Output gain
-    const out=c.createGain();
-    out.gain.value=vol*0.4;
-
-    src.connect(drive).connect(dist).connect(hp).connect(mid).connect(lp).connect(out).connect(c.destination);
+    src.connect(hp).connect(pres).connect(lp).connect(out).connect(c.destination);
     src.start(t);
   }
   catch(e){mode='alt';pluck(freq,when,vol);}
