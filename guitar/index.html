@@ -307,31 +307,17 @@ function ac(){
   return ctx;
 }
 const synthCache={};
-function synth(freq,dur=3.5){
+function synth(freq,dur=2.8){
   const key=freq.toFixed(2);if(synthCache[key])return synthCache[key];
   const len=Math.floor(SR*dur),d=new Float32Array(len),N=Math.round(SR/freq);
-  // Warm initial excitation: mix noise with a soft sine-shaped burst
-  for(let i=0;i<N;i++){
-    const t=i/N;
-    const noise=(Math.random()*2-1);
-    const shape=Math.sin(Math.PI*t); // smooth attack/release envelope
-    d[i]=noise*0.7*shape + (Math.random()*2-1)*0.3;
-  }
-  // Pre-smooth the excitation buffer for warmth (reduce harsh highs)
-  for(let i=1;i<N-1;i++)d[i]=0.25*d[i-1]+0.5*d[i]+0.25*d[i+1];
-  // Karplus-Strong with tuned decay — lower strings ring longer
-  const decay=freq<100?0.9995:freq<200?0.9992:freq<400?0.9988:0.9982;
-  // Blend factor: 0.5 = standard KS, >0.5 = brighter, <0.5 = darker/warmer
-  const blend=freq<200?0.48:0.50;
-  for(let i=N;i<len;i++){
-    d[i]=decay*(blend*d[i-N]+(1-blend)*d[i-N+1]);
-  }
-  // Apply a soft body resonance — slight low-mid boost via comb
-  const bodyN=Math.round(SR/160); // ~160Hz body resonance
-  if(bodyN<len){
-    for(let i=bodyN;i<len;i++)d[i]+=d[i-bodyN]*0.012;
-  }
-  // Normalize to prevent clipping
+  // Sharp electric-style excitation — bright noise burst, minimal smoothing
+  for(let i=0;i<N;i++)d[i]=Math.random()*2-1;
+  // Single light smooth pass (keep brightness for electric tone)
+  for(let i=1;i<N;i++)d[i]=0.6*d[i]+0.4*d[i-1];
+  // Karplus-Strong — electric strings sustain well
+  const decay=freq<100?0.9994:freq<200?0.9991:freq<400?0.9986:0.9980;
+  for(let i=N;i<len;i++)d[i]=decay*0.502*(d[i-N]+d[i-N+1]);
+  // Normalize
   let peak=0;for(let i=0;i<len;i++)if(Math.abs(d[i])>peak)peak=Math.abs(d[i]);
   if(peak>0)for(let i=0;i<len;i++)d[i]/=peak;
   return synthCache[key]=d;
@@ -347,6 +333,11 @@ function wavURL(d){
   for(let i=0;i<n;i++){const s=Math.max(-1,Math.min(1,d[i]*0.9));v.setInt16(44+i*2,s*32767,true);}
   return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));
 }
+function makeDistortionCurve(amount=80){
+  const n=256,curve=new Float32Array(n);
+  for(let i=0;i<n;i++){const x=i*2/n-1;curve[i]=x*(Math.abs(x)*amount+1)/(x*x*(amount-1)+1);}
+  return curve;
+}
 function pluck(freq,when=0,vol=0.5){
   ac();
   if(mode==='alt'){
@@ -354,7 +345,33 @@ function pluck(freq,when=0,vol=0.5){
     const go=()=>{const a=new Audio(url);a.volume=Math.min(1,vol*1.6);a.play().catch(e=>setStatus('Browser blocked sound: '+e.name,false));};
     when>0?setTimeout(go,when*1000):go();return;
   }
-  try{const c=ctx,src=c.createBufferSource(),g=c.createGain();src.buffer=pluckBuffer(freq);g.gain.value=vol;src.connect(g).connect(c.destination);src.start(c.currentTime+when);}
+  try{
+    const c=ctx,t=c.currentTime+when;
+    const src=c.createBufferSource();
+    src.buffer=pluckBuffer(freq);
+
+    // Pre-gain (drive into distortion)
+    const drive=c.createGain();
+    drive.gain.value=3.5;
+
+    // Waveshaper distortion (overdrive)
+    const dist=c.createWaveShaper();
+    dist.curve=makeDistortionCurve(90);
+    dist.oversample='4x';
+
+    // Tone: highpass to cut mud, lowpass to tame harshness
+    const hp=c.createBiquadFilter();hp.type='highpass';hp.frequency.value=120;
+    const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=4800;
+    // Slight presence boost around 2.5kHz (electric guitar bite)
+    const mid=c.createBiquadFilter();mid.type='peaking';mid.frequency.value=2500;mid.gain.value=6;mid.Q.value=1.2;
+
+    // Output gain
+    const out=c.createGain();
+    out.gain.value=vol*0.4;
+
+    src.connect(drive).connect(dist).connect(hp).connect(mid).connect(lp).connect(out).connect(c.destination);
+    src.start(t);
+  }
   catch(e){mode='alt';pluck(freq,when,vol);}
 }
 function soundCheck(){
