@@ -98,6 +98,9 @@
   .songcard b{font-family:Poppins,sans-serif;font-size:17px;line-height:1.2}
   .songcard small{color:var(--muted);font-size:12px}
   .songcard.on{border-color:var(--accent);background:#fff5f6;box-shadow:0 0 0 2px #f9c9cd}
+  .songcard{position:relative}
+  .del-song{position:absolute;top:6px;right:8px;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;line-height:1;padding:2px 4px;border-radius:4px;opacity:0.5}
+  .del-song:hover{background:#fce4e4;color:#c0392b;opacity:1}
   .lvl{align-self:flex-start;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#e7f3ef;color:#2f7d6b}
   .lvl-easy{background:#fff1d6;color:#9a6312}.lvl-medium{background:#fde3d8;color:#b0451c}
   .songhead h3{font-family:Poppins,sans-serif;font-size:22px;margin:4px 0 2px}
@@ -432,12 +435,28 @@ function spot(m){let best=null;for(let s=0;s<6;s++){const f=m-OPEN[s];if(f>=0&&f
 let cur=SONGS[0],mySongs=[];
 const pk=document.getElementById('picker'),mEl=document.getElementById('measures');
 const allSongs=()=>SONGS.concat(mySongs);
-function renderPicker(){pk.innerHTML='';const card=(s)=>{const b=document.createElement('button');b.className='songcard'+(s.custom?' mine':'');b.dataset.id=s.id;b.innerHTML='<b>'+esc(s.title)+'</b><span class="lvl lvl-'+(s.custom?'mine':s.level.toLowerCase())+'">'+(s.custom?'★ My song':s.level)+'</span><small>'+esc(s.used.join(' · '))+' · '+s.box+' beats/box</small>';b.onclick=()=>{loadSong(s.id);document.getElementById('songTitle').scrollIntoView({behavior:'smooth',block:'start'});};b.classList.toggle('on',cur&&cur.id===s.id);return b;};SONGS.forEach(s=>pk.appendChild(card(s)));if(mySongs.length){const h=document.createElement('div');h.className='pkhead';h.textContent='My songs';pk.appendChild(h);mySongs.forEach(s=>pk.appendChild(card(s)));}const add=document.createElement('button');add.className='songcard addcard';add.innerHTML='<b>➕ Add your own song</b><small>Paste or type lyrics with chords</small>';add.onclick=()=>openEditor(null);pk.appendChild(add);}
+function renderPicker(){pk.innerHTML='';const card=(s)=>{const b=document.createElement('button');b.className='songcard'+(s.custom?' mine':'');b.dataset.id=s.id;b.innerHTML='<b>'+esc(s.title)+'</b><span class="lvl lvl-'+(s.custom?'mine':s.level.toLowerCase())+'">'+(s.custom?'★ My song':s.level)+'</span><small>'+esc(s.used.join(' · '))+' · '+s.box+' beats/box</small>';b.onclick=()=>{loadSong(s.id);document.getElementById('songTitle').scrollIntoView({behavior:'smooth',block:'start'});};b.classList.toggle('on',cur&&cur.id===s.id);return b;};SONGS.forEach(s=>pk.appendChild(card(s)));if(mySongs.length){const h=document.createElement('div');h.className='pkhead';h.textContent='My songs';pk.appendChild(h);mySongs.forEach(s=>{
+      const wrap=card(s);
+      const del=document.createElement('button');
+      del.className='del-song';del.title='Delete song';del.textContent='✕';
+      del.onclick=(e)=>{
+        e.stopPropagation();
+        if(confirm('Delete "'+s.title+'"? This cannot be undone.')){
+          mySongs=mySongs.filter(x=>x.id!==s.id);
+          try{localStorage.setItem('gtrMySongs',JSON.stringify(mySongs));}catch(e){}
+          renderPicker();
+          if(cur&&cur.id===s.id)loadSong(SONGS[0].id);
+        }
+      };
+      wrap.appendChild(del);
+      pk.appendChild(wrap);
+    });}const add=document.createElement('button');add.className='songcard addcard';add.innerHTML='<b>➕ Add your own song</b><small>Paste or type lyrics with chords</small>';add.onclick=()=>openEditor(null);pk.appendChild(add);}
 const tempo=document.getElementById('tempo');tempo.oninput=()=>document.getElementById('bpm').textContent=tempo.value;
 const mt=document.getElementById('mtempo');mt.oninput=()=>document.getElementById('mbpm').textContent=mt.value;
 function chordStrip(names){return names.map(n=>{const ch=chordInfo(n);return '<div class="mini" data-c="'+esc(n)+'"><b style="color:'+chordCol(n)+'">'+esc(n)+'</b>'+(ch?chordSVG(ch,chordCol(n)):'<p class="nodiag">No diagram yet.<br>Tap to hear it.</p>')+'</div>';}).join('');}
 function loadSong(id){const prevId=cur?cur.id:null;stopSong();stopMel();cur=allSongs().find(s=>s.id===id)||SONGS[0];const songChanged=cur.id!==prevId;try{localStorage.setItem('gtrSong',cur.id)}catch(e){}[...pk.querySelectorAll('.songcard')].forEach(b=>b.classList.toggle('on',b.dataset.id===cur.id));document.getElementById('songTitle').textContent=cur.title;document.getElementById('songHow').innerHTML=cur.custom?'Your song. Each box gets <b>'+cur.box+'</b> strums. <button class="linkbtn" id="editCur">✏️ Edit</button>':cur.how;if(cur.custom)document.getElementById('editCur').onclick=()=>openEditor(cur);document.getElementById('songCredit').textContent=cur.credit||'';
-  const sb=document.getElementById('sheetBtn');if(cur.sheet){sb.href=cur.sheet;sb.style.display='';}else{sb.style.display='none';}document.getElementById('melTitle').textContent=cur.title;if(songChanged){tempo.value=cur.tempo;document.getElementById('bpm').textContent=cur.tempo;}mt.value=Math.min(140,Math.round(cur.tempo*0.9));document.getElementById('mbpm').textContent=mt.value;document.getElementById('beat').innerHTML='<i></i>'.repeat(cur.box);mEl.innerHTML='';cur.boxes.forEach(([c,l],i)=>{const d=document.createElement('div');d.className='m';d.style.setProperty('--cc',chordCol(c));const same=i>0&&cur.boxes[i-1][0]===c;d.innerHTML='<div class="c '+(same?'same':'')+'">'+esc(c)+'</div><div class="l">'+esc(l)+'</div>';d.onclick=()=>strum(c,0,0.4);mEl.appendChild(d);});const sc=document.getElementById('songChords');sc.innerHTML=chordStrip(cur.used);sc.querySelectorAll('.mini').forEach(m=>m.onclick=()=>strum(m.dataset.c,0,0.4));buildTab();}
+  const sb=document.getElementById('sheetBtn');if(cur.sheet){sb.href=cur.sheet;sb.style.display='';}else{sb.style.display='none';}document.getElementById('melTitle').textContent=cur.title;
+  document.getElementById('melody').style.display=(cur.notes&&cur.notes.length)?'':'none';if(songChanged){tempo.value=cur.tempo;document.getElementById('bpm').textContent=cur.tempo;}mt.value=Math.min(140,Math.round(cur.tempo*0.9));document.getElementById('mbpm').textContent=mt.value;document.getElementById('beat').innerHTML='<i></i>'.repeat(cur.box);mEl.innerHTML='';cur.boxes.forEach(([c,l],i)=>{const d=document.createElement('div');d.className='m';d.style.setProperty('--cc',chordCol(c));const same=i>0&&cur.boxes[i-1][0]===c;d.innerHTML='<div class="c '+(same?'same':'')+'">'+esc(c)+'</div><div class="l">'+esc(l)+'</div>';d.onclick=()=>strum(c,0,0.4);mEl.appendChild(d);});const sc=document.getElementById('songChords');sc.innerHTML=chordStrip(cur.used);sc.querySelectorAll('.mini').forEach(m=>m.onclick=()=>strum(m.dataset.c,0,0.4));buildTab();}
 
 let songTimer=null,songIdx=0,songBeat=0;
 function stopSong(){clearInterval(songTimer);songTimer=null;document.getElementById('playSong').textContent='▶ Play along';[...mEl.querySelectorAll('.m')].forEach(m=>m.classList.remove('now'));[...document.getElementById('beat').children].forEach(b=>b.classList.remove('on'));}
