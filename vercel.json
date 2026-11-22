@@ -4,6 +4,10 @@
     "api/polish-review.js": {
       "memory": 256,
       "maxDuration": 10
+    },
+    "api/chords.js": {
+      "memory": 512,
+      "maxDuration": 30
     }
   }
 }

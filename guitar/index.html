@@ -142,6 +142,18 @@
 
     a.primary.ghost{background:var(--card);color:var(--accent2);border:1.5px solid var(--accent2);text-decoration:none;font-size:.82rem;padding:7px 14px;}
     a.primary.ghost:hover{background:var(--hl);}
+  
+  #find-song .find-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+  #find-song .find-row input{flex:1;min-width:140px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);font-size:.9rem;}
+  #find-song .find-row select{padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);font-size:.9rem;}
+  .find-status{margin-top:12px;font-size:.9rem;color:var(--accent2);}
+  .find-status.err{color:#e63946;}
+  .find-preview{margin-top:14px;background:var(--hl);border-radius:10px;padding:14px 16px;font-size:.88rem;}
+  .find-preview h4{margin:0 0 6px;font-size:1rem;}
+  .find-preview .fp-meta{color:var(--accent2);margin-bottom:8px;font-size:.82rem;}
+  .find-preview pre{background:var(--card);border-radius:8px;padding:10px;overflow-x:auto;font-size:.8rem;line-height:1.5;white-space:pre-wrap;}
+  .find-preview .fp-add{margin-top:10px;}
+
   </style>
 </head>
 <body>
@@ -189,6 +201,21 @@
   <p class="sub">Numbers in the dots = which finger (1=index, 2=middle, 3=ring, 4=pinky). <b>&#9675;</b> = open string, <b>&#10005;</b> = don't play. Tap a chord to hear it.</p>
   <div class="chords" id="chordList"></div>
   <div class="tip">&#128161; Start with <b>E minor</b> (just 2 fingers). Then practice <b>G &rarr; C &rarr; G &rarr; D</b> slowly. Clean switching beats speed every time.</div>
+</section>
+<section id="find-song">
+  <h2><span class="step" style="background:var(--accent2)">&#9834;</span>Find a song &amp; get the chord sheet</h2>
+  <p class="sub">Type any song and artist — the app will find the chords and add it to your song list below.</p>
+  <div class="find-row">
+    <input id="findSong" type="text" placeholder="Song name (e.g. Wonderwall)" maxlength="80" autocomplete="off">
+    <input id="findArtist" type="text" placeholder="Artist (optional)" maxlength="80" autocomplete="off">
+    <select id="findStyle">
+      <option value="fingerstyle">&#127928; Fingerstyle</option>
+      <option value="strumming">&#129304; Strumming</option>
+    </select>
+    <button class="primary" id="findBtn">&#9836; Generate</button>
+  </div>
+  <div id="findStatus" class="find-status" hidden></div>
+  <div id="findPreview" class="find-preview" hidden></div>
 </section>
 <section id="song">
   <h2><span class="step">4</span>Pick a song</h2>
@@ -427,6 +454,108 @@ const pl=document.getElementById('planList');
 PLAN.forEach((p,i)=>{const d=document.createElement('div');d.className='day';d.id='day'+i;const cb=document.createElement('input');cb.type='checkbox';cb.id='cb'+i;try{cb.checked=localStorage.getItem('gtrDay'+i)==='1';}catch(e){}cb.onchange=()=>{d.classList.toggle('done',cb.checked);try{localStorage.setItem('gtrDay'+i,cb.checked?'1':'0');}catch(e){}};if(cb.checked)d.classList.add('done');d.appendChild(cb);const t=document.createElement('div');t.innerHTML='<b>'+p.d+'</b><span>'+p.t+'</span>';d.appendChild(t);pl.appendChild(d);});
 try{const saved=JSON.parse(localStorage.getItem('gtrMySongs')||'[]');if(Array.isArray(saved)){mySongs=saved;mySongs.forEach(s=>{s.boxes=s.chords.split('|').map(x=>{const i=x.indexOf(' ');return[x.slice(0,i),x.slice(i+1).replace('~','—')];});s.used=[...new Set(s.boxes.map(b=>b[0]))];s.notes=[];});}}catch(e){}
 renderPicker();const savedSong=localStorage.getItem('gtrSong');loadSong(savedSong&&allSongs().find(s=>s.id===savedSong)?savedSong:SONGS[0].id);
+
+// === Find-a-Song via /api/chords ===
+(function(){
+  const btn = document.getElementById('findBtn');
+  const status = document.getElementById('findStatus');
+  const preview = document.getElementById('findPreview');
+
+  function setStatus(msg, isErr) {
+    status.textContent = msg;
+    status.className = 'find-status' + (isErr ? ' err' : '');
+    status.hidden = !msg;
+  }
+
+  btn.onclick = async () => {
+    const song = document.getElementById('findSong').value.trim();
+    const artist = document.getElementById('findArtist').value.trim();
+    const style = document.getElementById('findStyle').value;
+    if (!song) { setStatus('Please enter a song name.', true); return; }
+    btn.disabled = true;
+    setStatus('Searching for chords… ⏳');
+    preview.hidden = true;
+    try {
+      const params = new URLSearchParams({ song, style });
+      if (artist) params.set('artist', artist);
+      const res = await fetch('/api/chords?' + params.toString());
+      const data = await res.json();
+      if (!res.ok || data.error) { setStatus(data.error || 'Something went wrong.', true); return; }
+      setStatus('');
+      showPreview(data, style);
+    } catch(e) {
+      setStatus('Network error. Try again.', true);
+    } finally {
+      btn.disabled = false;
+    }
+  };
+
+  document.getElementById('findSong').onkeydown = (e) => { if (e.key === 'Enter') btn.click(); };
+  document.getElementById('findArtist').onkeydown = (e) => { if (e.key === 'Enter') btn.click(); };
+
+  function showPreview(data, style) {
+    const isFinger = style === 'fingerstyle';
+    const fp = data.fingerpicking_pattern || {};
+    const tab = fp.tab_example || '';
+    const pattern = fp.description || data.strumming_pattern || '';
+    const metaParts = [
+      data.key ? '🎵 Key: ' + data.key : '',
+      data.bpm ? '♪ ' + data.bpm + ' bpm' : '',
+      data.capo ? 'Capo ' + data.capo : '',
+      data.time_signature || ''
+    ].filter(Boolean);
+
+    preview.innerHTML =
+      '<h4>' + esc(data.title || 'Unknown') + (data.artist ? ' — ' + esc(data.artist) : '') + '</h4>' +
+      '<div class="fp-meta">' + metaParts.join(' · ') + '</div>' +
+      (pattern ? '<p><b>' + (isFinger ? fp.pattern_name || 'Fingerpicking' : 'Strumming') + ':</b> ' + esc(pattern) + '</p>' : '') +
+      (tab ? '<pre>' + esc(tab) + '</pre>' : '') +
+      '<div class="fp-add"><button class="primary" id="fpAddBtn">➕ Add to song list</button></div>';
+    preview.hidden = false;
+
+    document.getElementById('fpAddBtn').onclick = () => addGeneratedSong(data, style);
+  }
+
+  function addGeneratedSong(data, style) {
+    const rawText = (data.chords || '').replace(/\\n/g, '\n');
+    if (!rawText) { alert('No chord data returned.'); return; }
+    const boxes = parseLyrics(rawText).filter(([c]) => chordInfo(c) || theoryMidis(c));
+    if (!boxes.length) { alert('Could not parse chords from the response. Try a different song.'); return; }
+    const isFinger = style === 'fingerstyle';
+    const fp = data.fingerpicking_pattern || {};
+    const how = isFinger
+      ? (fp.pattern_name ? fp.pattern_name + ' — ' : '') + (fp.description || 'Fingerstyle')
+      : (data.strumming_pattern ? 'Strum: ' + data.strumming_pattern : 'Strumming');
+    const song = {
+      id: 'ai_' + Date.now(),
+      title: data.title || document.getElementById('findSong').value,
+      level: 'AI',
+      meter: 4,
+      box: 4,
+      tempo: data.bpm || 80,
+      custom: true,
+      rawText,
+      rawMel: '',
+      how,
+      credit: data.artist || '',
+      chords: boxes.map(([c,l]) => c + ' ' + l).join('|'),
+      melody: '',
+      style,
+      fingerpicking: fp
+    };
+    song.boxes = boxes.map(([c,l]) => [c, l.replace('~','—')]);
+    song.used = [...new Set(boxes.map(b => b[0]))];
+    song.notes = [];
+    mySongs.push(song);
+    try { localStorage.setItem('gtrMySongs', JSON.stringify(mySongs)); } catch(e) {}
+    renderPicker();
+    loadSong(song.id);
+    document.getElementById('findStatus').hidden = true;
+    document.getElementById('findPreview').hidden = true;
+    document.getElementById('song').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+})();
+
 </script>
 </body>
 </html>
