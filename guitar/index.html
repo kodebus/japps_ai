@@ -298,27 +298,43 @@
 </footer>
 <script>
 const SR=44100;let ctx=null,mode='auto',unlocked=false;
+// WebAudioFont real Stratocaster samples
+let wafPlayer=null,wafFont=null,wafReady=false;
+const WAF_SCRIPT='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js';
+const WAF_FONT='https://surikov.github.io/webaudiofontdata/sound/0270_Stratocaster_sf2_file.js';
+function loadWAF(){
+  if(wafReady||document.querySelector('[data-waf]'))return;
+  const s1=document.createElement('script');s1.src=WAF_SCRIPT;s1.setAttribute('data-waf','1');
+  s1.onload=()=>{
+    const s2=document.createElement('script');s2.src=WAF_FONT;s2.setAttribute('data-waf','2');
+    s2.onload=()=>{
+      try{
+        wafPlayer=new WebAudioFontPlayer();
+        wafFont=window._tone_0270_Stratocaster_sf2_file;
+        if(wafFont&&ctx){wafPlayer.adjustPreset(ctx,wafFont);wafReady=true;setStatus('Electric guitar loaded!',true);}
+      }catch(e){wafReady=false;}
+    };
+    document.head.appendChild(s2);
+  };
+  document.head.appendChild(s1);
+}
 try{if(localStorage.getItem('gtrSoundMode')==='alt')mode='alt';}catch(e){}
 function setStatus(msg,ok){const s=document.getElementById('sndStatus');if(s){s.textContent=msg;s.style.color=ok?'#2f7d6b':'#b0451c';}}
 function ac(){
   try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}
   try{if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state!=='running')ctx.resume().catch(()=>{});}catch(e){mode='alt';setStatus('Switched to backup sound mode.',true);}
-  if(!unlocked){unlocked=true;try{const a=new Audio(wavURL(silent()));a.play().catch(()=>{});}catch(e){}}
+  if(!unlocked){unlocked=true;loadWAF();}
   return ctx;
 }
+// Fallback synth (Karplus-Strong) used only if WAF not ready
 const synthCache={};
 function synth(freq,dur=3.2){
   const key=freq.toFixed(2);if(synthCache[key])return synthCache[key];
   const len=Math.floor(SR*dur),d=new Float32Array(len),N=Math.round(SR/freq);
-  // Telecaster-style: bright excitation with a little pick attack
   for(let i=0;i<N;i++)d[i]=Math.random()*2-1;
-  // Very light averaging — Tele stays bright/twangy
   for(let i=1;i<N;i++)d[i]=0.7*d[i]+0.3*d[i-1];
-  // Karplus-Strong — electric strings sustain longer than acoustic
-  // Higher decay = longer sustain (Tele characteristic)
   const decay=freq<100?0.9997:freq<200?0.9995:freq<400?0.9992:0.9988;
   for(let i=N;i<len;i++)d[i]=decay*0.5*(d[i-N]+d[i-N+1]);
-  // Normalize
   let peak=0;for(let i=0;i<len;i++)if(Math.abs(d[i])>peak)peak=Math.abs(d[i]);
   if(peak>0)for(let i=0;i<len;i++)d[i]/=peak;
   return synthCache[key]=d;
@@ -334,8 +350,18 @@ function wavURL(d){
   for(let i=0;i<n;i++){const s=Math.max(-1,Math.min(1,d[i]*0.9));v.setInt16(44+i*2,s*32767,true);}
   return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));
 }
+const freqToMidi=freq=>Math.round(69+12*Math.log2(freq/440));
 function pluck(freq,when=0,vol=0.5){
   ac();
+  // Use real Stratocaster samples if loaded
+  if(wafReady&&wafPlayer&&wafFont&&ctx&&mode!=='alt'){
+    try{
+      const midi=freqToMidi(freq);
+      const startTime=ctx.currentTime+when;
+      wafPlayer.queueWaveTable(ctx,ctx.destination,wafFont,startTime,midi,3.0,vol);
+      return;
+    }catch(e){/* fall through to synth */}
+  }
   if(mode==='alt'){
     const key=freq.toFixed(2);const url=urlCache[key]||(urlCache[key]=wavURL(synth(freq)));
     const go=()=>{const a=new Audio(url);a.volume=Math.min(1,vol*1.6);a.play().catch(e=>setStatus('Browser blocked sound: '+e.name,false));};
@@ -343,22 +369,12 @@ function pluck(freq,when=0,vol=0.5){
   }
   try{
     const c=ctx,t=c.currentTime+when;
-    const src=c.createBufferSource();
-    src.buffer=pluckBuffer(freq);
-
-    // Clean Telecaster tone: cut mud below 100Hz, gentle high-end rolloff
+    const src=c.createBufferSource();src.buffer=pluckBuffer(freq);
     const hp=c.createBiquadFilter();hp.type='highpass';hp.frequency.value=100;
-    // Tele brightness boost around 3kHz — the "twang" presence
-    const pres=c.createBiquadFilter();pres.type='peaking';pres.frequency.value=3000;pres.gain.value=4;pres.Q.value=0.8;
-    // Gentle lowpass to keep it musical, not harsh
     const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=6000;
-
     const out=c.createGain();out.gain.value=vol*0.7;
-
-    src.connect(hp).connect(pres).connect(lp).connect(out).connect(c.destination);
-    src.start(t);
-  }
-  catch(e){mode='alt';pluck(freq,when,vol);}
+    src.connect(hp).connect(lp).connect(out).connect(c.destination);src.start(t);
+  }catch(e){mode='alt';pluck(freq,when,vol);}
 }
 function soundCheck(){
   ac();[55,59,62,67].forEach((m,k)=>pluck(midiF(m),k*0.12,0.5));
