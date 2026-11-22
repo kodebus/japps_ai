@@ -638,6 +638,65 @@
     .stack-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
     footer { flex-direction: column; text-align: center; }
   }
+
+  /* ─── MOBILE BOTTOM NAV ─── */
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(6,13,31,0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    padding: 0.5rem 0 env(safe-area-inset-bottom, 0.5rem);
+  }
+
+  .mobile-nav-inner {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.6rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    padding: 0.4rem 0.5rem;
+    border-radius: 10px;
+    transition: color 0.2s;
+    min-width: 48px;
+  }
+
+  .mobile-nav-item .mn-icon { font-size: 1.1rem; line-height: 1; }
+
+  .mobile-nav-item:hover,
+  .mobile-nav-item.active { color: var(--accent); }
+
+  .mobile-nav-item.cta-btn {
+    background: var(--grad);
+    color: #000 !important;
+    padding: 0.45rem 1rem;
+    font-size: 0.65rem;
+    border-radius: 20px;
+    flex-direction: row;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-nav { display: block; }
+    body { padding-bottom: 68px; }
+  }
 </style>
 </head>
 <body>
@@ -1290,5 +1349,27 @@
     }
   }
 </script>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-nav" aria-label="Quick navigation">
+  <div class="mobile-nav-inner">
+    <a href="#services" class="mobile-nav-item">
+      <span class="mn-icon">⚙️</span>Services
+    </a>
+    <a href="#pricing" class="mobile-nav-item">
+      <span class="mn-icon">💰</span>Pricing
+    </a>
+    <a href="#portfolio" class="mobile-nav-item">
+      <span class="mn-icon">🗂️</span>Portfolio
+    </a>
+    <a href="#testimonials" class="mobile-nav-item">
+      <span class="mn-icon">⭐</span>Reviews
+    </a>
+    <a href="#contact" class="mobile-nav-item cta-btn">
+      <span class="mn-icon">✉️</span>Contact
+    </a>
+  </div>
+</nav>
+
 </body>
 </html>
