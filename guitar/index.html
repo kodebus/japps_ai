@@ -198,7 +198,7 @@
     <div style="margin-bottom:10px">
       <label style="display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Step 1 — Search by artist or band</label>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <input id="findArtist" type="text" placeholder="e.g. The Beatles, Taylor Swift, Oasis…" style="flex:1;min-width:180px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px">
+        <input id="findArtist" type="text" list="artistSuggestions" placeholder="e.g. The Beatles, Taylor Swift, Oasis…" style="flex:1;min-width:180px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px" autocomplete="off"><datalist id="artistSuggestions"></datalist>
         <button id="browseArtistBtn" class="primary">🎸 Find songs</button>
       </div>
       <div id="findStatus" style="font-size:13px;color:var(--muted);margin-top:8px;min-height:18px"></div>
@@ -209,7 +209,7 @@
     <div style="margin-bottom:10px">
       <label style="display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Step 2 — Confirm song &amp; get chords</label>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <input id="findInput" type="text" placeholder="Song title auto-fills when you pick one above, or type it directly" style="flex:1;min-width:180px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px">
+        <input id="findInput" type="text" list="songSuggestions" placeholder="Song title auto-fills when you pick one above, or type it directly" style="flex:1;min-width:180px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--hl);color:var(--ink);font-size:15px" autocomplete="off"><datalist id="songSuggestions"></datalist>
         <button class="primary" id="findBtn">Get chords</button>
       </div>
     </div>
@@ -492,6 +492,34 @@ function showArtistSongs(songs,artist){
   ar.appendChild(grid);
 }
 ['findInput','findArtist'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('findBtn').click();}));
+
+// Artist autocomplete — debounced, fires after 400ms pause
+let artistAcTimer=null;
+document.getElementById('findArtist').addEventListener('input',function(){
+  clearTimeout(artistAcTimer);
+  const q=this.value.trim();
+  if(q.length<2)return;
+  artistAcTimer=setTimeout(()=>{
+    fetch('https://jappsai.vercel.app/api/songs?artist='+encodeURIComponent(q))
+      .then(r=>r.json())
+      .then(data=>{
+        const dl=document.getElementById('artistSuggestions');
+        dl.innerHTML='';
+        // Populate song title datalist so user sees what songs exist for this artist
+        const sdl=document.getElementById('songSuggestions');
+        sdl.innerHTML='';
+        if(data&&data.songs){
+          data.songs.forEach(s=>{
+            const opt=document.createElement('option');
+            opt.value=s;
+            sdl.appendChild(opt);
+          });
+          // Also show the artist results panel automatically
+          showArtistSongs(data.songs,q);
+        }
+      }).catch(()=>{});
+  },400);
+});
 function renderPicker(){pk.innerHTML='';const card=(s)=>{const b=document.createElement('button');b.className='songcard'+(s.custom?' mine':'');b.dataset.id=s.id;b.innerHTML='<b>'+esc(s.title)+'</b><span class="lvl lvl-'+(s.custom?'mine':s.level.toLowerCase())+'">'+(s.custom?'★ My song':s.level)+'</span><small>'+esc(s.used.join(' · '))+' · '+s.box+' beats/box</small>'+(s.custom?'<span class="card-del" title="Delete">🗑</span>':'');b.onclick=()=>{loadSong(s.id);document.getElementById('songTitle').scrollIntoView({behavior:'smooth',block:'start'});};if(s.custom){const del=b.querySelector('.card-del');del.onclick=e=>{e.stopPropagation();if(!confirm('Delete "'+s.title+'"?'))return;mySongs=mySongs.filter(x=>x.id!==s.id);try{localStorage.setItem('gtrMySongs',JSON.stringify(mySongs));}catch(e2){}renderPicker();if(cur&&cur.id===s.id)loadSong(SONGS[0].id);};};b.classList.toggle('on',cur&&cur.id===s.id);return b;};SONGS.forEach(s=>pk.appendChild(card(s)));if(mySongs.length){const h=document.createElement('div');h.className='pkhead';h.textContent='My songs';pk.appendChild(h);mySongs.forEach(s=>pk.appendChild(card(s)));}const add=document.createElement('button');add.className='songcard addcard';add.innerHTML='<b>➕ Add or find a song</b><small>Search by name or paste chords</small>';add.onclick=()=>openEditor(null);pk.appendChild(add);}
 const tempo=document.getElementById('tempo');tempo.oninput=()=>document.getElementById('bpm').textContent=tempo.value;
 const mt=document.getElementById('mtempo');mt.oninput=()=>document.getElementById('mbpm').textContent=mt.value;
