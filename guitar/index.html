@@ -153,6 +153,13 @@
   .find-preview .fp-meta{color:var(--accent2);margin-bottom:8px;font-size:.82rem;}
   .find-preview pre{background:var(--card);border-radius:8px;padding:10px;overflow-x:auto;font-size:.8rem;line-height:1.5;white-space:pre-wrap;}
   .find-preview .fp-add{margin-top:10px;}
+  .find-song-wrap{position:relative;flex:1;min-width:140px;}
+  .find-song-wrap input{width:100%;box-sizing:border-box;}
+  .find-suggestions{position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.12);z-index:99;max-height:220px;overflow-y:auto;margin-top:3px;}
+  .find-suggestions div{padding:9px 14px;cursor:pointer;font-size:.88rem;border-bottom:1px solid var(--line);}
+  .find-suggestions div:last-child{border-bottom:none;}
+  .find-suggestions div:hover,.find-suggestions div.active{background:var(--hl);}
+  .find-suggestions b{color:var(--accent2);}
 
   </style>
 </head>
@@ -206,7 +213,10 @@
   <h2><span class="step" style="background:var(--accent2)">&#9834;</span>Find a song &amp; get the chord sheet</h2>
   <p class="sub">Type any song and artist — the app will find the chords and add it to your song list below.</p>
   <div class="find-row">
-    <input id="findSong" type="text" placeholder="Song name (e.g. Wonderwall)" maxlength="80" autocomplete="off">
+    <div class="find-song-wrap">
+      <input id="findSong" type="text" placeholder="Song name (e.g. Wonderwall)" maxlength="80" autocomplete="off">
+      <div id="findSuggestions" class="find-suggestions" hidden></div>
+    </div>
     <input id="findArtist" type="text" placeholder="Artist (optional)" maxlength="80" autocomplete="off">
     <select id="findStyle">
       <option value="fingerstyle">&#127928; Fingerstyle</option>
@@ -509,7 +519,105 @@ renderPicker();const savedSong=localStorage.getItem('gtrSong');loadSong(savedSon
     }
   };
 
-  document.getElementById('findSong').onkeydown = (e) => { if (e.key === 'Enter') btn.click(); };
+  // Song autocomplete
+  const POPULAR_SONGS = [
+    {song:'Wonderwall',artist:'Oasis'},{song:'Hotel California',artist:'Eagles'},
+    {song:'Stairway to Heaven',artist:'Led Zeppelin'},{song:'Bohemian Rhapsody',artist:'Queen'},
+    {song:'Smells Like Teen Spirit',artist:'Nirvana'},{song:'Yesterday',artist:'Beatles'},
+    {song:'Let It Be',artist:'Beatles'},{song:'Blackbird',artist:'Beatles'},
+    {song:'Here Comes the Sun',artist:'Beatles'},{song:'Come As You Are',artist:'Nirvana'},
+    {song:'Sweet Home Alabama',artist:'Lynyrd Skynyrd'},{song:'Free Fallin',artist:'Tom Petty'},
+    {song:'Fast Car',artist:'Tracy Chapman'},{song:'Jolene',artist:'Dolly Parton'},
+    {song:'Take Me to Church',artist:'Hozier'},{song:'Creep',artist:'Radiohead'},
+    {song:'No Woman No Cry',artist:'Bob Marley'},{song:'Redemption Song',artist:'Bob Marley'},
+    {song:'Knockin on Heavens Door',artist:'Bob Dylan'},{song:'Mr Tambourine Man',artist:'Bob Dylan'},
+    {song:'House of the Rising Sun',artist:'The Animals'},{song:'Wish You Were Here',artist:'Pink Floyd'},
+    {song:'Comfortably Numb',artist:'Pink Floyd'},{song:'More Than Words',artist:'Extreme'},
+    {song:'Tears in Heaven',artist:'Eric Clapton'},{song:'Layla',artist:'Eric Clapton'},
+    {song:'Hallelujah',artist:'Leonard Cohen'},{song:'The Sound of Silence',artist:'Simon and Garfunkel'},
+    {song:'Scarborough Fair',artist:'Simon and Garfunkel'},{song:'Country Roads',artist:'John Denver'},
+    {song:'Annie's Song',artist:'John Denver'},{song:'Dust in the Wind',artist:'Kansas'},
+    {song:'Love Runs Out',artist:'OneRepublic'},{song:'Counting Stars',artist:'OneRepublic'},
+    {song:'Moves Like Jagger',artist:'Maroon 5'},{song:'She Will Be Loved',artist:'Maroon 5'},
+    {song:'Sunday Morning',artist:'Maroon 5'},{song:'Sugar',artist:'Maroon 5'},
+    {song:'Perfect',artist:'Ed Sheeran'},{song:'Thinking Out Loud',artist:'Ed Sheeran'},
+    {song:'The A Team',artist:'Ed Sheeran'},{song:'Photograph',artist:'Ed Sheeran'},
+    {song:'Shape of You',artist:'Ed Sheeran'},{song:'Shallow',artist:'Lady Gaga'},
+    {song:'Let Her Go',artist:'Passenger'},{song:'Use Somebody',artist:'Kings of Leon'},
+    {song:'Sex on Fire',artist:'Kings of Leon'},{song:'Mr Brightside',artist:'The Killers'},
+    {song:'Human',artist:'The Killers'},{song:'Yellow',artist:'Coldplay'},
+    {song:'The Scientist',artist:'Coldplay'},{song:'Fix You',artist:'Coldplay'},
+    {song:'Clocks',artist:'Coldplay'},{song:'Viva la Vida',artist:'Coldplay'},
+    {song:'Iris',artist:'Goo Goo Dolls'},{song:'Name',artist:'Goo Goo Dolls'},
+    {song:'3AM',artist:'Matchbox 20'},{song:'Push',artist:'Matchbox 20'},
+    {song:'Glycerine',artist:'Bush'},{song:'Everlong',artist:'Foo Fighters'},
+    {song:'Times Like These',artist:'Foo Fighters'},{song:'Learn to Fly',artist:'Foo Fighters'},
+    {song:'What I Got',artist:'Sublime'},{song:'Santeria',artist:'Sublime'},
+    {song:'Under the Bridge',artist:'Red Hot Chili Peppers'},{song:'Californication',artist:'Red Hot Chili Peppers'},
+    {song:'Scar Tissue',artist:'Red Hot Chili Peppers'},{song:'Otherside',artist:'Red Hot Chili Peppers'},
+    {song:'Black',artist:'Pearl Jam'},{song:'Better Man',artist:'Pearl Jam'},
+    {song:'Neon',artist:'John Mayer'},{song:'Gravity',artist:'John Mayer'},
+    {song:'Slow Dancing in a Burning Room',artist:'John Mayer'},{song:'Helpless',artist:'Neil Young'},
+    {song:'Heart of Gold',artist:'Neil Young'},{song:'The Weight',artist:'The Band'},
+    {song:'Wagon Wheel',artist:'Darius Rucker'},{song:'Take Me Home Country Roads',artist:'John Denver'},
+    {song:'Riptide',artist:'Vance Joy'},{song:'Ho Hey',artist:'The Lumineers'},
+    {song:'Stubborn Love',artist:'The Lumineers'},{song:'I Will Wait',artist:'Mumford and Sons'},
+    {song:'Little Lion Man',artist:'Mumford and Sons'},{song:'Budapest',artist:'George Ezra'},
+    {song:'Barcelona',artist:'George Ezra'},{song:'Hold Back the River',artist:'James Bay'},
+    {song:'Let It Go',artist:'James Bay'},{song:'Somewhere Only We Know',artist:'Keane'},
+    {song:'Chasing Cars',artist:'Snow Patrol'},{song:'Run',artist:'Snow Patrol'},
+    {song:'Dakota',artist:'Stereophonics'},{song:'Have You Ever Seen the Rain',artist:'CCR'},
+    {song:'Bad Moon Rising',artist:'CCR'},{song:'Proud Mary',artist:'CCR'},
+    {song:'Brown Eyed Girl',artist:'Van Morrison'},{song:'Into the Mystic',artist:'Van Morrison'},
+    {song:'Fire and Rain',artist:'James Taylor'},{song:'Mexico',artist:'James Taylor'},
+    {song:'Babe I'm Gonna Leave You',artist:'Led Zeppelin'},{song:'Tangerine',artist:'Led Zeppelin'},
+    {song:'Blackbird',artist:'Beatles'},{song:'Classical Gas',artist:'Mason Williams'},
+    {song:'Clair de Lune',artist:'Debussy'},{song:'Canon in D',artist:'Pachelbel'},
+    {song:'Fur Elise',artist:'Beethoven'},{song:'Romance',artist:'Anonymous Spanish'},
+    {song:'Asturias',artist:'Isaac Albeniz'},{song:'Recuerdos de la Alhambra',artist:'Francisco Tarrega'}
+  ];
+
+  const sugBox = document.getElementById('findSuggestions');
+  const songInput = document.getElementById('findSong');
+  let activeIdx = -1;
+
+  function showSuggestions(val) {
+    if (!val) { sugBox.hidden = true; return; }
+    const q = val.toLowerCase();
+    const matches = POPULAR_SONGS.filter(s =>
+      s.song.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q)
+    ).slice(0, 8);
+    if (!matches.length) { sugBox.hidden = true; return; }
+    activeIdx = -1;
+    sugBox.innerHTML = matches.map((s, i) => {
+      const hl = (str) => str.replace(new RegExp('(' + val.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi'), '<b>$1</b>');
+      return '<div data-i="' + i + '" data-song="' + s.song.replace(/"/g,'&quot;') + '" data-artist="' + s.artist.replace(/"/g,'&quot;') + '">' + hl(s.song) + ' <span style="opacity:.6">— ' + hl(s.artist) + '</span></div>';
+    }).join('');
+    sugBox.hidden = false;
+    sugBox.querySelectorAll('div').forEach(d => {
+      d.onmousedown = (e) => {
+        e.preventDefault();
+        songInput.value = d.dataset.song;
+        document.getElementById('findArtist').value = d.dataset.artist;
+        sugBox.hidden = true;
+      };
+    });
+  }
+
+  songInput.oninput = () => showSuggestions(songInput.value.trim());
+  songInput.onblur = () => setTimeout(() => { sugBox.hidden = true; }, 150);
+  songInput.onfocus = () => showSuggestions(songInput.value.trim());
+
+  document.getElementById('findSong').onkeydown = (e) => {
+    const items = sugBox.querySelectorAll('div');
+    if (!sugBox.hidden && items.length) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); activeIdx = Math.min(activeIdx+1, items.length-1); items.forEach((d,i) => d.classList.toggle('active', i===activeIdx)); return; }
+      if (e.key === 'ArrowUp') { e.preventDefault(); activeIdx = Math.max(activeIdx-1, 0); items.forEach((d,i) => d.classList.toggle('active', i===activeIdx)); return; }
+      if (e.key === 'Enter' && activeIdx >= 0) { e.preventDefault(); items[activeIdx].onmousedown(e); return; }
+      if (e.key === 'Escape') { sugBox.hidden = true; return; }
+    }
+    if (e.key === 'Enter') btn.click();
+  };
   document.getElementById('findArtist').onkeydown = (e) => { if (e.key === 'Enter') btn.click(); };
 
   function showPreview(data, style) {
