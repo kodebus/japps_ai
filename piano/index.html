@@ -403,14 +403,18 @@ document.getElementById('artistInput').addEventListener('input', function() {
     fetch(API + '/songs?artist=' + encodeURIComponent(q))
       .then(function(r){ return r.json(); })
       .then(function(data) {
-        // Populate song datalist suggestions
-        var dl = document.getElementById('artistSuggestions');
-        dl.innerHTML = '';
-        // Auto-show songs if we got results
         if (data && data.songs && data.songs.length) {
           songs = data.songs;
           artistName = q;
-          loadSongs(q);
+          // Populate the <select> dropdown
+          var sel = document.getElementById('songSelect');
+          sel.innerHTML = '<option value="">— select a song —</option>';
+          data.songs.forEach(function(s){
+            var o = document.createElement('option');
+            o.value = s; o.textContent = s;
+            sel.appendChild(o);
+          });
+          document.getElementById('songSection').style.display = 'block';
         }
       }).catch(function(){});
   }, 400);
