@@ -96,18 +96,6 @@
   .spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
   @keyframes spin{to{transform:rotate(360deg)}}
 
-  .editor-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;padding:20px;overflow-y:auto}
-  .editor-overlay.on{display:flex;align-items:flex-start;justify-content:center}
-  .editor-box{background:var(--card);border:2px solid var(--gold);border-radius:16px;padding:24px 22px 28px;width:100%;max-width:520px;margin-top:40px}
-  .editor-box h3{font-family:'Playfair Display',serif;color:var(--ivory);margin:0 0 16px}
-  .editor-box label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px;margin-top:12px}
-  .editor-box input,.editor-box textarea{font:inherit;width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid var(--line);background:#0d0d1a;color:var(--ink);font-size:14px;outline:none;resize:vertical}
-  .editor-box input:focus,.editor-box textarea:focus{border-color:var(--gold)}
-  .editor-box textarea{min-height:90px}
-  .editor-hint{font-size:12px;color:var(--muted);margin-top:4px}
-  .editor-btns{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-  .danger{background:#2a0f0f;border-color:#6a2020;color:#e07070}
-  .danger:hover{background:#3a1515}
   .play-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
   .tempo-wrap{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
   .tempo-wrap input[type=range]{width:90px;accent-color:var(--gold)}
@@ -139,18 +127,18 @@
 <main>
   <section id="find">
     <h2><span class="step">1</span> Find a Song</h2>
-    <p class="sub">Enter an artist name to browse their songs</p>
-    <div class="row" style="margin-bottom:12px">
-      <input type="text" id="artistInput" placeholder="e.g. Coldplay, Beethoven, Billie Eilish" style="flex:1;min-width:200px" autocomplete="off" list="artistSuggestions"><datalist id="artistSuggestions"></datalist>
-      <button class="primary" onclick="loadSongs()">Search</button>
-    </div>
-    <div id="songSection" style="display:block">
-      <div class="songlist">
-        <div class="pkfilter">
-          <input type="text" id="filterInput" placeholder="Filter songs..." oninput="filterSongs()">
-        </div>
-        <div id="songItems"></div>
+    <p class="sub">Type an artist, then pick a song</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:4px">
+      <input type="text" id="artistInput" placeholder="Artist — e.g. Coldplay, Beethoven, Billie Eilish" autocomplete="off" list="artistSuggestions"><datalist id="artistSuggestions"></datalist>
+      <div id="songSection" style="display:none">
+        <select id="songSelect" style="font:inherit;width:100%;padding:11px 16px;border-radius:10px;border:1.5px solid var(--line);background:#0d0d1a;color:var(--ink);font-size:15px;outline:none;cursor:pointer;min-height:44px">
+          <option value="">— select a song —</option>
+        </select>
       </div>
+    </div>
+    <div id="mySongsSection" style="margin-top:16px;display:none">
+      <div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">My Saved Songs</div>
+      <div id="mySongsList"></div>
     </div>
   </section>
   <section id="keyboard">
@@ -160,6 +148,7 @@
       <div class="song-header" id="songHeader"></div>
       <div class="progression-row" id="progressionRow" style="display:none"></div>
       <div class="play-row" id="playRow" style="display:none"><button class="primary" id="playSongBtn">&#9654; Play Along</button><div class="tempo-wrap"><span>Tempo</span><input type="range" id="tempoSlider" min="40" max="200" value="80"><span id="tempoVal">80</span> BPM</div></div>
+      <div id="saveRow" style="display:none;margin-bottom:12px"><button id="saveSongBtn" style="background:#111120;border:1.5px solid var(--gold);color:var(--gold);border-radius:10px;padding:9px 18px;font:inherit;cursor:pointer;font-size:14px;font-weight:600">&#9733; Save to My Songs</button><span id="saveStatus" style="font-size:13px;color:var(--muted);margin-left:10px"></span></div>
       <div class="keyboard-wrap"><div class="keyboard" id="piano"></div></div>
       <div class="finger-tip" id="fingerTip"></div>
     </div>
@@ -181,6 +170,7 @@
   <section id="tips">
     <h2><span class="step">4</span> Playing Tips</h2>
     <p class="sub">AI-generated tips specific to this song</p>
+    <div id="lyricsBox" style="display:none;white-space:pre-wrap;font-size:14px;line-height:1.9;color:var(--accent2);background:#0f0d1e;border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px"></div>
     <div id="tipsBox" class="tips-box" style="display:none"></div>
     <div id="tipsEmpty" class="empty-state">
       <div class="empty-icon">&#128161;</div>
@@ -188,31 +178,6 @@
     </div>
   </section>
 
-<!-- Song Editor Modal -->
-<div class="editor-overlay" id="editorOverlay">
-  <div class="editor-box">
-    <h3 id="edHead">Add My Song</h3>
-    <label>Song Title</label>
-    <input type="text" id="edTitle" placeholder="e.g. Clocks">
-    <label>Artist</label>
-    <input type="text" id="edArtist" placeholder="e.g. Coldplay">
-    <label>Chords (comma-separated)</label>
-    <textarea id="edChords" placeholder="e.g. Am, F, C, G"></textarea>
-    <div class="editor-hint">Use chord names like C, Am, F#m, G7, Dmaj7</div>
-    <label>Lyrics (optional)</label>
-    <textarea id="edLyrics" placeholder="Paste the song lyrics here..." style="min-height:120px"></textarea>
-    <label>Beats per chord</label>
-    <input type="number" id="edBeats" value="4" min="1" max="8">
-    <label>Tempo (BPM)</label>
-    <input type="number" id="edTempo" value="80" min="30" max="220">
-    <div id="edStatus" style="color:#e07070;font-size:13px;margin-top:8px"></div>
-    <div class="editor-btns">
-      <button class="primary" id="edSave">Save Song</button>
-      <button id="edCancel">Cancel</button>
-      <button class="danger" id="edDelete" style="display:none">Delete</button>
-    </div>
-  </div>
-</div>
 </main>
 <footer>
   <p>Ivory &middot; <a href="privacy.html">Privacy Policy</a> &middot; Powered by <a href="https://japps.ai">Japps.ai</a></p>
@@ -334,21 +299,11 @@ function renderSongs(list){
     html+='<div class="songitem" data-s="'+s.replace(/"/g,'&quot;')+'"><span class="note-icon">'+icons[i%icons.length]+'</span><span class="song-name">'+s+'</span><span class="arrow">&#8250;</span></div>';
   });
   el.innerHTML=html;
-  var add=document.createElement('div');add.className='addrow';
-  add.innerHTML='<span>&#10133;</span><span>Add my own song</span>';
-  add.addEventListener('click',function(){openEditor(null);});
-  el.appendChild(add);
-  el.querySelectorAll('.songitem[data-s]').forEach(function(item){item.addEventListener('click',function(){loadChords(this.dataset.s);});});
-  el.querySelectorAll('.songitem[data-custom]').forEach(function(item){
-    item.addEventListener('click',function(e){if(e.target.classList.contains('edit-btn'))return;loadCustomSong(this.dataset.custom);});
-  });
-  el.querySelectorAll('.edit-btn').forEach(function(btn){
-    btn.addEventListener('click',function(e){e.stopPropagation();openEditor(mySongs.find(function(m){return m.id===btn.dataset.id;}));});
-  });
 }
 
 function filterSongs(){var q=document.getElementById('filterInput').value.toLowerCase();renderSongs(q?songs.filter(function(s){return s.toLowerCase().indexOf(q)>=0;}):songs);}
 document.getElementById('artistInput').addEventListener('keydown',function(e){if(e.key==='Enter')loadSongs();});
+document.getElementById('songSelect').addEventListener('change',function(){if(this.value)loadChords(this.value);});
 
 function loadChords(song){
   document.getElementById('kbSub').textContent='Loading chords for "'+song+'"...';
@@ -390,6 +345,20 @@ function renderResult(d){
   document.getElementById('tempoSlider').value=Math.min(200,Math.max(40,bpm));
   document.getElementById('tempoVal').textContent=document.getElementById('tempoSlider').value;
   wirePlayBtn();
+  // Save button
+  document.getElementById('saveRow').style.display='block';
+  document.getElementById('saveStatus').textContent=mySongs.find(function(m){return m.title===d.song;})?' ✓ Already saved':'';
+  var sb=document.getElementById('saveSongBtn');
+  var nsb=sb.cloneNode(true);sb.parentNode.replaceChild(nsb,sb);
+  nsb.addEventListener('click',function(){
+    if(mySongs.find(function(m){return m.title===d.song;})){document.getElementById('saveStatus').textContent='✓ Already saved';return;}
+    var chords=(d.chords||[]).map(function(c){return c.name;});
+    var song={id:'my_'+Date.now(),title:d.song,artist:d.artist||artistName,chords:chords,beats:4,tempo:bpm,lyrics:''};
+    mySongs.push(song);
+    try{localStorage.setItem('ivoryMySongs',JSON.stringify(mySongs));}catch(e){}
+    document.getElementById('saveStatus').textContent='✓ Saved!';
+    renderMySongs();
+  });
 }
 
 function renderGrid(chords){
@@ -441,8 +410,7 @@ document.getElementById('artistInput').addEventListener('input', function() {
         if (data && data.songs && data.songs.length) {
           songs = data.songs;
           artistName = q;
-          document.getElementById('songSection').style.display = 'block';
-          renderSongs(songs);
+          loadSongs(q);
         }
       }).catch(function(){});
   }, 400);
@@ -463,47 +431,7 @@ var CHORD_NOTES={
 };
 function chordToNotes(name){return CHORD_NOTES[name]||CHORD_NOTES[name.replace(/[0-9]/g,'')]||[];}
 
-function openEditor(song){
-  editingId=song?song.id:null;
-  document.getElementById('edHead').textContent=song?'Edit Song':'Add My Song';
-  document.getElementById('edTitle').value=song?song.title:'';
-  document.getElementById('edArtist').value=song?(song.artist||''):'';
-  document.getElementById('edChords').value=song?(song.chords||[]).join(', '):'';
-  document.getElementById('edLyrics').value=song?(song.lyrics||''):'';
-  document.getElementById('edBeats').value=song?(song.beats||4):4;
-  document.getElementById('edTempo').value=song?(song.tempo||80):80;
-  document.getElementById('edDelete').style.display=song?'':'none';
-  document.getElementById('edStatus').textContent='';
-  document.getElementById('editorOverlay').classList.add('on');
-}
-document.getElementById('edCancel').addEventListener('click',function(){document.getElementById('editorOverlay').classList.remove('on');});
-document.getElementById('editorOverlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('on');});
-document.getElementById('edSave').addEventListener('click',function(){
-  var title=document.getElementById('edTitle').value.trim();
-  var artist=document.getElementById('edArtist').value.trim();
-  var chStr=document.getElementById('edChords').value.trim();
-  var beats=parseInt(document.getElementById('edBeats').value)||4;
-  var tempo=parseInt(document.getElementById('edTempo').value)||80;
-  if(!title){document.getElementById('edStatus').textContent='Please enter a song title.';return;}
-  if(!chStr){document.getElementById('edStatus').textContent='Please enter at least one chord.';return;}
-  var chords=chStr.split(/[,\n]+/).map(function(c){return c.trim();}).filter(Boolean);
-  var lyrics=document.getElementById('edLyrics').value.trim();
-  var song={id:editingId||('my_'+Date.now()),title:title,artist:artist,chords:chords,beats:beats,tempo:tempo,lyrics:lyrics};
-  if(editingId){var idx=mySongs.findIndex(function(m){return m.id===editingId;});if(idx>=0)mySongs[idx]=song;else mySongs.push(song);}
-  else mySongs.push(song);
-  try{localStorage.setItem('ivoryMySongs',JSON.stringify(mySongs));}catch(e){}
-  document.getElementById('editorOverlay').classList.remove('on');
-  renderSongs(songs);
-  loadCustomSong(song.id);
-});
-document.getElementById('edDelete').addEventListener('click',function(){
-  if(!editingId)return;
-  if(!confirm('Delete this song?'))return;
-  mySongs=mySongs.filter(function(m){return m.id!==editingId;});
-  try{localStorage.setItem('ivoryMySongs',JSON.stringify(mySongs));}catch(e){}
-  document.getElementById('editorOverlay').classList.remove('on');
-  renderSongs(songs);
-});
+
 
 function loadCustomSong(id){
   var song=mySongs.find(function(m){return m.id===id;});if(!song)return;
@@ -554,7 +482,7 @@ function wirePlayBtn(){
 }
 // ---- end My Songs ----
 
-renderSongs(songs);
+renderMySongs();
 buildPiano();
 </script>
 </body>
