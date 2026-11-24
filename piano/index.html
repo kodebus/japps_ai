@@ -130,10 +130,10 @@
     <p class="sub">Type an artist, then pick a song</p>
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:4px">
       <input type="text" id="artistInput" placeholder="Artist — e.g. Coldplay, Beethoven, Billie Eilish" autocomplete="off" list="artistSuggestions"><datalist id="artistSuggestions"></datalist>
-      <div id="songSection" style="display:none">
-        <select id="songSelect" style="font:inherit;width:100%;padding:11px 16px;border-radius:10px;border:1.5px solid var(--line);background:#0d0d1a;color:var(--ink);font-size:15px;outline:none;cursor:pointer;min-height:44px">
-          <option value="">— select a song —</option>
-        </select>
+      <div id="songSection" style="display:none;position:relative">
+        <input type="text" id="songSearch" placeholder="Type to search songs..." autocomplete="off"
+          style="font:inherit;width:100%;padding:11px 16px;border-radius:10px;border:1.5px solid var(--line);background:#0d0d1a;color:var(--ink);font-size:15px;outline:none;box-sizing:border-box">
+        <div id="songDropdown" style="display:none;position:absolute;top:100%;left:0;right:0;max-height:260px;overflow-y:auto;background:#0d0d1a;border:1.5px solid var(--gold);border-radius:10px;z-index:50;margin-top:4px;box-shadow:0 8px 24px rgba(0,0,0,.5)"></div>
       </div>
     </div>
     <div id="mySongsSection" style="margin-top:16px;display:none">
@@ -280,12 +280,17 @@ function soloKey(id){clearKeys();var k=allKeys.find(function(x){return x.id===id
 
 function loadSongs(){
   var a=document.getElementById('artistInput').value.trim();if(!a)return;artistName=a;
+  var ss=document.getElementById('songSearch');
+  if(ss)ss.placeholder='Loading songs...';
   document.getElementById('songSection').style.display='block';
-  document.getElementById('songItems').innerHTML='<div class="loading-songs"><span class="spinner"></span>Finding songs...</div>';
   fetch(API+'/songs?artist='+encodeURIComponent(a))
     .then(function(r){return r.json();})
-    .then(function(d){songs=d.songs||[];renderSongs(songs);})
-    .catch(function(){document.getElementById('songItems').innerHTML='<div class="loading-songs">Could not load songs.</div>';});
+    .then(function(d){
+      allSongs=d.songs||[];songs=allSongs;
+      if(ss){ss.placeholder='Type to search songs...';ss.value='';}
+      renderSongDropdown(allSongs);
+    })
+    .catch(function(){if(ss)ss.placeholder='Could not load songs.';});
 }
 
 function renderSongs(list){
@@ -303,7 +308,7 @@ function renderSongs(list){
 
 function filterSongs(){var q=document.getElementById('filterInput').value.toLowerCase();renderSongs(q?songs.filter(function(s){return s.toLowerCase().indexOf(q)>=0;}):songs);}
 document.getElementById('artistInput').addEventListener('keydown',function(e){if(e.key==='Enter')loadSongs();});
-document.getElementById('songSelect').addEventListener('change',function(){if(this.value)loadChords(this.value);});
+// songSearch wired below
 
 function loadChords(song){
   document.getElementById('kbSub').textContent='Loading chords for "'+song+'"...';
@@ -361,6 +366,29 @@ function renderResult(d){
   });
 }
 
+function renderMySongs(){
+  var sec=document.getElementById('mySongsSection');
+  var list=document.getElementById('mySongsList');
+  if(!sec||!list)return;
+  if(!mySongs.length){sec.style.display='none';return;}
+  sec.style.display='block';
+  list.innerHTML='';
+  mySongs.forEach(function(ms){
+    var row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;padding:10px 14px;border-radius:10px;background:var(--card);margin-bottom:6px;cursor:pointer;gap:10px;border:1px solid var(--line)';
+    row.innerHTML='<span style="font-size:18px">🎵</span><span style="flex:1;font-size:14px;color:var(--ink)">'+ms.title+'<span style="font-size:11px;color:var(--muted);margin-left:6px">'+ms.artist+'</span></span><span class="del-btn" data-id="'+ms.id+'" style="font-size:18px;color:var(--muted);padding:4px 6px;cursor:pointer">✕</span>';
+    row.addEventListener('click',function(e){
+      if(e.target.classList.contains('del-btn')){
+        mySongs=mySongs.filter(function(m){return m.id!==ms.id;});
+        try{localStorage.setItem('ivoryMySongs',JSON.stringify(mySongs));}catch(e){}
+        renderMySongs();return;
+      }
+      loadCustomSong(ms.id);
+    });
+    list.appendChild(row);
+  });
+}
+
 function renderGrid(chords){
   var g=document.getElementById('chordsGrid');
   if(!chords.length){g.innerHTML='<div class="empty-state" style="grid-column:1/-1">No chords found.</div>';return;}
@@ -390,6 +418,54 @@ function selByName(name){
 
 
 // Artist autocomplete — debounced 400ms
+function renderSongDropdown(list){
+  var dd=document.getElementById('songDropdown');
+  if(!list.length){dd.style.display='none';return;}
+  dd.innerHTML='';
+  list.slice(0,200).forEach(function(s){
+    var item=document.createElement('div');
+    item.textContent=s;
+    item.style.cssText='padding:10px 16px;cursor:pointer;font-size:14px;color:var(--ink);border-bottom:1px solid rgba(255,255,255,.05)';
+    item.addEventListener('mouseenter',function(){this.style.background='rgba(212,175,55,.12)';});
+    item.addEventListener('mouseleave',function(){this.style.background='';});
+    item.addEventListener('click',function(){
+      document.getElementById('songSearch').value=s;
+      document.getElementById('songDropdown').style.display='none';
+      loadChords(s);
+    });
+    dd.appendChild(item);
+  });
+  if(list.length>200){
+    var more=document.createElement('div');
+    more.textContent='+ '+(list.length-200)+' more — keep typing to narrow down';
+    more.style.cssText='padding:10px 16px;font-size:12px;color:var(--muted);text-align:center';
+    dd.appendChild(more);
+  }
+  dd.style.display='block';
+}
+
+document.addEventListener('click',function(e){
+  if(!document.getElementById('songSection').contains(e.target)){
+    var dd=document.getElementById('songDropdown');
+    if(dd)dd.style.display='none';
+  }
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+  var ss=document.getElementById('songSearch');
+  if(!ss)return;
+  ss.addEventListener('focus',function(){
+    if(allSongs.length)renderSongDropdown(
+      this.value.trim()?allSongs.filter(function(s){return s.toLowerCase().indexOf(ss.value.trim().toLowerCase())>=0;}):allSongs
+    );
+  });
+  ss.addEventListener('input',function(){
+    var q=this.value.trim().toLowerCase();
+    if(!allSongs.length)return;
+    renderSongDropdown(q?allSongs.filter(function(s){return s.toLowerCase().indexOf(q)>=0;}):allSongs);
+  });
+});
+
 var artistAcTimer = null;
 document.getElementById('artistInput').addEventListener('input', function() {
   clearTimeout(artistAcTimer);
@@ -407,14 +483,11 @@ document.getElementById('artistInput').addEventListener('input', function() {
           songs = data.songs;
           artistName = q;
           // Populate the <select> dropdown
-          var sel = document.getElementById('songSelect');
-          sel.innerHTML = '<option value="">— select a song —</option>';
-          data.songs.forEach(function(s){
-            var o = document.createElement('option');
-            o.value = s; o.textContent = s;
-            sel.appendChild(o);
-          });
+          allSongs = data.songs;
+          document.getElementById('songSearch').value = '';
+          document.getElementById('songDropdown').style.display = 'none';
           document.getElementById('songSection').style.display = 'block';
+          renderSongDropdown(allSongs);
         }
       }).catch(function(){});
   }, 400);
