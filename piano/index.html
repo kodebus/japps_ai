@@ -532,11 +532,11 @@ function wirePlayBtn(){
   nb.textContent='\u25B6 Play Along';
   nb.addEventListener('click',function(){
     if(playTimer){stopPlayAlong();return;}
-    var bpm=parseInt(document.getElementById('tempoSlider').value)||80;
     var chords=currentChords;var idx=0;
     nb.textContent='\u23F9 Stop';
     function step(){
       selChord(idx%chords.length);idx++;
+      var bpm=parseInt(document.getElementById('tempoSlider').value)||80;
       playTimer=setTimeout(step,(60/bpm)*4*1000);
     }
     step();
