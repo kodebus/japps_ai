@@ -125,7 +125,7 @@
     <h2><span class="step">1</span> Find a Song</h2>
     <p class="sub">Enter an artist name to browse their songs</p>
     <div class="row" style="margin-bottom:12px">
-      <input type="text" id="artistInput" placeholder="e.g. Coldplay, Beethoven, Billie Eilish" style="flex:1;min-width:200px" autocomplete="off">
+      <input type="text" id="artistInput" placeholder="e.g. Coldplay, Beethoven, Billie Eilish" style="flex:1;min-width:200px" autocomplete="off" list="artistSuggestions"><datalist id="artistSuggestions"></datalist>
       <button class="primary" onclick="loadSongs()">Search</button>
     </div>
     <div id="songSection" style="display:none">
@@ -358,6 +358,31 @@ function selByName(name){
   var idx=-1;currentChords.forEach(function(c,i){if(c.name.trim()===name.trim())idx=i;});
   if(idx>=0){selChord(idx);document.getElementById('chords').scrollIntoView({behavior:'smooth',block:'start'});}
 }
+
+
+// Artist autocomplete — debounced 400ms
+var artistAcTimer = null;
+document.getElementById('artistInput').addEventListener('input', function() {
+  clearTimeout(artistAcTimer);
+  var q = this.value.trim();
+  if (q.length < 2) return;
+  artistAcTimer = setTimeout(function() {
+    fetch(API + '/songs?artist=' + encodeURIComponent(q))
+      .then(function(r){ return r.json(); })
+      .then(function(data) {
+        // Populate song datalist suggestions
+        var dl = document.getElementById('artistSuggestions');
+        dl.innerHTML = '';
+        // Auto-show songs if we got results
+        if (data && data.songs && data.songs.length) {
+          songs = data.songs;
+          artistName = q;
+          document.getElementById('songSection').style.display = 'block';
+          renderSongs(songs);
+        }
+      }).catch(function(){});
+  }, 400);
+});
 
 buildPiano();
 </script>
