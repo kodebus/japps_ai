@@ -184,6 +184,65 @@ var FLAT_MAP={'Bb':'A#','Eb':'D#','Ab':'G#','Db':'C#','Gb':'F#','Cb':'B','Fb':'E
 
 function norm(n){var m=n.match(/^([A-G]b?)(\d)$/);if(!m)return n;return(FLAT_MAP[m[1]]||m[1])+m[2];}
 
+
+// ---- Piano audio engine ----
+var audioCtx = null;
+var NOTE_FREQS = {
+  'C3':130.81,'C#3':138.59,'D3':146.83,'D#3':155.56,'E3':164.81,'F3':174.61,
+  'F#3':185.00,'G3':196.00,'G#3':207.65,'A3':220.00,'A#3':233.08,'B3':246.94,
+  'C4':261.63,'C#4':277.18,'D4':293.66,'D#4':311.13,'E4':329.63,'F4':349.23,
+  'F#4':369.99,'G4':392.00,'G#4':415.30,'A4':440.00,'A#4':466.16,'B4':493.88
+};
+
+function getAudioCtx() {
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+  }
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playPianoNote(freq, vol) {
+  var ctx = getAudioCtx(); if (!ctx) return;
+  vol = vol || 0.4;
+  var now = ctx.currentTime;
+  // Main tone
+  var osc = ctx.createOscillator();
+  var gain = ctx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(vol, now + 0.008);
+  gain.gain.exponentialRampToValueAtTime(vol * 0.6, now + 0.1);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.2);
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.start(now); osc.stop(now + 2.3);
+  // Harmonic overtone (gives piano body)
+  var osc2 = ctx.createOscillator();
+  var gain2 = ctx.createGain();
+  osc2.type = 'sine';
+  osc2.frequency.value = freq * 2;
+  gain2.gain.setValueAtTime(0, now);
+  gain2.gain.linearRampToValueAtTime(vol * 0.3, now + 0.005);
+  gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+  osc2.connect(gain2); gain2.connect(ctx.destination);
+  osc2.start(now); osc2.stop(now + 0.9);
+}
+
+function playNoteById(id) {
+  var freq = NOTE_FREQS[id];
+  if (freq) playPianoNote(freq);
+}
+
+function playChordNotes(notes) {
+  notes.forEach(function(n, i) {
+    var id = norm(n);
+    var freq = NOTE_FREQS[id];
+    if (freq) setTimeout(function(){ playPianoNote(freq, 0.35); }, i * 30);
+  });
+}
+// ---- end audio engine ----
+
 function buildPiano(){
   var p=document.getElementById('piano');p.innerHTML='';allKeys=[];
   OCTAVES.forEach(function(o){WHITE_NOTES.forEach(function(note){
@@ -206,7 +265,7 @@ function buildPiano(){
 
 function clearKeys(){allKeys.forEach(function(k){k.el.classList.remove('lit');});}
 function lightKeys(notes){clearKeys();notes.forEach(function(n){var id=norm(n);var k=allKeys.find(function(x){return x.id===id;});if(k)k.el.classList.add('lit');});}
-function soloKey(id){clearKeys();var k=allKeys.find(function(x){return x.id===id;});if(k)k.el.classList.add('lit');}
+function soloKey(id){clearKeys();var k=allKeys.find(function(x){return x.id===id;});if(k)k.el.classList.add('lit');playNoteById(id);}
 
 function loadSongs(){
   var a=document.getElementById('artistInput').value.trim();if(!a)return;artistName=a;
@@ -289,7 +348,7 @@ function selChord(i){
   document.querySelectorAll('.chord-card').forEach(function(c){c.classList.remove('active');});
   var card=document.getElementById('cc'+i);if(card)card.classList.add('active');
   var c=currentChords[i];if(!c)return;
-  lightKeys(c.notes||[]);
+  lightKeys(c.notes||[]);playChordNotes(c.notes||[]);
   var ft=document.getElementById('fingerTip');
   if(c.fingers){ft.innerHTML='<strong>'+c.name+':</strong> '+c.fingers;ft.classList.add('show');}
   else{ft.classList.remove('show');}
