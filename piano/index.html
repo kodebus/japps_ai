@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ivory &middot; Piano Chord Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--card:#111120;--card2:#16162a;--ink:#e8e4f0;--muted:#8880a8;--line:#2a2840;--ivory:#f5f0e8;--gold:#c9a84c;--gold2:#e8c76a;--glow:#7b5ea7;--key-white:#f0ece0;--key-black:#111118;--accent:#9b59b6;--accent2:#c39bd3}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;color-scheme:dark;overflow-x:hidden}
+  .back-bar{background:#050508;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+  .back-bar a{color:var(--gold);text-decoration:none;font-size:13px;font-weight:600}
+  .back-bar a:hover{color:var(--gold2)}
+  .back-bar span{color:var(--muted);font-size:12px}
+  header{background:linear-gradient(135deg,#1a0a2e,#2d1554 50%,#1a0a2e);padding:52px 20px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid #2d1554}
+  header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(123,94,167,.35) 0%,transparent 70%)}
+  .header-keys{position:absolute;bottom:0;left:50%;transform:translateX(-50%);display:flex;gap:1px;opacity:.12;pointer-events:none}
+  .hk{width:18px;height:52px;background:var(--key-white);border-radius:0 0 3px 3px}
+  .hk.b{width:12px;height:34px;background:var(--key-black);margin:0 -6px;z-index:1;border-radius:0 0 2px 2px}
+  header h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(36px,6vw,56px);margin:0 0 8px;letter-spacing:-.5px;position:relative}
+  .title-ivory{color:var(--ivory)}
+  .title-dot{color:var(--gold)}
+  header p{margin:0 auto;max-width:540px;color:var(--accent2);font-size:15px;position:relative}
+  nav{position:sticky;top:0;z-index:10;background:rgba(8,8,16,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;gap:4px;overflow-x:auto;padding:8px 16px}
+  nav a{white-space:nowrap;text-decoration:none;color:var(--muted);padding:7px 14px;border-radius:999px;font-size:13px;font-weight:500;transition:.15s}
+  nav a:hover{color:var(--ink);background:var(--card2)}
+  main{max-width:900px;margin:0 auto;padding:16px 16px 80px}
+  section{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:16px;padding:24px 22px 28px;margin:20px 0;box-shadow:0 4px 24px rgba(0,0,0,.4)}
+  section h2{font-family:'Playfair Display',serif;font-size:22px;margin:0 0 4px;display:flex;align-items:center;gap:10px;color:var(--ivory)}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:14px}
+  .step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--accent));color:#0d0a20;font:700 13px Inter;flex-shrink:0}
+  input[type=text]{font:inherit;width:100%;padding:11px 16px;border-radius:10px;border:1.5px solid var(--line);background:#0d0d1a;color:var(--ink);font-size:15px;outline:none;transition:.15s;min-height:44px}
+  input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15)}
+  input[type=text]::placeholder{color:#554e70}
+  button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card2);border-radius:10px;padding:10px 16px;min-height:44px;color:var(--ink);transition:.15s;touch-action:manipulation}
+  button:hover{border-color:var(--gold);color:var(--gold)}
+  button.primary{background:linear-gradient(135deg,#4a1a7a,var(--glow));border-color:#6b35a0;color:var(--ivory);font-weight:600;box-shadow:0 3px 14px -4px rgba(123,94,167,.6)}
+  button.primary:hover{filter:brightness(1.1)}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .pkfilter{display:flex;gap:8px;align-items:center;padding:10px 12px;background:#0d0d1a;border-bottom:2px solid var(--gold)}
+  .pkfilter input{flex:1;padding:9px 14px;border-radius:10px;border:2px solid var(--line);background:#111120;color:var(--ink);font-size:15px;outline:none}
+  .pkfilter input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.2)}
+  .pkfilter input::placeholder{color:#554e70}
+  .songlist{display:flex;flex-direction:column;gap:1px;background:var(--line);border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+  .addrow{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;color:var(--gold2);font-size:15px;font-weight:600;background:linear-gradient(135deg,#0d0d1a,#141428);border-top:2px solid var(--gold);transition:.15s}
+  .addrow:hover{background:linear-gradient(135deg,#141428,#1e1e3a);color:#f0d890}
+  .songitem{padding:12px 16px;background:var(--card);cursor:pointer;display:flex;align-items:center;gap:12px;transition:.12s;font-size:15px}
+  .songitem:hover{background:var(--card2);color:var(--gold)}
+  .note-icon{font-size:18px;opacity:.6}
+  .song-name{flex:1}
+  .arrow{color:var(--muted);font-size:12px}
+  .loading-songs{padding:20px;text-align:center;color:var(--muted);font-size:14px;animation:pulse 1.5s infinite}
+  @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+  .result-panel{display:none;margin-top:20px}
+  .result-panel.visible{display:block}
+  .song-header{background:linear-gradient(135deg,#111120,#1a1a30);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:16px 20px;margin-bottom:20px}
+  .song-header h3{font-family:'Playfair Display',serif;margin:0 0 4px;font-size:20px;color:var(--ivory)}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .badge{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid}
+  .badge.key{color:var(--gold);border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.08)}
+  .badge.tempo{color:var(--accent2);border-color:rgba(195,155,211,.3);background:rgba(195,155,211,.08)}
+  .beginner{color:#6bcf7f;border-color:rgba(107,207,127,.3);background:transparent}
+  .intermediate{color:#f0c060;border-color:rgba(240,192,96,.3);background:transparent}
+  .advanced{color:#e07070;border-color:rgba(224,112,112,.3);background:transparent}
+  .chords-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+  .chord-card{background:var(--card2);border:1.5px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;transition:.15s;text-align:center}
+  .chord-card:hover,.chord-card.active{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15)}
+  .chord-card.active{background:#1a1a2e}
+  .chord-name{font-family:'Playfair Display',serif;font-size:28px;color:var(--ivory);margin-bottom:4px}
+  .chord-role{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+  .chord-notes-pill{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
+  .note-pill{padding:3px 8px;border-radius:999px;background:#1e1a30;border:1px solid var(--line);font-size:11px;color:var(--accent2);font-weight:500}
+  .keyboard-wrap{margin:20px 0;overflow-x:auto;padding:4px 0 12px}
+  .keyboard{display:flex;position:relative;height:140px;user-select:none;min-width:fit-content;margin:0 auto;width:fit-content}
+  .wkey{width:36px;height:130px;background:var(--key-white);border:1px solid #9a8878;border-radius:0 0 5px 5px;position:relative;cursor:pointer;transition:.1s;flex-shrink:0;z-index:1}
+  .wkey:hover{background:#fffaf0}
+  .wkey.lit{background:linear-gradient(180deg,var(--gold) 0%,#f0d070 100%);border-color:#a08030;box-shadow:0 4px 12px rgba(201,168,76,.5)}
+  .key-label{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:9px;color:#888;font-weight:600;pointer-events:none}
+  .wkey.lit .key-label{color:#5a3a00;font-weight:700}
+  .bkey{width:22px;height:82px;background:var(--key-black);border:1px solid #333;border-radius:0 0 4px 4px;position:absolute;top:0;z-index:2;cursor:pointer;transition:.1s}
+  .bkey:hover{background:#222230}
+  .bkey.lit{background:linear-gradient(180deg,var(--glow) 0%,#9b59b6 100%);border-color:#7b39a6;box-shadow:0 4px 10px rgba(155,89,182,.6)}
+  .progression-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 16px;background:#0d0d1a;border-radius:10px;border:1px solid var(--line);margin-bottom:16px}
+  .prog-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+  .prog-chord{padding:6px 14px;background:var(--card2);border:1px solid var(--line);border-radius:8px;font-family:'Playfair Display',serif;font-size:16px;cursor:pointer;transition:.12s}
+  .prog-chord:hover{border-color:var(--gold);color:var(--gold)}
+  .prog-sep{color:var(--muted);font-size:18px}
+  .tips-box{background:#0f0d1e;border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:12px 16px;font-size:14px;color:var(--accent2);line-height:1.6;margin-top:4px}
+  .finger-tip{margin-top:12px;padding:10px 14px;background:#111120;border:1px solid var(--line);border-radius:10px;font-size:14px;color:var(--muted);display:none}
+  .finger-tip.show{display:block}
+  .finger-tip strong{color:var(--ivory)}
+  .empty-state{text-align:center;padding:40px 20px;color:var(--muted)}
+  .empty-icon{font-size:48px;margin-bottom:12px;opacity:.4}
+  .spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  footer{text-align:center;padding:24px 16px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
+  footer a{color:var(--muted);text-decoration:none}
+  footer a:hover{color:var(--gold)}
+  @media(max-width:500px){.chords-grid{grid-template-columns:repeat(2,1fr)}.wkey{width:28px;height:110px}.bkey{width:17px;height:66px}}
+</style>
+</head>
+<body>
+<div class="back-bar"><a href="https://japps.ai">&larr; Japps.ai</a><span>Ivory &middot; Piano</span></div>
+<header>
+  <div class="header-keys" aria-hidden="true">
+    <div class="hk"></div><div class="hk b"></div><div class="hk"></div><div class="hk b"></div>
+    <div class="hk"></div><div class="hk"></div><div class="hk b"></div><div class="hk"></div>
+    <div class="hk b"></div><div class="hk"></div><div class="hk b"></div><div class="hk"></div>
+    <div class="hk"></div><div class="hk b"></div><div class="hk"></div><div class="hk b"></div>
+    <div class="hk"></div><div class="hk"></div><div class="hk b"></div><div class="hk"></div>
+  </div>
+  <h1><span class="title-ivory">Ivory</span><span class="title-dot">.</span></h1>
+  <p>Search a song &mdash; see the chords on a real piano keyboard</p>
+</header>
+<nav>
+  <a href="#find">Find Song</a>
+  <a href="#keyboard">Keyboard</a>
+  <a href="#chords">Chords</a>
+  <a href="#tips">Tips</a>
+</nav>
+<main>
+  <section id="find">
+    <h2><span class="step">1</span> Find a Song</h2>
+    <p class="sub">Enter an artist name to browse their songs</p>
+    <div class="row" style="margin-bottom:12px">
+      <input type="text" id="artistInput" placeholder="e.g. Coldplay, Beethoven, Billie Eilish" style="flex:1;min-width:200px" autocomplete="off">
+      <button class="primary" onclick="loadSongs()">Search</button>
+    </div>
+    <div id="songSection" style="display:none">
+      <div class="songlist">
+        <div class="pkfilter">
+          <input type="text" id="filterInput" placeholder="Filter songs..." oninput="filterSongs()">
+        </div>
+        <div id="songItems"></div>
+      </div>
+    </div>
+  </section>
+  <section id="keyboard">
+    <h2><span class="step">2</span> Piano Keyboard</h2>
+    <p class="sub" id="kbSub">Select a song above to see chords highlighted on keys</p>
+    <div id="resultPanel" class="result-panel">
+      <div class="song-header" id="songHeader"></div>
+      <div class="progression-row" id="progressionRow" style="display:none"></div>
+      <div class="keyboard-wrap"><div class="keyboard" id="piano"></div></div>
+      <div class="finger-tip" id="fingerTip"></div>
+    </div>
+    <div id="kbEmpty" class="empty-state">
+      <div class="empty-icon">&#127929;</div>
+      <div>Keys light up when you pick a chord</div>
+    </div>
+  </section>
+  <section id="chords">
+    <h2><span class="step">3</span> Song Chords</h2>
+    <p class="sub">Tap a chord to highlight it on the keyboard</p>
+    <div id="chordsGrid" class="chords-grid">
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-icon">&#127925;</div>
+        <div>Chords will appear here</div>
+      </div>
+    </div>
+  </section>
+  <section id="tips">
+    <h2><span class="step">4</span> Playing Tips</h2>
+    <p class="sub">AI-generated tips specific to this song</p>
+    <div id="tipsBox" class="tips-box" style="display:none"></div>
+    <div id="tipsEmpty" class="empty-state">
+      <div class="empty-icon">&#128161;</div>
+      <div>Tips will appear after you load a song</div>
+    </div>
+  </section>
+</main>
+<footer>
+  <p>Ivory &middot; <a href="privacy.html">Privacy Policy</a> &middot; Powered by <a href="https://japps.ai">Japps.ai</a></p>
+</footer>
+<script>
+var API='https://jappsai.vercel.app/api';
+var OCTAVES=[3,4];
+var WHITE_NOTES=['C','D','E','F','G','A','B'];
+var BLACK_AFTER=[0,1,3,4,5];
+var allKeys=[],currentChords=[],songs=[],artistName='';
+var FLAT_MAP={'Bb':'A#','Eb':'D#','Ab':'G#','Db':'C#','Gb':'F#','Cb':'B','Fb':'E'};
+
+function norm(n){var m=n.match(/^([A-G]b?)(\d)$/);if(!m)return n;return(FLAT_MAP[m[1]]||m[1])+m[2];}
+
+function buildPiano(){
+  var p=document.getElementById('piano');p.innerHTML='';allKeys=[];
+  OCTAVES.forEach(function(o){WHITE_NOTES.forEach(function(note){
+    var k=document.createElement('div');k.className='wkey';
+    var lbl=document.createElement('div');lbl.className='key-label';lbl.textContent=note+o;k.appendChild(lbl);
+    (function(id){k.addEventListener('click',function(){soloKey(id);});})(note+o);
+    p.appendChild(k);allKeys.push({el:k,id:note+o});
+  });});
+  var wPos=0;
+  OCTAVES.forEach(function(o){WHITE_NOTES.forEach(function(note,ni){
+    if(BLACK_AFTER.indexOf(ni)>=0){
+      var id=note+'#'+o;var bk=document.createElement('div');bk.className='bkey';
+      bk.style.left=(wPos*36+25)+'px';
+      (function(sid){bk.addEventListener('click',function(e){e.stopPropagation();soloKey(sid);});})(id);
+      p.appendChild(bk);allKeys.push({el:bk,id:id});
+    }
+    wPos++;
+  });});
+}
+
+function clearKeys(){allKeys.forEach(function(k){k.el.classList.remove('lit');});}
+function lightKeys(notes){clearKeys();notes.forEach(function(n){var id=norm(n);var k=allKeys.find(function(x){return x.id===id;});if(k)k.el.classList.add('lit');});}
+function soloKey(id){clearKeys();var k=allKeys.find(function(x){return x.id===id;});if(k)k.el.classList.add('lit');}
+
+function loadSongs(){
+  var a=document.getElementById('artistInput').value.trim();if(!a)return;artistName=a;
+  document.getElementById('songSection').style.display='block';
+  document.getElementById('songItems').innerHTML='<div class="loading-songs"><span class="spinner"></span>Finding songs...</div>';
+  fetch(API+'/songs?artist='+encodeURIComponent(a))
+    .then(function(r){return r.json();})
+    .then(function(d){songs=d.songs||[];renderSongs(songs);})
+    .catch(function(){document.getElementById('songItems').innerHTML='<div class="loading-songs">Could not load songs.</div>';});
+}
+
+function renderSongs(list){
+  var el=document.getElementById('songItems');
+  if(!list.length){el.innerHTML='<div class="loading-songs">No songs found.</div>';return;}
+  var icons=['&#127925;','&#127926;','&#127932;','&#127929;','&#9834;','&#9835;'];
+  var html='';
+  list.forEach(function(s,i){
+    html+='<div class="songitem" data-s="'+s.replace(/"/g,'&quot;')+'"><span class="note-icon">'+icons[i%icons.length]+'</span><span class="song-name">'+s+'</span><span class="arrow">&#8250;</span></div>';
+  });
+  html+='<div class="addrow" id="addBtn"><span>&#10133;</span><span>Add a song manually</span></div>';
+  el.innerHTML=html;
+  el.querySelectorAll('.songitem').forEach(function(item){item.addEventListener('click',function(){loadChords(this.dataset.s);});});
+  document.getElementById('addBtn').addEventListener('click',promptAdd);
+}
+
+function filterSongs(){var q=document.getElementById('filterInput').value.toLowerCase();renderSongs(songs.filter(function(s){return s.toLowerCase().indexOf(q)>=0;}));}
+function promptAdd(){var n=prompt('Enter song name:');if(n&&n.trim())loadChords(n.trim());}
+document.getElementById('artistInput').addEventListener('keydown',function(e){if(e.key==='Enter')loadSongs();});
+
+function loadChords(song){
+  document.getElementById('kbSub').textContent='Loading chords for "'+song+'"...';
+  document.getElementById('kbEmpty').style.display='none';
+  document.getElementById('resultPanel').classList.remove('visible');
+  document.getElementById('chordsGrid').innerHTML='<div class="empty-state" style="grid-column:1/-1"><span class="spinner"></span>Analyzing...</div>';
+  document.getElementById('tipsBox').style.display='none';
+  document.getElementById('tipsEmpty').style.display='none';
+  document.getElementById('keyboard').scrollIntoView({behavior:'smooth',block:'start'});
+  fetch(API+'/piano-chords?song='+encodeURIComponent(song)+'&artist='+encodeURIComponent(artistName))
+    .then(function(r){return r.json();})
+    .then(function(d){if(d.error)throw new Error(d.error);currentChords=d.chords||[];renderResult(d);})
+    .catch(function(){
+      document.getElementById('chordsGrid').innerHTML='<div class="empty-state" style="grid-column:1/-1">Could not reach chord service.</div>';
+      document.getElementById('kbEmpty').style.display='block';
+      document.getElementById('kbSub').textContent='Select a song above to see chords on keys';
+    });
+}
+
+function renderResult(d){
+  var dc=(d.difficulty||'').toLowerCase();
+  document.getElementById('songHeader').innerHTML='<h3>'+(d.song||'Unknown Song')+'</h3><div style="color:var(--muted);font-size:14px">'+(d.artist||artistName)+'</div><div class="meta">'+(d.key?'<span class="badge key">&#127932; '+d.key+'</span>':'')+(d.tempo?'<span class="badge tempo">&#9834; '+d.tempo+'</span>':'')+(d.difficulty?'<span class="badge '+dc+'">'+d.difficulty+'</span>':'')+'</div>';
+  if(d.progression){
+    var pr=document.getElementById('progressionRow');
+    var parts=d.progression.split(/\s*[-–—]\s*/);
+    var ph='<span class="prog-label">Progression:</span>';
+    parts.forEach(function(c,i){ph+='<span class="prog-chord" data-c="'+c.trim()+'">'+c.trim()+'</span>'+(i<parts.length-1?'<span class="prog-sep">&#8250;</span>':'');});
+    pr.innerHTML=ph;
+    pr.querySelectorAll('.prog-chord').forEach(function(el){el.addEventListener('click',function(){selByName(this.dataset.c);});});
+    pr.style.display='flex';
+  }
+  document.getElementById('resultPanel').classList.add('visible');
+  document.getElementById('kbSub').textContent='Showing "'+(d.song||'this song')+'" - tap a chord';
+  renderGrid(d.chords||[]);
+  if(d.tips){var tb=document.getElementById('tipsBox');tb.textContent='🎹 '+d.tips;tb.style.display='block';document.getElementById('tipsEmpty').style.display='none';}
+  if(d.chords&&d.chords.length>0)setTimeout(function(){selChord(0);},300);
+}
+
+function renderGrid(chords){
+  var g=document.getElementById('chordsGrid');
+  if(!chords.length){g.innerHTML='<div class="empty-state" style="grid-column:1/-1">No chords found.</div>';return;}
+  var html='';
+  chords.forEach(function(c,i){
+    var pills='';(c.notes||[]).forEach(function(n){pills+='<span class="note-pill">'+n+'</span>';});
+    html+='<div class="chord-card" id="cc'+i+'"><div class="chord-name">'+c.name+'</div><div class="chord-role">'+(c.role||'')+'</div><div class="chord-notes-pill">'+pills+'</div></div>';
+  });
+  g.innerHTML=html;
+  chords.forEach(function(_,i){document.getElementById('cc'+i).addEventListener('click',function(){selChord(i);});});
+}
+
+function selChord(i){
+  document.querySelectorAll('.chord-card').forEach(function(c){c.classList.remove('active');});
+  var card=document.getElementById('cc'+i);if(card)card.classList.add('active');
+  var c=currentChords[i];if(!c)return;
+  lightKeys(c.notes||[]);
+  var ft=document.getElementById('fingerTip');
+  if(c.fingers){ft.innerHTML='<strong>'+c.name+':</strong> '+c.fingers;ft.classList.add('show');}
+  else{ft.classList.remove('show');}
+}
+
+function selByName(name){
+  var idx=-1;currentChords.forEach(function(c,i){if(c.name.trim()===name.trim())idx=i;});
+  if(idx>=0){selChord(idx);document.getElementById('chords').scrollIntoView({behavior:'smooth',block:'start'});}
+}
+
+buildPiano();
+</script>
+</body>
+</html>
