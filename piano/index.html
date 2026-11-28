@@ -128,6 +128,9 @@
   <section id="find">
     <h2><span class="step">1</span> Find a Song</h2>
     <p class="sub">Type an artist, then pick a song</p>
+    <div id="spotifyTopRow" style="margin-bottom:14px">
+      <button onclick="spotifyLogin()" style="background:#1DB954;border:none;border-radius:10px;padding:9px 18px;font:inherit;cursor:pointer;font-size:14px;font-weight:600;color:#000">🎵 Connect Spotify to Listen While You Practice</button>
+    </div>
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:4px">
       <input type="text" id="artistInput" placeholder="Artist — e.g. Coldplay, Beethoven, Billie Eilish" autocomplete="off" list="artistSuggestions"><datalist id="artistSuggestions"></datalist>
       <div id="songSection" style="display:none;position:relative">
@@ -742,12 +745,15 @@ function spotifyTogglePlay() {
 function spotifyShowConnect() {
   var cr = document.getElementById('spotifyConnectRow');
   var bar = document.getElementById('spotifyBar');
-  if (!cr || !bar) return;
+  var top = document.getElementById('spotifyTopRow');
   if (spotifyToken) {
-    // Already connected — player will show bar when track loads
+    // Already connected — hide connect buttons, player bar shows when track loads
+    if (cr) cr.style.display = 'none';
+    if (top) top.style.display = 'none';
   } else {
-    cr.style.display = 'block';
-    bar.style.display = 'none';
+    if (cr) { cr.style.display = 'block'; }
+    if (bar) bar.style.display = 'none';
+    if (top) top.style.display = 'block';
   }
 }
 
