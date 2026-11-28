@@ -149,6 +149,17 @@
       <div class="progression-row" id="progressionRow" style="display:none"></div>
       <div class="play-row" id="playRow" style="display:none"><button class="primary" id="playSongBtn">&#9654; Play Along</button><div class="tempo-wrap"><span>Tempo</span><input type="range" id="tempoSlider" min="40" max="200" value="80"><span id="tempoVal">80</span> BPM</div></div>
       <div id="saveRow" style="display:none;margin-bottom:12px"><button id="saveSongBtn" style="background:#111120;border:1.5px solid var(--gold);color:var(--gold);border-radius:10px;padding:9px 18px;font:inherit;cursor:pointer;font-size:14px;font-weight:600">&#9733; Save to My Songs</button><span id="saveStatus" style="font-size:13px;color:var(--muted);margin-left:10px"></span></div>
+      <div id="spotifyBar" style="display:none;align-items:center;gap:12px;background:#111120;border:1.5px solid #1DB954;border-radius:12px;padding:12px 16px;margin-bottom:12px">
+        <img id="spotifyArt" src="" style="width:44px;height:44px;border-radius:6px;object-fit:cover;display:none">
+        <div style="flex:1;min-width:0">
+          <div id="spotifyTrackName" style="font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+          <div id="spotifyTrackArtist" style="font-size:11px;color:#1DB954;margin-top:2px"></div>
+        </div>
+        <button id="spotifyPlayBtn" onclick="spotifyTogglePlay()" style="background:#1DB954;border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">▶</button>
+      </div>
+      <div id="spotifyConnectRow" style="display:none;margin-bottom:12px">
+        <button onclick="spotifyLogin()" style="background:#1DB954;border:none;border-radius:10px;padding:9px 18px;font:inherit;cursor:pointer;font-size:14px;font-weight:600;color:#000">🎵 Connect Spotify to Listen</button>
+      </div>
       <div class="keyboard-wrap"><div class="keyboard" id="piano"></div></div>
       <div class="finger-tip" id="fingerTip"></div>
     </div>
@@ -345,6 +356,8 @@ function renderResult(d){
   renderGrid(d.chords||[]);
   if(d.tips){var tb=document.getElementById('tipsBox');tb.textContent='🎹 '+d.tips;tb.style.display='block';document.getElementById('tipsEmpty').style.display='none';}
   if(d.chords&&d.chords.length>0)setTimeout(function(){selChord(0);},300);
+  spotifyShowConnect();
+  if(spotifyToken&&spotifyDeviceId)spotifySearch(d.artist||artistName,d.song);
   var bpm=parseInt((d.tempo||'80').replace(/[^0-9]/g,''))||80;
   document.getElementById('playRow').style.display='flex';
   document.getElementById('tempoSlider').value=Math.min(200,Math.max(40,bpm));
@@ -519,6 +532,8 @@ function loadCustomSong(id){
   document.getElementById('resultPanel').classList.add('visible');
   document.getElementById('kbEmpty').style.display='none';
   document.getElementById('kbSub').textContent='"'+song.title+'" - tap a chord to hear it';
+  spotifyShowConnect();
+  if(spotifyToken&&spotifyDeviceId)spotifySearch(song.artist||'',song.title);
   document.getElementById('tipsEmpty').style.display='none';
   var tb=document.getElementById('tipsBox');
   if(song.lyrics){tb.innerHTML='<div style="white-space:pre-wrap;font-size:14px;line-height:1.8;color:var(--accent2)">'+song.lyrics.replace(/</g,'&lt;')+'</div>';tb.style.display='block';}else{tb.style.display='none';document.getElementById('tipsEmpty').style.display='block';}
@@ -560,6 +575,164 @@ function wirePlayBtn(){
 // ---- end My Songs ----
 
 renderMySongs();
+
+// ---- Spotify Integration ----
+var SPOTIFY_CLIENT_ID = '3c7bd2f0840943debf4052ff141e11e5';
+var SPOTIFY_REDIRECT = 'https://www.japps.ai/piano/';
+var SPOTIFY_SCOPES = 'streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state';
+var spotifyToken = null;
+var spotifyRefreshToken = null;
+var spotifyPlayer = null;
+var spotifyDeviceId = null;
+var spotifyPlaying = false;
+
+try {
+  spotifyToken = localStorage.getItem('spotify_access_token');
+  spotifyRefreshToken = localStorage.getItem('spotify_refresh_token');
+  var exp = localStorage.getItem('spotify_token_expiry');
+  if (exp && Date.now() > parseInt(exp)) spotifyToken = null;
+} catch(e) {}
+
+function spotifyLogin() {
+  var state = Math.random().toString(36).slice(2);
+  try { localStorage.setItem('spotify_state', state); } catch(e) {}
+  var url = 'https://accounts.spotify.com/authorize?' + new URLSearchParams({
+    response_type: 'code',
+    client_id: SPOTIFY_CLIENT_ID,
+    scope: SPOTIFY_SCOPES,
+    redirect_uri: SPOTIFY_REDIRECT,
+    state: state
+  });
+  window.location.href = url;
+}
+
+async function spotifyExchangeCode(code) {
+  try {
+    var r = await fetch('/api/spotify-token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code, redirect_uri: SPOTIFY_REDIRECT })
+    });
+    var data = await r.json();
+    if (data.access_token) {
+      spotifyToken = data.access_token;
+      spotifyRefreshToken = data.refresh_token;
+      try {
+        localStorage.setItem('spotify_access_token', data.access_token);
+        localStorage.setItem('spotify_refresh_token', data.refresh_token);
+        localStorage.setItem('spotify_token_expiry', Date.now() + (data.expires_in - 60) * 1000);
+      } catch(e) {}
+      // Clean URL
+      window.history.replaceState({}, document.title, '/piano/');
+      spotifyInitPlayer();
+    }
+  } catch(e) { console.error('Spotify exchange failed', e); }
+}
+
+async function spotifyRefreshAccessToken() {
+  if (!spotifyRefreshToken) return false;
+  try {
+    var r = await fetch('/api/spotify-refresh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: spotifyRefreshToken })
+    });
+    var data = await r.json();
+    if (data.access_token) {
+      spotifyToken = data.access_token;
+      try {
+        localStorage.setItem('spotify_access_token', data.access_token);
+        localStorage.setItem('spotify_token_expiry', Date.now() + (data.expires_in - 60) * 1000);
+      } catch(e) {}
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+function spotifyInitPlayer() {
+  if (!spotifyToken) return;
+  var script = document.createElement('script');
+  script.src = 'https://sdk.scdn.co/spotify-player.js';
+  document.head.appendChild(script);
+  window.onSpotifyWebPlaybackSDKReady = function() {
+    spotifyPlayer = new Spotify.Player({
+      name: 'Ivory Piano',
+      getOAuthToken: function(cb) { cb(spotifyToken); },
+      volume: 0.8
+    });
+    spotifyPlayer.addListener('ready', function(d) {
+      spotifyDeviceId = d.device_id;
+      console.log('Spotify ready', d.device_id);
+    });
+    spotifyPlayer.addListener('player_state_changed', function(state) {
+      if (!state) return;
+      spotifyPlaying = !state.paused;
+      document.getElementById('spotifyPlayBtn').textContent = spotifyPlaying ? '⏸' : '▶';
+      var track = state.track_window && state.track_window.current_track;
+      if (track) {
+        document.getElementById('spotifyTrackName').textContent = track.name;
+        document.getElementById('spotifyTrackArtist').textContent = track.artists.map(function(a){return a.name;}).join(', ');
+        var art = track.album && track.album.images && track.album.images[0];
+        if (art) { document.getElementById('spotifyArt').src = art.url; document.getElementById('spotifyArt').style.display = 'block'; }
+        document.getElementById('spotifyBar').style.display = 'flex';
+        document.getElementById('spotifyConnectRow').style.display = 'none';
+      }
+    });
+    spotifyPlayer.connect();
+  };
+}
+
+async function spotifySearch(artist, song) {
+  if (!spotifyToken || !spotifyDeviceId) return;
+  try {
+    var q = encodeURIComponent(song + ' ' + artist);
+    var r = await fetch('https://api.spotify.com/v1/search?q=' + q + '&type=track&limit=1', {
+      headers: { 'Authorization': 'Bearer ' + spotifyToken }
+    });
+    var data = await r.json();
+    var track = data.tracks && data.tracks.items && data.tracks.items[0];
+    if (!track) return;
+    // Queue it on the Ivory device
+    await fetch('https://api.spotify.com/v1/me/player/play?device_id=' + spotifyDeviceId, {
+      method: 'PUT',
+      headers: { 'Authorization': 'Bearer ' + spotifyToken, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uris: [track.uri] })
+    });
+  } catch(e) { console.error('Spotify search/play failed', e); }
+}
+
+function spotifyTogglePlay() {
+  if (!spotifyPlayer) return;
+  spotifyPlayer.togglePlay();
+}
+
+function spotifyShowConnect() {
+  var cr = document.getElementById('spotifyConnectRow');
+  var bar = document.getElementById('spotifyBar');
+  if (!cr || !bar) return;
+  if (spotifyToken) {
+    // Already connected — player will show bar when track loads
+  } else {
+    cr.style.display = 'block';
+    bar.style.display = 'none';
+  }
+}
+
+// Handle OAuth callback
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var code = params.get('code');
+  var state = params.get('state');
+  if (code) {
+    var saved = '';
+    try { saved = localStorage.getItem('spotify_state'); } catch(e) {}
+    if (!state || state === saved) spotifyExchangeCode(code);
+  } else if (spotifyToken) {
+    spotifyInitPlayer();
+  }
+})();
+
 buildPiano();
 </script>
 </body>
