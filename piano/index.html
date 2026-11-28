@@ -576,66 +576,98 @@ function wirePlayBtn(){
 
 renderMySongs();
 
-// ---- Spotify Integration ----
+// ---- Spotify Integration (PKCE — no backend needed) ----
 var SPOTIFY_CLIENT_ID = '3c7bd2f0840943debf4052ff141e11e5';
 var SPOTIFY_REDIRECT = 'https://www.japps.ai/piano/';
 var SPOTIFY_SCOPES = 'streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state';
 var spotifyToken = null;
-var spotifyRefreshToken = null;
 var spotifyPlayer = null;
 var spotifyDeviceId = null;
 var spotifyPlaying = false;
 
 try {
   spotifyToken = localStorage.getItem('spotify_access_token');
-  spotifyRefreshToken = localStorage.getItem('spotify_refresh_token');
   var exp = localStorage.getItem('spotify_token_expiry');
-  if (exp && Date.now() > parseInt(exp)) spotifyToken = null;
+  if (exp && Date.now() > parseInt(exp)) { spotifyToken = null; localStorage.removeItem('spotify_access_token'); }
 } catch(e) {}
 
-function spotifyLogin() {
-  var state = Math.random().toString(36).slice(2);
-  try { localStorage.setItem('spotify_state', state); } catch(e) {}
+async function sha256(plain) {
+  var encoder = new TextEncoder();
+  var data = encoder.encode(plain);
+  var hash = await window.crypto.subtle.digest('SHA-256', data);
+  return hash;
+}
+
+function base64urlencode(a) {
+  return btoa(String.fromCharCode.apply(null, new Uint8Array(a)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function spotifyLogin() {
+  var verifier = generateCodeVerifier();
+  try { localStorage.setItem('spotify_verifier', verifier); } catch(e) {}
+  var challenge = base64urlencode(await sha256(verifier));
   var url = 'https://accounts.spotify.com/authorize?' + new URLSearchParams({
     response_type: 'code',
     client_id: SPOTIFY_CLIENT_ID,
     scope: SPOTIFY_SCOPES,
     redirect_uri: SPOTIFY_REDIRECT,
-    state: state
+    code_challenge_method: 'S256',
+    code_challenge: challenge
   });
   window.location.href = url;
 }
 
+function generateCodeVerifier() {
+  var arr = new Uint8Array(56);
+  window.crypto.getRandomValues(arr);
+  return base64urlencode(arr);
+}
+
 async function spotifyExchangeCode(code) {
+  var verifier = '';
+  try { verifier = localStorage.getItem('spotify_verifier') || ''; } catch(e) {}
   try {
-    var r = await fetch('/api/spotify-token', {
+    var r = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code: code, redirect_uri: SPOTIFY_REDIRECT })
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: SPOTIFY_REDIRECT,
+        client_id: SPOTIFY_CLIENT_ID,
+        code_verifier: verifier
+      })
     });
     var data = await r.json();
     if (data.access_token) {
       spotifyToken = data.access_token;
-      spotifyRefreshToken = data.refresh_token;
       try {
         localStorage.setItem('spotify_access_token', data.access_token);
-        localStorage.setItem('spotify_refresh_token', data.refresh_token);
         localStorage.setItem('spotify_token_expiry', Date.now() + (data.expires_in - 60) * 1000);
+        if (data.refresh_token) localStorage.setItem('spotify_refresh_token', data.refresh_token);
       } catch(e) {}
-      // Clean URL
       window.history.replaceState({}, document.title, '/piano/');
       spotifyInitPlayer();
+    } else {
+      console.error('Spotify token error', data);
     }
   } catch(e) { console.error('Spotify exchange failed', e); }
 }
 
 async function spotifyRefreshAccessToken() {
-  if (!spotifyRefreshToken) return false;
+  var refreshToken = '';
+  try { refreshToken = localStorage.getItem('spotify_refresh_token') || ''; } catch(e) {}
+  if (!refreshToken) return false;
   try {
-    var r = await fetch('/api/spotify-refresh', {
+    var r = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refresh_token: spotifyRefreshToken })
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+        client_id: SPOTIFY_CLIENT_ID
+      })
     });
     var data = await r.json();
     if (data.access_token) {
